@@ -1,0 +1,7 @@
+﻿11services:
+  uppercube:
+    image: uppercube
+    build:
+      context: .
+      dockerfile: Dockerfile
+

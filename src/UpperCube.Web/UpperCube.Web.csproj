@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AssemblyName>UpperCube.Web</AssemblyName>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\homelengo\" />
+      <Folder Include="wwwroot\upcube\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UpperCube.Application\UpperCube.Application.csproj" />
+      <ProjectReference Include="..\UpperCube.Infrastructure\UpperCube.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

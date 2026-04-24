@@ -1,0 +1,62 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+artifacts/
+
+# User and IDE files
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
+
+# ASP.NET / local configuration
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# Logs and diagnostics
+*.log
+logs/
+TestResults/
+coverage/
+coverage.*
+*.trx
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Docker / local environment
+.env
+.env.*
+!.env.example
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
