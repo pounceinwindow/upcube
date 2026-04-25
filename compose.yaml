@@ -1,7 +1,37 @@
-﻿11services:
+services:
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: realestate
+      POSTGRES_USER: realestate
+      POSTGRES_PASSWORD: devpassword
+    volumes:
+      - postgres18_data:/var/lib/postgresql
+
+  mongo:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: realestate
+      MONGO_INITDB_ROOT_PASSWORD: devpassword
+    volumes:
+      - mongo_data:/data/db
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   uppercube:
     image: uppercube
     build:
       context: .
       dockerfile: Dockerfile
 
+volumes:
+  postgres18_data:
+  mongo_data:
