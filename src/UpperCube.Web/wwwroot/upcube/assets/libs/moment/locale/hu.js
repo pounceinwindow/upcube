@@ -8,6 +8,7 @@ import moment from '../moment';
 var weekEndings = 'vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton'.split(
     ' '
 );
+
 function translate(number, withoutSuffix, key, isFuture) {
     var num = number;
     switch (key) {
@@ -42,6 +43,7 @@ function translate(number, withoutSuffix, key, isFuture) {
     }
     return '';
 }
+
 function week(isFuture) {
     return (
         (isFuture ? '' : '[múlt] ') +

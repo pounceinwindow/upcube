@@ -1,0 +1,63 @@
+@model RegisterViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Регистрация";
+}
+
+<h4 class="text-muted text-center font-size-18"><b>Регистрация</b></h4>
+
+<div class="p-3">
+    <form asp-action="Register" method="post" class="form-horizontal mt-3">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-6">
+                <input asp-for="FirstName" class="form-control" placeholder="Имя"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <input asp-for="LastName" class="form-control" placeholder="Фамилия"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <input asp-for="Password" class="form-control" placeholder="Пароль" autocomplete="new-password"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <input asp-for="ConfirmPassword" class="form-control" placeholder="Повторите пароль"
+                       autocomplete="new-password"/>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group text-center row mt-3 pt-1">
+            <div class="col-12">
+                <button class="btn btn-info w-100 waves-effect waves-light" type="submit">Создать аккаунт</button>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 row mt-2">
+            <div class="col-12 mt-3 text-center">
+                <a asp-action="Login" class="text-muted"><i class="mdi mdi-account-circle"></i> Уже есть аккаунт?</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

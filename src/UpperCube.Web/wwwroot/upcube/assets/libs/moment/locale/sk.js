@@ -9,9 +9,11 @@ var months = 'január_február_marec_apríl_máj_jún_júl_august_september_okt�
         '_'
     ),
     monthsShort = 'jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec'.split('_');
+
 function plural(n) {
     return n > 1 && n < 5;
 }
+
 function translate(number, withoutSuffix, key, isFuture) {
     var result = number + ' ';
     switch (key) {

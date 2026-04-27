@@ -1,8 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Главная";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="flat-slider home-2 bg-primary-new">
+    <div class="container relative">
+        <div class="row">
+            <div class="col-xl-10">
+                <div class="slider-content">
+                    <div class="heading">
+                        <h1 class="fw-8 title">Недвижимость, которую удобно выбирать</h1>
+                        <p class="subtitle body-2">
+                            UpperCube помогает искать, сравнивать и оценивать объекты в едином интерфейсе.
+                        </p>
+                    </div>
+                    <div class="flat-tab flat-tab-form">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" role="tabpanel">
+                                <div class="form-sl">
+                                    <form asp-controller="Catalog" asp-action="Index" method="get">
+                                        <div class="wd-find-select style-2">
+                                            <div class="inner-group">
+                                                <div class="form-group-2 form-style">
+                                                    <label>Город или район</label>
+                                                    <div class="group-ip">
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Москва, Санкт-Петербург, Краснодар"
+                                                               name="query"/>
+                                                        <a href="#" class="icon icon-location"></a>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-3 form-style">
+                                                    <label>Ключевые слова</label>
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Квартира, дом, офис" name="q"/>
+                                                </div>
+                                            </div>
+                                            <div class="box-btn-advanced">
+                                                <button type="submit" class="tf-btn btn-search primary">Искать <i
+                                                        class="icon icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrap-search-link">
+                        <p class="body-2">Популярные разделы:</p>
+                        <div class="categories-list">
+                            <a asp-controller="Catalog" asp-action="Index"><i class="icon icon-apartment"></i> Квартиры</a>
+                            <a asp-controller="Catalog" asp-action="Index"><i class="icon icon-house-fill"></i> Дома</a>
+                            <a asp-controller="Estimator" asp-action="Index"><i class="icon icon-office-fill"></i>
+                                Оценка</a>
+                            <a asp-controller="Compare" asp-action="Index"><i class="icon icon-villa-fill"></i>
+                                Сравнение</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-banner-left">
+        <img src="~/homelengo/images/slider/graplic-slider-2.png" alt=""/>
+    </div>
+    <div class="img-banner-right">
+        <div class="slider-home2 img-animation">
+            <img src="~/homelengo/images/slider/slider-2.jpg" alt="Недвижимость"/>
+        </div>
+    </div>
+</section>
