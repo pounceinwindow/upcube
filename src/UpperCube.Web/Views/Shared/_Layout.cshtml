@@ -64,8 +64,12 @@
                                 </div>
                             </div>
                             <div class="inner-header-right header-account">
-                                <a href="?culture=ru" class="tf-btn btn-line">RU</a>
-                                <a href="?culture=en" class="tf-btn btn-line">EN</a>
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="ru"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
+                                   class="tf-btn btn-line">RU</a>
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="en"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
+                                   class="tf-btn btn-line">EN</a>
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
                                     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post"
@@ -141,8 +145,8 @@
     </div>
 </div>
 
-<script src="~/homelengo/js/bootstrap.min.js"></script>
 <script src="~/homelengo/js/jquery.min.js"></script>
+<script src="~/homelengo/js/bootstrap.min.js"></script>
 <script src="~/homelengo/js/swiper-bundle.min.js"></script>
 <script src="~/homelengo/js/carousel.js"></script>
 <script src="~/homelengo/js/plugin.js"></script>

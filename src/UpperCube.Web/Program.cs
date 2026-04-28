@@ -30,9 +30,11 @@ var supportedCultures = new[]
 
 var app = builder.Build();
 
+await UpperCube.Infrastructure.Seeding.DataSeeder.SeedAsync(app.Services);
+
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/error/500");
     app.UseHsts();
 }
 

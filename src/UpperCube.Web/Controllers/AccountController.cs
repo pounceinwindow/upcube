@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UpperCube.Application.Abstractions.Authentication;
 using UpperCube.Models.Account;
 
-namespace UpperCube.Controllers;
+namespace UpperCube.Web.Controllers;
 
 [Route("account")]
 public sealed class AccountController(IAccountService accountService) : Controller
@@ -20,7 +20,10 @@ public sealed class AccountController(IAccountService accountService) : Controll
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
 
         var result = await accountService.PasswordSignInAsync(
             model.Email,
@@ -29,10 +32,15 @@ public sealed class AccountController(IAccountService accountService) : Controll
             HttpContext.RequestAborted);
 
         if (result.RequiresTwoFactor)
+        {
             return RedirectToAction(nameof(TwoFactor),
                 new { rememberMe = model.RememberMe, returnUrl = model.ReturnUrl });
+        }
 
-        if (result.Succeeded) return LocalRedirect(model.ReturnUrl ?? Url.Action("Index", "Home")!);
+        if (result.Succeeded)
+        {
+            return LocalRedirect(model.ReturnUrl ?? Url.Action("Index", "Home")!);
+        }
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Неверный email или пароль.");
         return View(model);
@@ -50,7 +58,10 @@ public sealed class AccountController(IAccountService accountService) : Controll
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
 
         var result = await accountService.RegisterAsync(
             model.FirstName,
@@ -59,9 +70,16 @@ public sealed class AccountController(IAccountService accountService) : Controll
             model.Password,
             HttpContext.RequestAborted);
 
-        if (result.Succeeded) return RedirectToAction("Index", "Home");
+        if (result.Succeeded)
+        {
+            TempData["AccountMessage"] = result.Message;
+            return RedirectToAction(nameof(Login));
+        }
 
-        foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error);
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error);
+        }
 
         return View(model);
     }
@@ -78,7 +96,10 @@ public sealed class AccountController(IAccountService accountService) : Controll
     [ValidateAntiForgeryToken]
     public IActionResult ForgotPassword(ForgotPasswordViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
 
         ViewData["Message"] = "Если пользователь найден, ссылка для восстановления будет отправлена на email.";
         return View(model);
@@ -89,7 +110,9 @@ public sealed class AccountController(IAccountService accountService) : Controll
     public async Task<IActionResult> ConfirmEmail(string userId, string code)
     {
         if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+        {
             return RedirectToAction("Index", "Home");
+        }
 
         var result = await accountService.ConfirmEmailAsync(userId, code, HttpContext.RequestAborted);
         TempData["AccountMessage"] = result.Succeeded
@@ -111,7 +134,10 @@ public sealed class AccountController(IAccountService accountService) : Controll
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> TwoFactor(TwoFactorViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
 
         var authenticatorCode = model.Code.Replace(" ", string.Empty, StringComparison.Ordinal);
         var result = await accountService.TwoFactorAuthenticatorSignInAsync(
@@ -120,7 +146,10 @@ public sealed class AccountController(IAccountService accountService) : Controll
             model.RememberMachine,
             HttpContext.RequestAborted);
 
-        if (result.Succeeded) return RedirectToAction("Index", "Home");
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Неверный код подтверждения.");
         return View(model);
