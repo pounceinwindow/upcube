@@ -1,5 +1,7 @@
+@model IEnumerable<UpperCube.Application.DTOs.PropertyListItemDto>
 @{
     ViewData["Title"] = "Главная";
+    
 }
 
 <section class="flat-slider home-2 bg-primary-new">
@@ -37,7 +39,7 @@
                                             </div>
                                             <div class="box-btn-advanced">
                                                 <button type="submit" class="tf-btn btn-search primary">Искать <i
-                                                        class="icon icon-search"></i></button>
+                                                                                                                   class="icon icon-search"></i></button>
                                             </div>
                                         </div>
                                     </form>
@@ -66,6 +68,21 @@
     <div class="img-banner-right">
         <div class="slider-home2 img-animation">
             <img src="~/homelengo/images/slider/slider-2.jpg" alt="Недвижимость"/>
+        </div>
+    </div>
+</section>
+<section class="flat-section">
+    <div class="tf-container">
+        <h3>Свежие предложения</h3>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <h5>@item.Title</h5>
+                    <p>@item.Price.ToString("N0") @item.Currency</p>
+                    <p>@item.City, @item.District</p>
+                </div>
+            }
         </div>
     </div>
 </section>

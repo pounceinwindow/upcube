@@ -9,7 +9,12 @@ public sealed record PropertyListItemDto(
     int Rooms,
     string City,
     string District,
-    string? PrimaryImagePath);
+    string? PrimaryImagePath,
+    int Floor,
+    string PropertyType,
+    int TotalFloors,
+    int TransactionType,
+    string Address);
 
 public sealed record PropertyDetailsDto(int Id, string Title, string Description);
 

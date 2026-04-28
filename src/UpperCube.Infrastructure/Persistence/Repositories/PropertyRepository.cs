@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using UpperCube.Application.Abstractions.Repositories;
 using UpperCube.Application.DTOs;
 using UpperCube.Domain.Entities;
+using UpperCube.Domain.Enums;
+
 
 namespace UpperCube.Infrastructure.Persistence.Repositories;
 
@@ -79,5 +81,18 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
     {
         var property = await dbContext.Properties.FindAsync([id], ct);
         if (property is not null) dbContext.Properties.Remove(property);
+    }
+    
+    public  async Task<IReadOnlyList<Property>> GetLatestPublishedAsync(int count, CancellationToken ct = default)
+    {
+        var query = dbContext.Properties
+            .Include(x => x.Images)
+            .Include(x => x.City)
+            .Include(x => x.District)
+            .Include(x => x.PropertyType)
+            .Where(x => x.Status == PropertyStatus.Published)
+            .OrderByDescending(y => y.PublishedAt)
+            .Take(count);
+        return  await query.ToListAsync(ct);
     }
 }
