@@ -77,10 +77,8 @@
         <div class="row">
             @foreach (var item in Model)
             {
-                <div class="col-md-4">
-                    <h5>@item.Title</h5>
-                    <p>@item.Price.ToString("N0") @item.Currency</p>
-                    <p>@item.City, @item.District</p>
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <partial name="_PropertyCard" model="item"/>
                 </div>
             }
         </div>
