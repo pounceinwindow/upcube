@@ -19,7 +19,7 @@ public sealed class IdentityAccountService(
             email,
             password,
             rememberMe,
-            lockoutOnFailure: true);
+            true);
 
         return new AccountSignInResult(
             result.Succeeded,
@@ -39,9 +39,7 @@ public sealed class IdentityAccountService(
         {
             var createRoleResult = await roleManager.CreateAsync(new IdentityRole("User"));
             if (!createRoleResult.Succeeded)
-            {
                 return AccountOperationResult.Failed(createRoleResult.Errors.Select(x => x.Description).ToArray());
-            }
         }
 
         var user = new ApplicationUser
@@ -55,18 +53,13 @@ public sealed class IdentityAccountService(
         };
 
         var result = await userManager.CreateAsync(user, password);
-        if (!result.Succeeded)
-        {
-            return AccountOperationResult.Failed(result.Errors.Select(x => x.Description).ToArray());
-        }
+        if (!result.Succeeded) return AccountOperationResult.Failed(result.Errors.Select(x => x.Description).ToArray());
 
         if (!await userManager.IsInRoleAsync(user, "User"))
         {
             var roleResult = await userManager.AddToRoleAsync(user, "User");
             if (!roleResult.Succeeded)
-            {
                 return AccountOperationResult.Failed(roleResult.Errors.Select(x => x.Description).ToArray());
-            }
         }
 
         return AccountOperationResult.Success("Регистрация завершена. Подтвердите email перед входом.");
@@ -78,10 +71,7 @@ public sealed class IdentityAccountService(
         CancellationToken ct = default)
     {
         var user = await userManager.FindByIdAsync(userId);
-        if (user is null)
-        {
-            return AccountOperationResult.Failed("Пользователь не найден.");
-        }
+        if (user is null) return AccountOperationResult.Failed("Пользователь не найден.");
 
         var result = await userManager.ConfirmEmailAsync(user, code);
         return result.Succeeded

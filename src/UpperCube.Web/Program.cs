@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Localization;
 using Serilog;
 using UpperCube.Application;
 using UpperCube.Infrastructure;
+using UpperCube.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ var supportedCultures = new[]
 
 var app = builder.Build();
 
-await UpperCube.Infrastructure.Seeding.DataSeeder.SeedAsync(app.Services);
+await DataSeeder.SeedAsync(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {

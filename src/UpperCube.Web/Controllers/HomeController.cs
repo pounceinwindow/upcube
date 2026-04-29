@@ -10,7 +10,7 @@ public sealed class HomeController(IPropertyRepository repository) : Controller
     {
         var model = (await repository
                 .GetLatestPublishedAsync(6))
-                .Select(p => p.ToListItemDto());
+            .Select(p => p.ToListItemDto());
         return View(model);
     }
 }

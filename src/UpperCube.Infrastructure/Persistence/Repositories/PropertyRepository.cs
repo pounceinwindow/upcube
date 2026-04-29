@@ -4,7 +4,6 @@ using UpperCube.Application.DTOs;
 using UpperCube.Domain.Entities;
 using UpperCube.Domain.Enums;
 
-
 namespace UpperCube.Infrastructure.Persistence.Repositories;
 
 public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyRepository
@@ -82,8 +81,8 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
         var property = await dbContext.Properties.FindAsync([id], ct);
         if (property is not null) dbContext.Properties.Remove(property);
     }
-    
-    public  async Task<IReadOnlyList<Property>> GetLatestPublishedAsync(int count, CancellationToken ct = default)
+
+    public async Task<IReadOnlyList<Property>> GetLatestPublishedAsync(int count, CancellationToken ct = default)
     {
         var query = dbContext.Properties
             .Include(x => x.Images)
@@ -93,6 +92,6 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
             .Where(x => x.Status == PropertyStatus.Published)
             .OrderByDescending(y => y.PublishedAt)
             .Take(count);
-        return  await query.ToListAsync(ct);
+        return await query.ToListAsync(ct);
     }
 }

@@ -44,7 +44,6 @@ public interface IFeatureCatalogRepository
 }
 
 public interface IDictionaryRepository<T>
-    where T : Entity
 {
     Task<IReadOnlyList<T>> ListAsync(CancellationToken ct = default);
 

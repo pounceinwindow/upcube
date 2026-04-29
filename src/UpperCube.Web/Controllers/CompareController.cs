@@ -4,5 +4,8 @@ namespace UpperCube.Web.Controllers;
 
 public class CompareController : Controller
 {
-    public IActionResult Index() => View();
+    public IActionResult Index()
+    {
+        return View();
+    }
 }
