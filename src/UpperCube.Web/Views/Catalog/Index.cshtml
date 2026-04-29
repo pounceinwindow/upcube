@@ -1,4 +1,4 @@
-@model IEnumerable<UpperCube.Application.DTOs.PropertyListItemDto>
+@model UpperCube.Web.Models.Catalog.CatalogModelView
 @{
     ViewData["Title"] = "Каталог";
 }
@@ -6,8 +6,52 @@
 <section class="flat-section">
     <div class="tf-container">
         <h3 class="mb-4">Каталог объектов</h3>
+        <form method="get" asp-controller="Catalog" asp-action="Index" class="row g-3 mb-4">
+            <div class="col-md-2">
+                <label class="form-label">Город</label>
+                <select name="cityId" class="form-select">
+                    <option value="">Любой</option>
+                    @foreach (var c in Model.Cities)
+                    {
+                        <option value="@c.Value" selected="@(c.Value == Model.CityId?.ToString())">
+                            @c.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Тип Недвижимости</label>
+                <select name="propertyTypeId" class="form-select">
+                    <option value="">Любой</option>
+                    @foreach (var r in Model.PropertyTypes)
+                    {
+                        <option value="@r.Value" selected="@(r.Value == Model.PropertyTypeId?.ToString())">
+                            @r.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Цена от</label>
+                <input type="number" name="minPrice" value="@Model.MinPrice" class="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Цена до</label>
+                <input type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control"/>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">Комнаты</label>
+                <input type="number" name="rooms" value="@Model.Rooms" class="form-control"/>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="tf-btn primary w-100">Применить</button>
+            </div>
+        </form>
+        <p>Найдено: <b>@Model.TotalCount</b></p>
         <div class="row">
-            @foreach (var item in Model)
+            @foreach (var item in Model.Items)
             {
                 <div class="col-xl-4 col-lg-6 col-md-6">
                     <partial name="_PropertyCard" model="item"/>

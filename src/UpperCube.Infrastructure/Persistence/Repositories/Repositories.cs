@@ -80,7 +80,7 @@ public sealed class FeatureCatalogRepository(AppDbContext dbContext) : IFeatureC
 }
 
 public sealed class DictionaryRepository<T>(AppDbContext dbContext) : IDictionaryRepository<T>
-    where T : Entity
+    where T : Entity<int>
 {
     public async Task<IReadOnlyList<T>> ListAsync(CancellationToken ct = default)
     {

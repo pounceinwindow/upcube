@@ -9,7 +9,7 @@ using UpperCube.Web.Models.Catalog;
 
 namespace UpperCube.Web.Controllers;
 
-public class CatalogController(IPropertyRepository repository, IDictionaryRepository<City> City , IDictionaryRepository<PropertyType> PropertyType) : Controller
+public class CatalogController(IPropertyRepository repository, IDictionaryRepository<City> cityRepo , IDictionaryRepository<PropertyType> propertyTypeRepo) : Controller
 {
     public async Task<IActionResult> Index(int? cityId,
         int? propertyTypeId,
@@ -28,10 +28,10 @@ public class CatalogController(IPropertyRepository repository, IDictionaryReposi
             Rooms: rooms,
             Status: (int)PropertyStatus.Published);
 
-        var city = (await City.ListAsync())
+        var city = (await cityRepo.ListAsync())
             .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name });
 
-        var property = (await PropertyType.ListAsync())
+        var property = (await propertyTypeRepo.ListAsync())
             .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name });
 
         var (items, totalCount) = await repository.SearchAsync(filter, page, 9);
