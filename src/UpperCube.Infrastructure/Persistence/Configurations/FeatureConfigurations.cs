@@ -23,7 +23,8 @@ public sealed class ComparisonItemConfiguration : IEntityTypeConfiguration<Compa
     {
         builder.ToTable("ComparisonItems");
         builder.HasKey(x => new { x.ComparisonId, x.PropertyId });
-        builder.HasOne(x => x.Comparison).WithMany(x => x.Items).HasForeignKey(x => x.ComparisonId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Comparison).WithMany(x => x.Items).HasForeignKey(x => x.ComparisonId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(x => x.Property).WithMany().HasForeignKey(x => x.PropertyId).OnDelete(DeleteBehavior.Cascade);
         builder.HasIndex(x => new { x.ComparisonId, x.Position }).IsUnique();
     }
@@ -66,7 +67,8 @@ public sealed class ModerationActionConfiguration : IEntityTypeConfiguration<Mod
         builder.Property(x => x.Action).HasConversion<int>();
         builder.Property(x => x.Reason).HasMaxLength(1000);
         builder.HasOne(x => x.Property).WithMany().HasForeignKey(x => x.PropertyId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(x => x.ModeratorId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(x => x.ModeratorId)
+            .OnDelete(DeleteBehavior.Restrict);
         builder.HasIndex(x => x.ModeratorId);
     }
 }

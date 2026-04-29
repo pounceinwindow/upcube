@@ -6,6 +6,7 @@ public sealed record PropertySearchFilter(
     int? PropertyTypeId = null,
     int? CategoryId = null,
     int? TransactionType = null,
+    int? Status = null,
     decimal? MinPrice = null,
     decimal? MaxPrice = null,
     decimal? MinArea = null,

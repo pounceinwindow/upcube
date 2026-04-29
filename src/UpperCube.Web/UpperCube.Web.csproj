@@ -9,24 +9,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\homelengo\" />
-      <Folder Include="wwwroot\upcube\" />
+        <Folder Include="wwwroot\homelengo\"/>
+        <Folder Include="wwwroot\upcube\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\site.js"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\UpperCube.Application\UpperCube.Application.csproj" />
-      <ProjectReference Include="..\UpperCube.Infrastructure\UpperCube.Infrastructure.csproj" />
+        <ProjectReference Include="..\UpperCube.Application\UpperCube.Application.csproj"/>
+        <ProjectReference Include="..\UpperCube.Infrastructure\UpperCube.Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

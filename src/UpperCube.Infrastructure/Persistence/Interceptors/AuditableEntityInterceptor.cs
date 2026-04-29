@@ -23,19 +23,13 @@ public sealed class AuditableEntityInterceptor : SaveChangesInterceptor
 
     private static void UpdateTimestamps(DbContext? context)
     {
-        if (context is null)
-        {
-            return;
-        }
+        if (context is null) return;
 
         var now = DateTime.UtcNow;
 
         foreach (var entry in context.ChangeTracker.Entries())
         {
-            if (entry.Entity is not AuditableEntity auditable)
-            {
-                continue;
-            }
+            if (entry.Entity is not AuditableEntity auditable) continue;
 
             if (entry.State == EntityState.Added)
             {
@@ -43,10 +37,7 @@ public sealed class AuditableEntityInterceptor : SaveChangesInterceptor
                 auditable.UpdatedAt = now;
             }
 
-            if (entry.State == EntityState.Modified)
-            {
-                auditable.UpdatedAt = now;
-            }
+            if (entry.State == EntityState.Modified) auditable.UpdatedAt = now;
         }
     }
 }

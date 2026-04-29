@@ -54,7 +54,10 @@ public sealed class Property : AuditableEntity
 
     public ICollection<PropertyAmenity> Amenities { get; set; } = new List<PropertyAmenity>();
 
-    public void Submit() => Status = PropertyStatus.PendingModeration;
+    public void Submit()
+    {
+        Status = PropertyStatus.PendingModeration;
+    }
 
     public void Approve(DateTime utcNow)
     {

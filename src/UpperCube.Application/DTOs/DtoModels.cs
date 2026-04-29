@@ -9,7 +9,12 @@ public sealed record PropertyListItemDto(
     int Rooms,
     string City,
     string District,
-    string? PrimaryImagePath);
+    string? PrimaryImagePath,
+    int Floor,
+    string PropertyType,
+    int TotalFloors,
+    int TransactionType,
+    string Address);
 
 public sealed record PropertyDetailsDto(int Id, string Title, string Description);
 
@@ -52,7 +57,14 @@ public sealed record InquiryDto(int Id, int PropertyId, string FromUserId, strin
 
 public sealed record MessageDto(int Id, int InquiryId, string SenderId, string Text, DateTime SentAt, bool IsRead);
 
-public sealed record ValuationRequestDto(int CityId, int DistrictId, int PropertyTypeId, decimal Area, int Rooms, int Floor, int TotalFloors);
+public sealed record ValuationRequestDto(
+    int CityId,
+    int DistrictId,
+    int PropertyTypeId,
+    decimal Area,
+    int Rooms,
+    int Floor,
+    int TotalFloors);
 
 public sealed record ComparisonDto(int Id, string Name, IReadOnlyList<PropertyListItemDto> Items);
 

@@ -5,6 +5,7 @@ namespace UpperCube.Application.Abstractions.Repositories;
 
 public interface IPropertyRepository
 {
+    Task<IReadOnlyList<Property>> GetLatestPublishedAsync(int count, CancellationToken ct = default);
     Task<Property?> GetByIdAsync(int id, CancellationToken ct = default);
 
     Task<(IReadOnlyList<Property> Items, int TotalCount)> SearchAsync(

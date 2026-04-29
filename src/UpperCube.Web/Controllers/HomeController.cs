@@ -1,24 +1,16 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using UpperCube.Models;
+using UpperCube.Application.Abstractions.Repositories;
+using UpperCube.Web.Mapping;
 
-namespace UpperCube.Controllers;
+namespace UpperCube.Web.Controllers;
 
-public class HomeController : Controller
+public sealed class HomeController(IPropertyRepository repository) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var model = (await repository
+                .GetLatestPublishedAsync(6))
+            .Select(p => p.ToListItemDto());
+        return View(model);
     }
 }

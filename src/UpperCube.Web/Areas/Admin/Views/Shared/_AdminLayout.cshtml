@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - UpperCube Admin</title>
+    <link rel="shortcut icon" href="~/upcube/assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="~/upcube/assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/upcube/assets/css/icons.min.css"/>
+    <link rel="stylesheet" href="~/upcube/assets/css/app.min.css"/>
+</head>
+<body data-sidebar="dark">
+<div id="layout-wrapper">
+    <header id="page-topbar">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <div class="navbar-brand-box">
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="logo logo-light">
+                        <span class="logo-lg text-white fw-bold">UpperCube</span>
+                    </a>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-sm btn-light me-2">Сайт</a>
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-primary">Выйти</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="vertical-menu">
+        <div data-simplebar class="h-100">
+            <div id="sidebar-menu">
+                <ul class="metismenu list-unstyled" id="side-menu">
+                    <li class="menu-title">Администрирование</li>
+                    <li><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="ti-home"></i><span>Дашборд</span></a>
+                    </li>
+                    <li><a asp-area="Admin" asp-controller="Users" asp-action="Index"><i class="ti-user"></i><span>Пользователи</span></a>
+                    </li>
+                    <li><a asp-area="Admin" asp-controller="Moderation" asp-action="Index"><i
+                                class="ti-check-box"></i><span>Модерация</span></a></li>
+                    <li><a asp-area="Admin" asp-controller="Dictionaries" asp-action="Index"><i
+                                class="ti-view-list"></i><span>Справочники</span></a></li>
+                    <li><a asp-area="Admin" asp-controller="Logs" asp-action="Audit"><i class="ti-notepad"></i><span>Логи</span></a>
+                    </li>
+                    <li><a asp-area="Admin" asp-controller="FeatureCatalog" asp-action="Index"><i
+                                class="ti-settings"></i><span>Фичи</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/upcube/assets/libs/jquery/jquery.min.js"></script>
+<script src="~/upcube/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/upcube/assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="~/upcube/assets/libs/simplebar/simplebar.min.js"></script>
+<script src="~/upcube/assets/js/app.js"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

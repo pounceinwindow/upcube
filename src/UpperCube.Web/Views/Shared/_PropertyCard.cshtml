@@ -1,0 +1,64 @@
+@model UpperCube.Application.DTOs.PropertyListItemDto
+
+
+<div class="homelengo-box">
+    <div class="archive-top">
+        <a class="images-group" asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id">
+            <div class="images-style">
+                <img alt="img" class="lazyload"
+                     data-src="images/home/house-13.jpg" src="images/home/house-13.jpg">
+            </div>
+            <div class="top">
+                <ul class="d-flex gap-6">
+                    <li class="flag-tag primary">@Model.PropertyType</li>
+                    <li class="flag-tag style-1">@(Model.TransactionType == 0 ? "Продажа" : "Аренда")</li>
+                </ul>
+
+            </div>
+            <div class="bottom">
+                <svg fill="none" height="16" viewBox="0 0 16 16" width="16"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 7C10 7.53043 9.78929 8.03914 9.41421 8.41421C9.03914 8.78929 8.53043 9 8 9C7.46957 9 6.96086 8.78929 6.58579 8.41421C6.21071 8.03914 6 7.53043 6 7C6 6.46957 6.21071 5.96086 6.58579 5.58579C6.96086 5.21071 7.46957 5 8 5C8.53043 5 9.03914 5.21071 9.41421 5.58579C9.78929 5.96086 10 6.46957 10 7Z"
+                        stroke="white" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5"/>
+                    <path
+                        d="M13 7C13 11.7613 8 14.5 8 14.5C8 14.5 3 11.7613 3 7C3 5.67392 3.52678 4.40215 4.46447 3.46447C5.40215 2.52678 6.67392 2 8 2C9.32608 2 10.5979 2.52678 11.5355 3.46447C12.4732 4.40215 13 5.67392 13 7Z"
+                        stroke="white" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5"/>
+                </svg>
+                @Model.Address
+            </div>
+        </a>
+
+    </div>
+    <div class="archive-bottom">
+        <div class="content-top">
+            <h6 class="text-capitalize"><a class="link"
+                                           asp-controller="Property" asp-action="Details"
+                                           asp-route-id="@Model.Id"> @Model.Title</a></h6>
+            <ul class="meta-list">
+                <li class="item">
+                    <i class="icon icon-bed"></i>
+                    <span class="text-variant-1">Комнат:</span>
+                    <span class="fw-6">@Model.Rooms</span>
+                </li>
+                <li class="item">
+                    <i class="icon icon-sqft"></i>
+                    <span class="text-variant-1">Площадь: @Model.Area.ToString("F0")</span>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="content-bottom">
+            <div class="d-flex gap-8 align-items-center">
+                <div class="avatar avt-40 round">
+                    <img alt="avt" src="images/avatar/avt-png1.png">
+                </div>
+                <span>Arlene McCoy</span>
+            </div>
+            <h6 class="price">@Model.Price.ToString("N0") @Model.Currency</h6>
+        </div>
+    </div>
+</div>

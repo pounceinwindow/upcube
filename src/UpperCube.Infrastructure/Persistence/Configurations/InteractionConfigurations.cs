@@ -38,7 +38,8 @@ public sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.ToTable("Messages");
         builder.Property(x => x.SenderId).HasMaxLength(450).IsRequired();
         builder.Property(x => x.Text).HasMaxLength(4000).IsRequired();
-        builder.HasOne(x => x.Inquiry).WithMany(x => x.Messages).HasForeignKey(x => x.InquiryId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Inquiry).WithMany(x => x.Messages).HasForeignKey(x => x.InquiryId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(x => x.SenderId).OnDelete(DeleteBehavior.Restrict);
         builder.HasIndex(x => new { x.InquiryId, x.SentAt });
     }

@@ -29,6 +29,7 @@ var months = 'leden_únor_březen_duben_květen_červen_červenec_srpen_září_
 function plural(n) {
     return n > 1 && n < 5 && ~~(n / 10) !== 1;
 }
+
 function translate(number, withoutSuffix, key, isFuture) {
     var result = number + ' ';
     switch (key) {

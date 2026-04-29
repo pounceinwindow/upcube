@@ -37,7 +37,8 @@ public sealed class PropertyConfiguration : IEntityTypeConfiguration<Property>
 
         builder.HasOne(x => x.City).WithMany().HasForeignKey(x => x.CityId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.District).WithMany().HasForeignKey(x => x.DistrictId).OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.PropertyType).WithMany().HasForeignKey(x => x.PropertyTypeId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.PropertyType).WithMany().HasForeignKey(x => x.PropertyTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(x => x.AgentId).OnDelete(DeleteBehavior.Restrict);
 
@@ -56,7 +57,8 @@ public sealed class PropertyImageConfiguration : IEntityTypeConfiguration<Proper
         builder.ToTable("PropertyImages");
         builder.Property(x => x.Path).HasMaxLength(512).IsRequired();
         builder.Property(x => x.MediaType).HasConversion<int>();
-        builder.HasOne(x => x.Property).WithMany(x => x.Images).HasForeignKey(x => x.PropertyId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Property).WithMany(x => x.Images).HasForeignKey(x => x.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.HasIndex(x => new { x.PropertyId, x.Order });
     }
 }
@@ -67,7 +69,8 @@ public sealed class PropertyAmenityConfiguration : IEntityTypeConfiguration<Prop
     {
         builder.ToTable("PropertyAmenities");
         builder.HasKey(x => new { x.PropertyId, x.AmenityId });
-        builder.HasOne(x => x.Property).WithMany(x => x.Amenities).HasForeignKey(x => x.PropertyId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Property).WithMany(x => x.Amenities).HasForeignKey(x => x.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(x => x.Amenity).WithMany().HasForeignKey(x => x.AmenityId).OnDelete(DeleteBehavior.Cascade);
     }
 }

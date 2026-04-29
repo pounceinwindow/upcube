@@ -1,50 +1,161 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>@ViewData["Title"] - UpperCube</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/UpperCube.styles.css" asp-append-version="true"/>
+    <link rel="shortcut icon" href="~/homelengo/images/logo/favicon.png"/>
+    <link rel="apple-touch-icon-precomposed" href="~/homelengo/images/logo/favicon.png"/>
+    <link rel="stylesheet" href="~/homelengo/fonts/fonts.css"/>
+    <link rel="stylesheet" href="~/homelengo/fonts/font-icons.css"/>
+    <link rel="stylesheet" href="~/homelengo/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/homelengo/css/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="~/homelengo/css/animate.css"/>
+    <link rel="stylesheet" href="~/homelengo/css/jquery.fancybox.min.css"/>
+    <link rel="stylesheet" href="~/homelengo/css/styles.css"/>
 </head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">UpperCube</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
+<body class="body">
+<div class="preload preload-container">
+    <div class="preload-logo">
+        <div class="spinner"></div>
+        <span class="icon icon-villa-fill"></span>
+    </div>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2026 - UpperCube - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<div id="wrapper">
+    <div id="pagee" class="clearfix">
+        <header class="main-header fixed-header">
+            <div class="header-lower">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="inner-header">
+                            <div class="inner-header-left">
+                                <div class="logo-box flex">
+                                    <div class="logo">
+                                        <a asp-area="" asp-controller="Home" asp-action="Index">
+                                            <img src="~/homelengo/images/logo/logo@2x.png" alt="UpperCube" width="166"
+                                                 height="48"/>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="nav-outer flex align-center">
+                                    <nav class="main-menu show navbar-expand-md">
+                                        <div class="navbar-collapse collapse clearfix" id="navbarSupportedContent">
+                                            <ul class="navigation clearfix">
+                                                <li><a asp-area="" asp-controller="Home"
+                                                       asp-action="Index">@Localizer["Home"]</a></li>
+                                                <li><a asp-area="" asp-controller="Catalog"
+                                                       asp-action="Index">@Localizer["Catalog"]</a></li>
+                                                <li><a asp-area="" asp-controller="Estimator"
+                                                       asp-action="Index">@Localizer["Estimator"]</a></li>
+                                                <li><a asp-area="" asp-controller="Compare"
+                                                       asp-action="Index">@Localizer["Compare"]</a></li>
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li><a asp-area="Admin" asp-controller="Dashboard"
+                                                           asp-action="Index">@Localizer["Admin"]</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="inner-header-right header-account">
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="ru"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
+                                   class="tf-btn btn-line">RU</a>
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="en"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
+                                   class="tf-btn btn-line">EN</a>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="tf-btn primary">@Localizer["Logout"]</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-area="" asp-controller="Account" asp-action="Login"
+                                       class="tf-btn btn-line btn-login">@Localizer["Login"]</a>
+                                    <div class="flat-bt-top">
+                                        <a asp-area="" asp-controller="Account" asp-action="Register"
+                                           class="tf-btn primary">@Localizer["Register"]</a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="mobile-nav-toggler mobile-button"><span></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="close-btn"><span class="icon flaticon-cancel-1"></span></div>
+            <div class="mobile-menu">
+                <div class="menu-backdrop"></div>
+                <nav class="menu-box">
+                    <div class="nav-logo">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="~/homelengo/images/logo/logo@2x.png" alt="UpperCube" width="174" height="44"/>
+                        </a>
+                    </div>
+                    <div class="bottom-canvas">
+                        <div class="login-box flex align-center">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="tf-btn primary">@Localizer["Logout"]</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                                <span>/</span>
+                                <a asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a>
+                            }
+                        </div>
+                        <div class="menu-outer"></div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main role="main">
+            @RenderBody()
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="tf-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="footer-cl-1">
+                                <p class="text-variant-2 mb-0">© 2026 UpperCube. @Localizer["RealEstatePlatform"]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+</div>
+
+<script src="~/homelengo/js/jquery.min.js"></script>
+<script src="~/homelengo/js/bootstrap.min.js"></script>
+<script src="~/homelengo/js/swiper-bundle.min.js"></script>
+<script src="~/homelengo/js/carousel.js"></script>
+<script src="~/homelengo/js/plugin.js"></script>
+<script src="~/homelengo/js/jquery.nice-select.min.js"></script>
+<script src="~/homelengo/js/animation_heading.js"></script>
+<script src="~/homelengo/js/rangle-slider.js"></script>
+<script src="~/homelengo/js/shortcodes.js"></script>
+<script src="~/homelengo/js/lazysize.min.js"></script>
+<script src="~/homelengo/js/main.js"></script>
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

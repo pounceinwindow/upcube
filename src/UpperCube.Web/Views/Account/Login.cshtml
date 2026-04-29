@@ -1,0 +1,62 @@
+@model LoginViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Вход";
+}
+
+<h4 class="text-muted text-center font-size-18"><b>Вход</b></h4>
+
+@if (TempData["AccountMessage"] is string message)
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+<div class="p-3">
+    <form asp-action="Login" method="post" class="form-horizontal mt-3">
+        @Html.AntiForgeryToken()
+        <input asp-for="ReturnUrl" type="hidden"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <input asp-for="Password" class="form-control" placeholder="Пароль" autocomplete="current-password"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <div class="custom-control custom-checkbox">
+                    <input asp-for="RememberMe" class="custom-control-input"/>
+                    <label asp-for="RememberMe" class="form-label ms-1">Запомнить меня</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 text-center row mt-3 pt-1">
+            <div class="col-12">
+                <button class="btn btn-info w-100 waves-effect waves-light" type="submit">Войти</button>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 row mt-2">
+            <div class="col-sm-7 mt-3">
+                <a asp-action="ForgotPassword" class="text-muted"><i class="mdi mdi-lock"></i> Забыли пароль?</a>
+            </div>
+            <div class="col-sm-5 mt-3">
+                <a asp-action="Register" class="text-muted"><i class="mdi mdi-account-circle"></i> Регистрация</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
