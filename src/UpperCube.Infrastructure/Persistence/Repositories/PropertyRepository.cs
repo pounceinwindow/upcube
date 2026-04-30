@@ -13,6 +13,11 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
         return dbContext.Properties
             .Include(x => x.Images)
             .Include(x => x.Amenities)
+            .ThenInclude(pa => pa.Amenity)
+            .Include(x => x.City)
+            .Include(x => x.District)
+            .Include(x => x.PropertyType)
+            .Include(x => x.Category)
             .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
@@ -93,5 +98,14 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
             .OrderByDescending(y => y.PublishedAt)
             .Take(count);
         return await query.ToListAsync(ct);
+    }
+
+    public async Task IncrementViewsAsync(int id, CancellationToken ct = default)
+    {
+        var property = await dbContext.Properties.FindAsync([id], ct);
+        if (property is not null)
+        {
+            property.ViewsCount++;
+        }
     }
 }

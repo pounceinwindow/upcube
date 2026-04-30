@@ -19,4 +19,6 @@ public interface IPropertyRepository
     Task UpdateAsync(Property property, CancellationToken ct = default);
 
     Task DeleteAsync(int id, CancellationToken ct = default);
+
+    Task IncrementViewsAsync(int id, CancellationToken ct = default);
 }
