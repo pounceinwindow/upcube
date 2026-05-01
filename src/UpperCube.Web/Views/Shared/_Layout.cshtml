@@ -59,7 +59,11 @@
                                                 @if (User.Identity?.IsAuthenticated == true)
                                                 {
                                                     <li><a asp-area="" asp-controller="Account"
+                                                           asp-action="Dashboard">Дашборд</a></li>
+                                                    <li><a asp-area="" asp-controller="Account"
                                                            asp-action="Favorites">Избранное</a></li>
+                                                    <li><a asp-area="" asp-controller="Account"
+                                                           asp-action="Profile">Профиль</a></li>
                                                 }
                                                 @if (User.IsInRole("Admin"))
                                                 {

@@ -62,4 +62,32 @@ public class CatalogController(
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
         return View(model);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> LoadMore(
+        int? cityId,
+        int? propertyTypeId,
+        int? transactionType,
+        decimal? minPrice,
+        decimal? maxPrice,
+        int? rooms,
+        int page = 1,
+        CancellationToken ct = default)
+    {
+        var filter = new PropertySearchFilter(
+            CityId: cityId,
+            PropertyTypeId: propertyTypeId,
+            TransactionType: transactionType,
+            MinPrice: minPrice,
+            MaxPrice: maxPrice,
+            Rooms: rooms,
+            Status: (int)PropertyStatus.Published);
+
+        var (items, _) = await repository.SearchAsync(filter, page, pageSize: 9, ct);
+        var dtos = items.Select(p => p.ToListItemDto()).ToList();
+
+        await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
+
+        return PartialView("_PropertyCardList", dtos);
+    }
 }

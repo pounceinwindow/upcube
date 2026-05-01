@@ -1,0 +1,8 @@
+@model IReadOnlyList<UpperCube.Application.DTOs.PropertyListItemDto>
+
+@foreach (var item in Model)
+{
+    <div class="col-xl-4 col-lg-6 col-md-6">
+        <partial name="_PropertyCard" model="item"/>
+    </div>
+}

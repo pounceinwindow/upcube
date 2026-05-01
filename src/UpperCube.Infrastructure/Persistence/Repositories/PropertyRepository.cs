@@ -100,6 +100,18 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
         return await query.ToListAsync(ct);
     }
 
+    public async Task<IReadOnlyList<Property>> GetByAgentIdAsync(string agentId, CancellationToken ct = default)
+    {
+        return await dbContext.Properties
+            .Include(x => x.Images)
+            .Include(x => x.City)
+            .Include(x => x.District)
+            .Include(x => x.PropertyType)
+            .Where(x => x.AgentId == agentId)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync(ct);
+    }
+
     public async Task IncrementViewsAsync(int id, CancellationToken ct = default)
     {
         var property = await dbContext.Properties.FindAsync([id], ct);

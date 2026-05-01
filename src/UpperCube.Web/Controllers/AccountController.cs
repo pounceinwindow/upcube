@@ -153,6 +153,42 @@ public sealed class AccountController(
         return View(items);
     }
 
+    [Authorize]
+    [HttpGet("/account/dashboard")]
+    public async Task<IActionResult> Dashboard(
+        [FromServices] IFavoriteRepository favoriteRepository,
+        [FromServices] IPropertyRepository propertyRepository,
+        CancellationToken ct)
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null) return Challenge();
+
+        var favoriteIds = await favoriteRepository.GetUserFavoritePropertyIdsAsync(userId, ct);
+
+        var myPropertiesCount = 0;
+        if (User.IsInRole("Agent"))
+        {
+            var myProps = await propertyRepository.GetByAgentIdAsync(userId, ct);
+            myPropertiesCount = myProps.Count;
+        }
+
+        ViewData["FavoritesCount"] = favoriteIds.Count;
+        ViewData["MyPropertiesCount"] = myPropertiesCount;
+        ViewData["IsAgent"] = User.IsInRole("Agent");
+
+        return View();
+    }
+
+    [Authorize]
+    [HttpGet("/account/profile")]
+    public async Task<IActionResult> Profile()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+
+        return View(user);
+    }
+
     [HttpPost("logout")]
     [Authorize]
     [ValidateAntiForgeryToken]
