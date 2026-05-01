@@ -1,4 +1,8 @@
 @model UpperCube.Application.DTOs.PropertyListItemDto
+@{
+    var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
+    var isFavorite = favoriteIds.Contains(Model.Id);
+}
 
 <div class="homelengo-box">
     <div class="archive-top">
@@ -48,7 +52,7 @@
                 </li>
             </ul>
 
-            <button type="button" class="btn-favorite" data-property-id="@Model.Id">
+            <button type="button" class="btn-favorite @(isFavorite ? "active" : "")" data-property-id="@Model.Id">
                 <i class="icon icon-heart"></i>
             </button>
         </div>

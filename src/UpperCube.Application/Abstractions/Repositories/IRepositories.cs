@@ -7,6 +7,10 @@ public interface IFavoriteRepository
 {
     Task<Favorite?> GetAsync(string userId, int propertyId, CancellationToken ct = default);
 
+    Task<IReadOnlyList<int>> GetUserFavoritePropertyIdsAsync(string userId, CancellationToken ct = default);
+
+    Task<IReadOnlyList<Property>> GetUserFavoritesAsync(string userId, CancellationToken ct = default);
+
     Task AddAsync(Favorite favorite, CancellationToken ct = default);
 
     Task DeleteAsync(Favorite favorite, CancellationToken ct = default);

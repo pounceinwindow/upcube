@@ -1,12 +1,18 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UpperCube.Application.Abstractions.Authentication;
+using UpperCube.Application.Abstractions.Repositories;
+using UpperCube.Infrastructure.Identity;
 using UpperCube.Models.Account;
+using UpperCube.Web.Mapping;
 
 namespace UpperCube.Web.Controllers;
 
 [Route("account")]
-public sealed class AccountController(IAccountService accountService) : Controller
+public sealed class AccountController(
+    IAccountService accountService,
+    UserManager<ApplicationUser> userManager) : Controller
 {
     [HttpGet("login")]
     [AllowAnonymous]
@@ -128,6 +134,23 @@ public sealed class AccountController(IAccountService accountService) : Controll
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Неверный код подтверждения.");
         return View(model);
+    }
+
+    [Authorize]
+    [HttpGet("favorites")]
+    public async Task<IActionResult> Favorites(
+        [FromServices] IFavoriteRepository favoriteRepository,
+        CancellationToken ct)
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null) return Challenge();
+
+        var properties = await favoriteRepository.GetUserFavoritesAsync(userId, ct);
+        var items = properties.Select(p => p.ToListItemDto()).ToList();
+
+        ViewData["FavoriteIds"] = items.Select(i => i.Id).ToHashSet();
+
+        return View(items);
     }
 
     [HttpPost("logout")]

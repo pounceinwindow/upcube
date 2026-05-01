@@ -56,6 +56,11 @@
                                                        asp-action="Index">@Localizer["Estimator"]</a></li>
                                                 <li><a asp-area="" asp-controller="Compare"
                                                        asp-action="Index">@Localizer["Compare"]</a></li>
+                                                @if (User.Identity?.IsAuthenticated == true)
+                                                {
+                                                    <li><a asp-area="" asp-controller="Account"
+                                                           asp-action="Favorites">Избранное</a></li>
+                                                }
                                                 @if (User.IsInRole("Admin"))
                                                 {
                                                     <li><a asp-area="Admin" asp-controller="Dashboard"
@@ -159,7 +164,7 @@
 <script src="~/homelengo/js/shortcodes.js"></script>
 <script src="~/homelengo/js/lazysize.min.js"></script>
 <script src="~/homelengo/js/main.js"></script>
-<script src = "js/favorites.js"></script>
+<script src="~/js/favorites.js"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

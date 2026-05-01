@@ -12,6 +12,31 @@ public sealed class FavoriteRepository(AppDbContext dbContext) : IFavoriteReposi
         return dbContext.Favorites.FirstOrDefaultAsync(x => x.UserId == userId && x.PropertyId == propertyId, ct);
     }
 
+    public async Task<IReadOnlyList<int>> GetUserFavoritePropertyIdsAsync(string userId, CancellationToken ct = default)
+    {
+        return await dbContext.Favorites
+            .Where(f => f.UserId == userId)
+            .Select(f => f.PropertyId)
+            .ToListAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<Property>> GetUserFavoritesAsync(string userId, CancellationToken ct = default)
+    {
+        return await dbContext.Favorites
+            .Where(f => f.UserId == userId)
+            .OrderByDescending(f => f.AddedAt)
+            .Include(f => f.Property)
+            .ThenInclude(p => p!.Images)
+            .Include(f => f.Property)
+            .ThenInclude(p => p!.City)
+            .Include(f => f.Property)
+            .ThenInclude(p => p!.District)
+            .Include(f => f.Property)
+            .ThenInclude(p => p!.PropertyType)
+            .Select(f => f.Property!)
+            .ToListAsync(ct);
+    }
+
     public Task AddAsync(Favorite favorite, CancellationToken ct = default)
     {
         return dbContext.Favorites.AddAsync(favorite, ct).AsTask();
