@@ -23,6 +23,8 @@ builder.Services
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
+
 var supportedCultures = new[]
 {
     new CultureInfo("ru"),

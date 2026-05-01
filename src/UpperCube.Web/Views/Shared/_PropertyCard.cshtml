@@ -1,12 +1,10 @@
 @model UpperCube.Application.DTOs.PropertyListItemDto
 
-
 <div class="homelengo-box">
     <div class="archive-top">
         <a class="images-group" asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id">
             <div class="images-style">
-                <img alt="img" class="lazyload"
-                     data-src="images/home/house-13.jpg" src="images/home/house-13.jpg">
+                <img alt="img" data-src="~/homelengo/images/home/house-13.jpg" src="~/homelengo/images/home/house-13.jpg">
             </div>
             <div class="top">
                 <ul class="d-flex gap-6">
@@ -34,9 +32,10 @@
     </div>
     <div class="archive-bottom">
         <div class="content-top">
-            <h6 class="text-capitalize"><a class="link"
-                                           asp-controller="Property" asp-action="Details"
-                                           asp-route-id="@Model.Id"> @Model.Title</a></h6>
+            <h6 class="text-capitalize">
+                <a class="link"
+                   asp-controller="Property" asp-action="Details"
+                   asp-route-id="@Model.Id"> @Model.Title</a></h6>
             <ul class="meta-list">
                 <li class="item">
                     <i class="icon icon-bed"></i>
@@ -49,6 +48,9 @@
                 </li>
             </ul>
 
+            <button type="button" class="btn-favorite" data-property-id="@Model.Id">
+                <i class="icon icon-heart"></i>
+            </button>
         </div>
 
         <div class="content-bottom">

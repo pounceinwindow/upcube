@@ -1,6 +1,8 @@
 ﻿@using System.Globalization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResource> Localizer
+@Html.AntiForgeryToken()
+
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
@@ -16,6 +18,7 @@
     <link rel="stylesheet" href="~/homelengo/css/animate.css"/>
     <link rel="stylesheet" href="~/homelengo/css/jquery.fancybox.min.css"/>
     <link rel="stylesheet" href="~/homelengo/css/styles.css"/>
+    <link rel="stylesheet" href="~/css/favorites.css">
 </head>
 <body class="body">
 <div class="preload preload-container">
@@ -156,6 +159,7 @@
 <script src="~/homelengo/js/shortcodes.js"></script>
 <script src="~/homelengo/js/lazysize.min.js"></script>
 <script src="~/homelengo/js/main.js"></script>
+<script src = "js/favorites.js"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>
