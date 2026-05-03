@@ -9,26 +9,26 @@
         <p class="text-variant-1">
             @Model.City, @Model.District, @Model.Address
         </p>
-        
+
         <h2>@Model.Price.ToString("N0") @Model.Currency</h2>
-        
+
         <div class="row mt-4">
             <div class="col-md-3"><strong>Тип:</strong> @Model.PropertyType</div>
             <div class="col-md-3"><strong>Категория:</strong> @Model.Category</div>
             <div class="col-md-3"><strong>Сделка:</strong> @(Model.TransactionType == 0 ? "Продажа" : "Аренда")</div>
             <div class="col-md-3"><strong>Площадь:</strong> @Model.Area.ToString("F0") м²</div>
         </div>
-        
+
         <div class="row mt-3">
             <div class="col-md-3"><strong>Комнат:</strong> @Model.Rooms</div>
             <div class="col-md-3"><strong>Этаж:</strong> @Model.Floor / @Model.TotalFloors</div>
             <div class="col-md-3"><strong>Просмотров:</strong> @Model.ViewsCount</div>
             <div class="col-md-3"><strong>Агент:</strong> @Model.AgentName</div>
         </div>
-        
+
         <h3 class="mt-4">Описание</h3>
         <p>@Model.Description</p>
-        
+
         @if (Model.Amenities.Any())
         {
             <h3 class="mt-4">Удобства</h3>

@@ -17,11 +17,8 @@ public sealed class PropertyController(
         var model = await repository
             .GetByIdAsync(id, ct);
 
-        if (model == null)
-        {
-            return NotFound();
-        }
-            
+        if (model == null) return NotFound();
+
         await repository.IncrementViewsAsync(id, ct);
 
         var details = model.ToDetailsDto();

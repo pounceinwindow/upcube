@@ -44,11 +44,11 @@ public class CatalogController(
             .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name });
 
         var (items, totalCount) = await repository.SearchAsync(filter, page, 9, ct);
-        var model = new CatalogModelView()
+        var model = new CatalogModelView
         {
-            Cities = city, 
+            Cities = city,
             PropertyTypes = property,
-            CityId =  cityId,
+            CityId = cityId,
             PropertyTypeId = propertyTypeId,
             TransactionType = transactionType,
             MinPrice = minPrice,
@@ -56,7 +56,7 @@ public class CatalogController(
             Rooms = rooms,
             Items = items.Select(p => p.ToListItemDto()),
             TotalCount = totalCount,
-            Page = page,
+            Page = page
         };
 
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
@@ -75,7 +75,7 @@ public class CatalogController(
         CancellationToken ct = default)
     {
         var filter = new PropertySearchFilter(
-            CityId: cityId,
+            cityId,
             PropertyTypeId: propertyTypeId,
             TransactionType: transactionType,
             MinPrice: minPrice,
@@ -83,7 +83,7 @@ public class CatalogController(
             Rooms: rooms,
             Status: (int)PropertyStatus.Published);
 
-        var (items, _) = await repository.SearchAsync(filter, page, pageSize: 9, ct);
+        var (items, _) = await repository.SearchAsync(filter, page, 9, ct);
         var dtos = items.Select(p => p.ToListItemDto()).ToList();
 
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);

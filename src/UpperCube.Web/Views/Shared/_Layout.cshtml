@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/homelengo/css/jquery.fancybox.min.css"/>
     <link rel="stylesheet" href="~/homelengo/css/styles.css"/>
     <link rel="stylesheet" href="~/css/favorites.css">
+    <link rel="stylesheet" href="~/css/uppercube-home.css"/>
 </head>
 <body class="body">
 <div class="preload preload-container">
@@ -30,7 +31,7 @@
 
 <div id="wrapper">
     <div id="pagee" class="clearfix">
-        <header class="main-header fixed-header">
+        <header class="main-header fixed-header uppercube-header">
             <div class="header-lower">
                 <div class="row">
                     <div class="col-lg-12">
@@ -44,10 +45,10 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="nav-outer flex align-center">
+                                <div class="nav-outer flex align-center uppercube-nav-outer">
                                     <nav class="main-menu show navbar-expand-md">
                                         <div class="navbar-collapse collapse clearfix" id="navbarSupportedContent">
-                                            <ul class="navigation clearfix">
+                                            <ul class="navigation clearfix uppercube-navigation">
                                                 <li><a asp-area="" asp-controller="Home"
                                                        asp-action="Index">@Localizer["Home"]</a></li>
                                                 <li><a asp-area="" asp-controller="Catalog"
@@ -75,28 +76,29 @@
                                     </nav>
                                 </div>
                             </div>
-                            <div class="inner-header-right header-account">
+                            <div class="inner-header-right header-account uppercube-header-actions">
                                 <a asp-controller="Culture" asp-action="Set" asp-route-culture="ru"
                                    asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
-                                   class="tf-btn btn-line">RU</a>
+                                   class="tf-btn btn-line uppercube-btn uppercube-btn-lang">RU</a>
                                 <a asp-controller="Culture" asp-action="Set" asp-route-culture="en"
                                    asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
-                                   class="tf-btn btn-line">EN</a>
+                                   class="tf-btn btn-line uppercube-btn uppercube-btn-lang">EN</a>
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
                                     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post"
-                                          class="d-inline">
+                                          class="d-inline uppercube-auth-form">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="tf-btn primary">@Localizer["Logout"]</button>
+                                        <button type="submit"
+                                                class="tf-btn primary uppercube-btn uppercube-btn-main">@Localizer["Logout"]</button>
                                     </form>
                                 }
                                 else
                                 {
                                     <a asp-area="" asp-controller="Account" asp-action="Login"
-                                       class="tf-btn btn-line btn-login">@Localizer["Login"]</a>
+                                       class="tf-btn btn-line btn-login uppercube-btn uppercube-btn-auth">@Localizer["Login"]</a>
                                     <div class="flat-bt-top">
                                         <a asp-area="" asp-controller="Account" asp-action="Register"
-                                           class="tf-btn primary">@Localizer["Register"]</a>
+                                           class="tf-btn primary uppercube-btn uppercube-btn-main">@Localizer["Register"]</a>
                                     </div>
                                 }
                             </div>
@@ -117,11 +119,19 @@
                     </div>
                     <div class="bottom-canvas">
                         <div class="login-box flex align-center">
+                            <div class="uppercube-mobile-langs">
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="ru"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">RU</a>
+                                <a asp-controller="Culture" asp-action="Set" asp-route-culture="en"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">EN</a>
+                            </div>
                             @if (User.Identity?.IsAuthenticated == true)
                             {
-                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post"
+                                      class="uppercube-auth-form">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="tf-btn primary">@Localizer["Logout"]</button>
+                                    <button type="submit"
+                                            class="tf-btn primary uppercube-btn uppercube-btn-main">@Localizer["Logout"]</button>
                                 </form>
                             }
                             else

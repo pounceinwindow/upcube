@@ -1,6 +1,3 @@
-using UpperCube.Domain.Enums;
-using UpperCube.Domain.ValueObjects;
-
 namespace UpperCube.Application.DTOs;
 
 public sealed record PropertyListItemDto(
@@ -31,7 +28,7 @@ public sealed record PropertyDetailsDto(
     int TotalFloors,
     int Status,
     int TransactionType,
-    string City,        
+    string City,
     string District,
     string PropertyType,
     string Category,
@@ -41,7 +38,7 @@ public sealed record PropertyDetailsDto(
     long ViewsCount,
     List<string> Images,
     List<string> Amenities
-    );
+);
 
 public sealed record CreatePropertyDto(
     string Title,

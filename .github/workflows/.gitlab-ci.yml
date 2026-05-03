@@ -1,0 +1,16 @@
+image: mcr.microsoft.com/dotnet/sdk:10.0
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - dotnet build UpperCube.sln 
+
+#test:
+#  stage: test
+#  script:
+#    - dotnet test UpperCube.sln --no-build 
+#  needs:
+#    - build как говорится все будет но не сразу

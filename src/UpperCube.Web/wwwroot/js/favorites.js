@@ -1,7 +1,7 @@
 (function () {
     document.addEventListener('click', async function (e) {
         const btn = e.target.closest('.btn-favorite');
-        if (!btn) return;  
+        if (!btn) return;
 
         e.preventDefault();
         const propertyId = parseInt(btn.dataset.propertyId, 10);
@@ -18,7 +18,7 @@
                 'Content-Type': 'application/json',
                 'RequestVerificationToken': tokenInput.value
             },
-            body: JSON.stringify({ propertyId })
+            body: JSON.stringify({propertyId})
         });
 
         if (res.status === 401) {

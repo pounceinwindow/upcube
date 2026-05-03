@@ -115,9 +115,6 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
     public async Task IncrementViewsAsync(int id, CancellationToken ct = default)
     {
         var property = await dbContext.Properties.FindAsync([id], ct);
-        if (property is not null)
-        {
-            property.ViewsCount++;
-        }
+        if (property is not null) property.ViewsCount++;
     }
 }

@@ -19,10 +19,11 @@ public static class PropertyMapping
     {
         return new PropertyDetailsDto(property.Id, property.Title, property.Description, property.Price.Amount,
             property.Price.Currency, property.Area.Value, property.Rooms, property.Floor, property.TotalFloors,
-            (int)property.Status, (int)property.TransactionType, property.City?.Name ?? string.Empty, property.District?.Name ?? string.Empty,
+            (int)property.Status, (int)property.TransactionType, property.City?.Name ?? string.Empty,
+            property.District?.Name ?? string.Empty,
             property.PropertyType?.Name ?? string.Empty,
             property.Category?.Name ?? string.Empty, property.Address, property.AgentId, "Агент", property.ViewsCount,
-            property.Images.Select(p => p.Path).ToList(), property.Amenities.Select(x => x.Amenity?.Name ?? "").ToList()  
+            property.Images.Select(p => p.Path).ToList(), property.Amenities.Select(x => x.Amenity?.Name ?? "").ToList()
         );
     }
 }

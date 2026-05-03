@@ -1,4 +1,3 @@
-using UpperCube.Domain.Common;
 using UpperCube.Domain.Entities;
 
 namespace UpperCube.Application.Abstractions.Repositories;
