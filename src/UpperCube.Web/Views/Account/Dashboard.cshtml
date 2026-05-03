@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Дашборд";
+    var favCount = (int)(ViewData["FavoritesCount"] ?? 0);
+    var myPropsCount = (int)(ViewData["MyPropertiesCount"] ?? 0);
+    var isAgent = (bool)(ViewData["IsAgent"] ?? false);
+}
+
+<section class="flat-section">
+    <div class="tf-container">
+        <h3 class="mb-4">Личный кабинет</h3>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="homelengo-box p-4 text-center">
+                    <h2 class="fw-7">@favCount</h2>
+                    <p class="text-variant-1">В избранном</p>
+                    <a asp-controller="Account" asp-action="Favorites" class="tf-btn primary">Открыть</a>
+                </div>
+            </div>
+
+            @if (isAgent)
+            {
+                <div class="col-md-4">
+                    <div class="homelengo-box p-4 text-center">
+                        <h2 class="fw-7">@myPropsCount</h2>
+                        <p class="text-variant-1">Моих объявлений</p>
+                        <a asp-controller="Agent" asp-action="MyProperties" class="tf-btn primary">Перейти</a>
+                    </div>
+                </div>
+            }
+
+            <div class="col-md-4">
+                <div class="homelengo-box p-4 text-center">
+                    <h2 class="fw-7"><i class="icon icon-user"></i></h2>
+                    <p class="text-variant-1">Профиль</p>
+                    <a asp-controller="Account" asp-action="Profile" class="tf-btn primary">Открыть</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

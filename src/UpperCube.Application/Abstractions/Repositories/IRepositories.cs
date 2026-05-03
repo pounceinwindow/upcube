@@ -1,4 +1,3 @@
-using UpperCube.Domain.Common;
 using UpperCube.Domain.Entities;
 
 namespace UpperCube.Application.Abstractions.Repositories;
@@ -6,6 +5,10 @@ namespace UpperCube.Application.Abstractions.Repositories;
 public interface IFavoriteRepository
 {
     Task<Favorite?> GetAsync(string userId, int propertyId, CancellationToken ct = default);
+
+    Task<IReadOnlyList<int>> GetUserFavoritePropertyIdsAsync(string userId, CancellationToken ct = default);
+
+    Task<IReadOnlyList<Property>> GetUserFavoritesAsync(string userId, CancellationToken ct = default);
 
     Task AddAsync(Favorite favorite, CancellationToken ct = default);
 

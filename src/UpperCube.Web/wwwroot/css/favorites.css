@@ -1,0 +1,20 @@
+.btn-favorite {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: #999;
+    transition: color 0.2s;
+}
+
+.btn-favorite:hover {
+    color: #ff4757;
+}
+
+.btn-favorite.active {
+    color: #ff4757;
+}
+
+.btn-favorite.active .icon {
+    color: #ff4757;
+}

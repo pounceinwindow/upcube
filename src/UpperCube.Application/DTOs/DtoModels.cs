@@ -16,7 +16,29 @@ public sealed record PropertyListItemDto(
     int TransactionType,
     string Address);
 
-public sealed record PropertyDetailsDto(int Id, string Title, string Description);
+public sealed record PropertyDetailsDto(
+    int Id,
+    string Title,
+    string Description,
+    decimal Price,
+    string Currency,
+    decimal Area,
+    int Rooms,
+    int Floor,
+    int TotalFloors,
+    int Status,
+    int TransactionType,
+    string City,
+    string District,
+    string PropertyType,
+    string Category,
+    string Address,
+    string AgentId,
+    string AgentName,
+    long ViewsCount,
+    List<string> Images,
+    List<string> Amenities
+);
 
 public sealed record CreatePropertyDto(
     string Title,

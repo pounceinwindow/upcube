@@ -6,6 +6,9 @@ namespace UpperCube.Application.Abstractions.Repositories;
 public interface IPropertyRepository
 {
     Task<IReadOnlyList<Property>> GetLatestPublishedAsync(int count, CancellationToken ct = default);
+
+    Task<IReadOnlyList<Property>> GetByAgentIdAsync(string agentId, CancellationToken ct = default);
+
     Task<Property?> GetByIdAsync(int id, CancellationToken ct = default);
 
     Task<(IReadOnlyList<Property> Items, int TotalCount)> SearchAsync(
@@ -19,4 +22,6 @@ public interface IPropertyRepository
     Task UpdateAsync(Property property, CancellationToken ct = default);
 
     Task DeleteAsync(int id, CancellationToken ct = default);
+
+    Task IncrementViewsAsync(int id, CancellationToken ct = default);
 }

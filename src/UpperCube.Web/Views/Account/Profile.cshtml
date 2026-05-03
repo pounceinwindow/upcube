@@ -1,0 +1,39 @@
+@model UpperCube.Infrastructure.Identity.ApplicationUser
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<section class="flat-section">
+    <div class="tf-container">
+        <h3 class="mb-4">Мой профиль</h3>
+
+        <div class="homelengo-box p-4">
+            <dl class="row">
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Имя</dt>
+                <dd class="col-sm-9">@Model.FirstName</dd>
+
+                <dt class="col-sm-3">Фамилия</dt>
+                <dd class="col-sm-9">@Model.LastName</dd>
+
+                <dt class="col-sm-3">Язык</dt>
+                <dd class="col-sm-9">@Model.PreferredLanguage</dd>
+
+                <dt class="col-sm-3">Email подтверждён</dt>
+                <dd class="col-sm-9">@(Model.EmailConfirmed ? "Да" : "Нет")</dd>
+
+                <dt class="col-sm-3">Двухфакторная аутентификация</dt>
+                <dd class="col-sm-9">@(Model.TwoFactorEnabled ? "Включена" : "Выключена")</dd>
+
+                <dt class="col-sm-3">Дата регистрации</dt>
+                <dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy")</dd>
+            </dl>
+
+            <p class="text-variant-1 mt-3">
+                <small>Редактирование профиля будет доступно в следующих обновлениях.</small>
+            </p>
+        </div>
+    </div>
+</section>
