@@ -4,7 +4,7 @@ obj/
 out/
 publish/
 artifacts/
-
+AGENTS.md
 # User and IDE files
 .vs/
 .idea/
