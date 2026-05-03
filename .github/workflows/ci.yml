@@ -1,4 +1,4 @@
-name: Docker CI
+name: CI
 
 on:
   push:
@@ -7,13 +7,31 @@ on:
     branches: [ dev, master ]
 
 jobs:
-  
-  docker-build:
+  build-and-docker-up:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t uppercube:latest .
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore UpperCube.sln
+
+      - name: Build
+        run: dotnet build UpperCube.sln 
+
+      - name: Docker compose up
+        run: docker compose up -d --build
+
+      - name: Show running containers
+        run: docker ps
+
+
+      - name: Docker compose down
+        if: always()
+        run: docker compose down
