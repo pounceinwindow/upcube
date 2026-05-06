@@ -8,6 +8,7 @@ using UpperCube.Domain.Enums;
 using UpperCube.Infrastructure.Identity;
 using UpperCube.Web.Helpers;
 using UpperCube.Web.Mapping;
+using UpperCube.Web.Models.Agent;
 using UpperCube.Web.Models.Catalog;
 
 namespace UpperCube.Web.Controllers;
