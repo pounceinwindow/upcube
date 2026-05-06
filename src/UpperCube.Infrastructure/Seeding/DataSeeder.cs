@@ -12,6 +12,8 @@ namespace UpperCube.Infrastructure.Seeding;
 
 public static class DataSeeder
 {
+    private static readonly DateTime SeedTimestamp = new(2026, 4, 25, 0, 0, 0, DateTimeKind.Utc);
+
     public static async Task SeedAsync(IServiceProvider services)
     {
         using var scope = services.CreateScope();
@@ -152,8 +154,6 @@ public static class DataSeeder
 
     private static async Task SeedPropertiesAsync(AppDbContext context, UserManager<ApplicationUser> userManager)
     {
-        if (await context.Properties.AnyAsync()) return;
-
         var agent = await userManager.FindByEmailAsync("agent@uppercube.local")
                     ?? throw new InvalidOperationException("Seed agent was not found.");
 
@@ -162,6 +162,9 @@ public static class DataSeeder
         var typeIds = await context.PropertyTypes.ToDictionaryAsync(x => x.Slug, x => x.Id);
         var categoryIds = await context.Categories.ToDictionaryAsync(x => x.Slug, x => x.Id);
         var amenityIds = await context.Amenities.OrderBy(x => x.Id).Select(x => x.Id).ToArrayAsync();
+        var existingProperties = await context.Properties
+            .Include(x => x.Images)
+            .ToDictionaryAsync(x => x.Title);
 
         var specs = new[]
         {
@@ -195,61 +198,93 @@ public static class DataSeeder
         {
             var spec = specs[index];
             var number = index + 1;
-            var property = new Property
+            if (!existingProperties.TryGetValue(spec.Title, out var property))
             {
-                Title = spec.Title,
-                Description =
-                    $"{spec.Title}. Отличное состояние, удобная транспортная доступность и развитая инфраструктура рядом.",
-                Price = new Money(spec.Price, "RUB"),
-                Area = new Area(spec.Area),
-                Rooms = spec.Rooms,
-                Floor = spec.Floor,
-                TotalFloors = spec.TotalFloors,
-                TransactionType = TransactionType.Sale,
-                AgentId = agent.Id,
-                Address = $"Большая улица, {number}",
-                CityId = cityIds[spec.CitySlug],
-                DistrictId = districtIds[spec.DistrictSlug],
-                PropertyTypeId = typeIds[spec.TypeSlug],
-                CategoryId = categoryIds[spec.CategorySlug],
-                ViewsCount = number * 17
-            };
-
-            property.Approve(DateTime.UtcNow);
-            property.Images.Add(new PropertyImage
-            {
-                Path = $"/uploads/seed/property-{number}.jpg",
-                MediaType = MediaType.Photo,
-                IsPrimary = true,
-                Order = 1,
-                UploadedAt = DateTime.UtcNow
-            });
-            property.Images.Add(new PropertyImage
-            {
-                Path = $"/uploads/seed/property-{number}-2.jpg",
-                MediaType = MediaType.Photo,
-                IsPrimary = false,
-                Order = 2,
-                UploadedAt = DateTime.UtcNow
-            });
-
-            if (number is 2 or 5)
-                property.Images.Add(new PropertyImage
+                property = new Property
                 {
-                    Path = $"/uploads/seed/panorama-{number}.jpg",
-                    MediaType = MediaType.Panorama360,
-                    IsPrimary = false,
-                    Order = 3,
-                    UploadedAt = DateTime.UtcNow
-                });
+                    Title = spec.Title,
+                    Description =
+                        $"{spec.Title}. Отличное состояние, удобная транспортная доступность и развитая инфраструктура рядом.",
+                    Price = new Money(spec.Price, "RUB"),
+                    Area = new Area(spec.Area),
+                    Rooms = spec.Rooms,
+                    Floor = spec.Floor,
+                    TotalFloors = spec.TotalFloors,
+                    TransactionType = TransactionType.Sale,
+                    AgentId = agent.Id,
+                    Address = $"Большая улица, {number}",
+                    CityId = cityIds[spec.CitySlug],
+                    DistrictId = districtIds[spec.DistrictSlug],
+                    PropertyTypeId = typeIds[spec.TypeSlug],
+                    CategoryId = categoryIds[spec.CategorySlug],
+                    ViewsCount = number * 17
+                };
 
-            foreach (var amenityId in PickAmenities(amenityIds, index))
-                property.Amenities.Add(new PropertyAmenity { AmenityId = amenityId });
+                property.Approve(SeedTimestamp);
 
-            context.Properties.Add(property);
+                foreach (var amenityId in PickAmenities(amenityIds, index))
+                    property.Amenities.Add(new PropertyAmenity { AmenityId = amenityId });
+
+                context.Properties.Add(property);
+            }
+
+            EnsureDemoImages(property, number);
         }
 
         await context.SaveChangesAsync();
+    }
+
+    private static void EnsureDemoImages(Property property, int number)
+    {
+        const string demoPrefix = "/images/demo/properties/";
+        const string oldSeedPrefix = "/uploads/seed/";
+
+        if (property.Images.Any(x => x.Path.StartsWith(demoPrefix, StringComparison.OrdinalIgnoreCase)))
+        {
+            EnsurePrimaryImage(property);
+            return;
+        }
+
+        if (property.Images.Count > 0 &&
+            property.Images.All(x => x.Path.StartsWith(oldSeedPrefix, StringComparison.OrdinalIgnoreCase)))
+            property.Images.Clear();
+
+        if (property.Images.Count > 0)
+        {
+            EnsurePrimaryImage(property);
+            return;
+        }
+
+        property.Images.Add(new PropertyImage
+        {
+            Path = DemoPropertyImagePath(number),
+            MediaType = MediaType.Photo,
+            IsPrimary = true,
+            Order = 0,
+            UploadedAt = SeedTimestamp
+        });
+
+        property.Images.Add(new PropertyImage
+        {
+            Path = DemoPropertyImagePath(number + 12),
+            MediaType = MediaType.Photo,
+            IsPrimary = false,
+            Order = 1,
+            UploadedAt = SeedTimestamp
+        });
+    }
+
+    private static void EnsurePrimaryImage(Property property)
+    {
+        if (property.Images.Count == 0 || property.Images.Any(x => x.IsPrimary)) return;
+
+        property.Images.OrderBy(x => x.Order).First().IsPrimary = true;
+    }
+
+    private static string DemoPropertyImagePath(int number)
+    {
+        var normalized = ((number - 1) % 24) + 1;
+        return $"/images/demo/properties/property-{normalized:00}.jpg";
     }
 
     private static IEnumerable<int> PickAmenities(IReadOnlyList<int> amenityIds, int offset)

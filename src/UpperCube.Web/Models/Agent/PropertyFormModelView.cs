@@ -1,25 +1,29 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UpperCube.Web.Models.Agent;
 
 public class PropertyFormModelView
 {
-        public string Title;
-        public string Description;
-        public decimal Price;
-        public string Currency;
-        public decimal Area;
-        public int Rooms;
-        public int Floor;
-        public int TotalFloors;
-        public int TransactionType;
-        public int CityId;
-        public int DistrictId;
-        public int PropertyTypeId;
-        public int CategoryId;
-        public string Address;
-        public IEnumerable<SelectListItem> Cities;
-        public IEnumerable<SelectListItem> Districts;
-        public IEnumerable<SelectListItem> PropertyTypes;
-        public IEnumerable<SelectListItem> Categories;
+    [Required] [MinLength(3)] public string Title { get; set; } = string.Empty;
+
+    [Required] [MinLength(10)] public string Description { get; set; } = string.Empty;
+
+    [Range(1,1000000000)]public decimal Price { get; set; } = decimal.Zero;
+
+    [Required] public string Currency { get; set; } = string.Empty;
+    public decimal Area { get; set; } = decimal.Zero;
+    public int Rooms { get; set; } = 0;
+    public int Floor { get; set; } = 0;
+    public int TotalFloors { get; set; } = 0;
+    public int TransactionType { get; set; } = 0;
+    public int CityId { get; set; } = 0;
+    public int DistrictId { get; set; } = 0;
+    public int PropertyTypeId { get; set; } = 0;
+    public int CategoryId { get; set; } = 0;
+    public string Address { get; set; } = string.Empty;
+    public IEnumerable<SelectListItem> Cities { get; set; } = new List<SelectListItem>();
+    public IEnumerable<SelectListItem> Districts { get; set; } = new List<SelectListItem>();
+    public IEnumerable<SelectListItem> PropertyTypes { get; set; } = new List<SelectListItem>();
+    public IEnumerable<SelectListItem> Categories { get; set; } = new List<SelectListItem>();
 }

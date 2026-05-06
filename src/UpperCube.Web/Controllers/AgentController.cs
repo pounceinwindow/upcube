@@ -17,6 +17,7 @@ namespace UpperCube.Web.Controllers;
 public sealed class AgentController(
     IPropertyRepository repository,
     UserManager<ApplicationUser> userManager,
+    IUnitOfWork  unitOfWork,
     IDictionaryRepository<City> city,
     IDictionaryRepository<District> district,
     IDictionaryRepository<PropertyType> propertyType,
@@ -89,6 +90,8 @@ public sealed class AgentController(
                 
             };
             property.Submit();
+            await repository.AddAsync(property, ct);
+            await unitOfWork.SaveChangesAsync(ct);
             return RedirectToAction(nameof(MyProperties));
         }
     }

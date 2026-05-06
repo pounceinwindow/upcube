@@ -2,14 +2,17 @@
 @{
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
+    var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
+        ? "/images/demo/properties/property-placeholder.jpg"
+        : Model.PrimaryImagePath;
 }
 
 <div class="homelengo-box">
     <div class="archive-top">
         <a class="images-group" asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id">
             <div class="images-style">
-                <img alt="img" data-src="~/homelengo/images/home/house-13.jpg"
-                     src="~/homelengo/images/home/house-13.jpg">
+                <img alt="@Model.Title" class="lazyload uc-property-card-image" data-src="@cardImagePath"
+                     src="@cardImagePath">
             </div>
             <div class="top">
                 <ul class="d-flex gap-6">
@@ -61,7 +64,7 @@
         <div class="content-bottom">
             <div class="d-flex gap-8 align-items-center">
                 <div class="avatar avt-40 round">
-                    <img alt="avt" src="images/avatar/avt-png1.png">
+                    <img alt="Агент" src="~/homelengo/images/avatar/avt-png1.png">
                 </div>
                 <span>Arlene McCoy</span>
             </div>

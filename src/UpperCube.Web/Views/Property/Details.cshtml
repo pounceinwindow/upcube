@@ -1,6 +1,14 @@
 @model UpperCube.Application.DTOs.PropertyDetailsDto
 @{
     ViewData["Title"] = Model.Title;
+    var detailImages = Model.Images
+        .Where(x => !string.IsNullOrWhiteSpace(x))
+        .ToList();
+
+    if (!detailImages.Any())
+    {
+        detailImages.Add("/images/demo/properties/property-placeholder.jpg");
+    }
 }
 
 <section class="flat-section">
@@ -11,6 +19,28 @@
         </p>
 
         <h2>@Model.Price.ToString("N0") @Model.Currency</h2>
+
+        <div class="flat-slider-detail-v1 uc-property-detail-gallery mt-4">
+            <div class="swiper tf-sw-location" data-mobile="1" data-mobile-sm="2" data-pagination="1"
+                 data-pagination-lg="3" data-pagination-md="2" data-pagination-sm="2" data-preview="3"
+                 data-space="10" data-space-lg="10" data-space-md="10" data-tablet="2" dir="ltr">
+                <div class="swiper-wrapper">
+                    @foreach (var imagePath in detailImages)
+                    {
+                        <div class="swiper-slide">
+                            <a class="box-img-detail d-block" data-fancybox="gallery" href="@imagePath">
+                                <img alt="@Model.Title" src="@imagePath">
+                            </a>
+                        </div>
+                    }
+                </div>
+
+                @if (detailImages.Count > 1)
+                {
+                    <div class="sw-pagination sw-pagination-location text-center"></div>
+                }
+            </div>
+        </div>
 
         <div class="row mt-4">
             <div class="col-md-3"><strong>Тип:</strong> @Model.PropertyType</div>

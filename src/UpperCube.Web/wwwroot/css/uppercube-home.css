@@ -242,6 +242,20 @@
     gap: 10px;
 }
 
+.homelengo-box .images-style .uc-property-card-image {
+    display: block;
+    height: 260px;
+    object-fit: cover;
+}
+
+.uc-property-detail-gallery .swiper-slide {
+    height: clamp(240px, 28vw, 420px);
+}
+
+.uc-property-detail-gallery .box-img-detail {
+    border-radius: 16px;
+}
+
 @media only screen and (max-width: 1320px) {
     .uppercube-header {
         padding-left: 22px;
@@ -344,6 +358,10 @@
 
     .flat-slider.home-2 .slider-content {
         padding: 54px 0 !important;
+    }
+
+    .homelengo-box .images-style .uc-property-card-image {
+        height: 220px;
     }
 }
 
