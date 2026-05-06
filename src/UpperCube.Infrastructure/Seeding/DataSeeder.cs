@@ -13,6 +13,10 @@ namespace UpperCube.Infrastructure.Seeding;
 public static class DataSeeder
 {
     private static readonly DateTime SeedTimestamp = new(2026, 4, 25, 0, 0, 0, DateTimeKind.Utc);
+    private const string BannerImagePrefix = "/images/banner/";
+    private const string OldDemoImagePrefix = "/images/demo/properties/";
+    private const int BannerPropertyImageCount = 13;
+    private const int SecondaryImageOffset = 12;
 
     public static async Task SeedAsync(IServiceProvider services)
     {
@@ -228,63 +232,69 @@ public static class DataSeeder
                 context.Properties.Add(property);
             }
 
-            EnsureDemoImages(property, number);
+            EnsureBannerImages(property, number);
         }
 
         await context.SaveChangesAsync();
     }
 
-    private static void EnsureDemoImages(Property property, int number)
+    private static void EnsureBannerImages(Property property, int number)
     {
-        const string demoPrefix = "/images/demo/properties/";
-        const string oldSeedPrefix = "/uploads/seed/";
+        var primaryPath = BannerPropertyImagePath(number);
+        var secondaryPath = BannerPropertyImagePath(number + SecondaryImageOffset);
+        var desiredPaths = new[] { primaryPath, secondaryPath };
+        var keptSeedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        if (property.Images.Any(x => x.Path.StartsWith(demoPrefix, StringComparison.OrdinalIgnoreCase)))
+        var managedSeedImages = property.Images.Where(IsManagedSeedImage).ToList();
+        foreach (var image in managedSeedImages)
         {
-            EnsurePrimaryImage(property);
-            return;
+            var desiredOrder = Array.FindIndex(desiredPaths,
+                path => string.Equals(path, image.Path, StringComparison.OrdinalIgnoreCase));
+
+            if (desiredOrder >= 0 && keptSeedPaths.Add(image.Path))
+            {
+                image.MediaType = MediaType.Photo;
+                image.Order = desiredOrder;
+                image.UploadedAt = SeedTimestamp;
+                continue;
+            }
+
+            property.Images.Remove(image);
         }
 
-        if (property.Images.Count > 0 &&
-            property.Images.All(x => x.Path.StartsWith(oldSeedPrefix, StringComparison.OrdinalIgnoreCase)))
-            property.Images.Clear();
-
-        if (property.Images.Count > 0)
+        for (var order = 0; order < desiredPaths.Length; order++)
         {
-            EnsurePrimaryImage(property);
-            return;
+            var path = desiredPaths[order];
+            if (property.Images.Any(x => string.Equals(x.Path, path, StringComparison.OrdinalIgnoreCase))) continue;
+
+            property.Images.Add(new PropertyImage
+            {
+                Path = path,
+                MediaType = MediaType.Photo,
+                IsPrimary = false,
+                Order = order,
+                UploadedAt = SeedTimestamp
+            });
         }
 
-        property.Images.Add(new PropertyImage
+        foreach (var image in property.Images)
         {
-            Path = DemoPropertyImagePath(number),
-            MediaType = MediaType.Photo,
-            IsPrimary = true,
-            Order = 0,
-            UploadedAt = SeedTimestamp
-        });
-
-        property.Images.Add(new PropertyImage
-        {
-            Path = DemoPropertyImagePath(number + 12),
-            MediaType = MediaType.Photo,
-            IsPrimary = false,
-            Order = 1,
-            UploadedAt = SeedTimestamp
-        });
+            image.IsPrimary = string.Equals(image.Path, primaryPath, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
-    private static void EnsurePrimaryImage(Property property)
+    private static bool IsManagedSeedImage(PropertyImage image)
     {
-        if (property.Images.Count == 0 || property.Images.Any(x => x.IsPrimary)) return;
-
-        property.Images.OrderBy(x => x.Order).First().IsPrimary = true;
+        return image.Path.StartsWith(BannerImagePrefix, StringComparison.OrdinalIgnoreCase) ||
+               image.Path.StartsWith(OldDemoImagePrefix, StringComparison.OrdinalIgnoreCase) ||
+               (image.Path.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase) &&
+                image.Path.Contains("/seed/", StringComparison.OrdinalIgnoreCase));
     }
 
-    private static string DemoPropertyImagePath(int number)
+    private static string BannerPropertyImagePath(int number)
     {
-        var normalized = ((number - 1) % 24) + 1;
-        return $"/images/demo/properties/property-{normalized:00}.jpg";
+        var normalized = ((number - 1) % BannerPropertyImageCount) + 1;
+        return $"{BannerImagePrefix}banner-property-{normalized}.jpg";
     }
 
     private static IEnumerable<int> PickAmenities(IReadOnlyList<int> amenityIds, int offset)

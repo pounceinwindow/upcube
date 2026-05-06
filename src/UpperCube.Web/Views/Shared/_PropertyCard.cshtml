@@ -3,7 +3,7 @@
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
     var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
-        ? "/images/demo/properties/property-placeholder.jpg"
+        ? "/images/banner/banner-property-1.jpg"
         : Model.PrimaryImagePath;
 }
 
