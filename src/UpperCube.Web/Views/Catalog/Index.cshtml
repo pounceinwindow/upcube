@@ -1,79 +1,161 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model UpperCube.Web.Models.Catalog.CatalogModelView
 @{
     ViewData["Title"] = "Каталог";
+    var cities = Model.Cities ?? Enumerable.Empty<SelectListItem>();
+    var propertyTypes = Model.PropertyTypes ?? Enumerable.Empty<SelectListItem>();
+    var pageSize = 9;
+    var items = Model.Items.ToList();
+    var totalPages = (int)Math.Ceiling((double)Model.TotalCount / pageSize);
+    var hasMore = Model.Page < totalPages;
+    var transactionText = Model.TransactionType switch
+    {
+        1 => "Продажа",
+        2 => "Аренда",
+        _ => "Все сделки"
+    };
 }
 
-<section class="flat-section">
-    <div class="tf-container">
-        <h3 class="mb-4">Каталог объектов</h3>
-        <form method="get" asp-controller="Catalog" asp-action="Index" class="row g-3 mb-4">
-            <div class="col-md-2">
-                <label class="form-label">Город</label>
-                <select name="cityId" class="form-select">
-                    <option value="">Любой</option>
-                    @foreach (var c in Model.Cities)
-                    {
-                        <option value="@c.Value" selected="@(c.Value == Model.CityId?.ToString())">
-                            @c.Text
-                        </option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Тип Недвижимости</label>
-                <select name="propertyTypeId" class="form-select">
-                    <option value="">Любой</option>
-                    @foreach (var r in Model.PropertyTypes)
-                    {
-                        <option value="@r.Value" selected="@(r.Value == Model.PropertyTypeId?.ToString())">
-                            @r.Text
-                        </option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Цена от</label>
-                <input type="number" name="minPrice" value="@Model.MinPrice" class="form-control"/>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Цена до</label>
-                <input type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control"/>
-            </div>
+<section class="flat-filter-search-v2 uc-catalog-filter">
+    <div class="flat-tab flat-tab-form">
+        <ul class="nav-tab-form style-3" role="tablist">
+            <li class="nav-tab-item" role="presentation">
+                <a class="nav-link-item @(Model.TransactionType is null ? "active" : "")"
+                   asp-controller="Catalog" asp-action="Index">Все</a>
+            </li>
+            <li class="nav-tab-item" role="presentation">
+                <a class="nav-link-item @(Model.TransactionType == 1 ? "active" : "")"
+                   asp-controller="Catalog" asp-action="Index" asp-route-transactionType="1">Продажа</a>
+            </li>
+            <li class="nav-tab-item" role="presentation">
+                <a class="nav-link-item @(Model.TransactionType == 2 ? "active" : "")"
+                   asp-controller="Catalog" asp-action="Index" asp-route-transactionType="2">Аренда</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active show" role="tabpanel">
+                <div class="form-sl">
+                    <form method="get" asp-controller="Catalog" asp-action="Index">
+                        <div class="wd-find-select uc-filter-bar">
+                            <div class="inner-group">
+                                <div class="form-group-2 form-style">
+                                    <label for="cityId">Город</label>
+                                    <select id="cityId" name="cityId" class="form-select">
+                                        <option value="">Любой город</option>
+                                        @foreach (var c in cities)
+                                        {
+                                            <option value="@c.Value" selected="@(c.Value == Model.CityId?.ToString())">@c.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group-3 form-style">
+                                    <label for="propertyTypeId">Тип</label>
+                                    <select id="propertyTypeId" name="propertyTypeId" class="form-select">
+                                        <option value="">Любой тип</option>
+                                        @foreach (var type in propertyTypes)
+                                        {
+                                            <option value="@type.Value" selected="@(type.Value == Model.PropertyTypeId?.ToString())">@type.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group-3 form-style">
+                                    <label for="transactionType">Сделка</label>
+                                    <select id="transactionType" name="transactionType" class="form-select">
+                                        <option value="">Все сделки</option>
+                                        <option value="1" selected="@(Model.TransactionType == 1)">Продажа</option>
+                                        <option value="2" selected="@(Model.TransactionType == 2)">Аренда</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="box-btn-advanced">
+                                <button type="submit" class="tf-btn btn-search primary">
+                                    Найти <i class="icon icon-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
 
-            <div class="col-md-2">
-                <label class="form-label">Комнаты</label>
-                <input type="number" name="rooms" value="@Model.Rooms" class="form-control"/>
-            </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="tf-btn primary w-100">Применить</button>
-            </div>
-        </form>
-        <p>Найдено: <b>@Model.TotalCount</b></p>
-        <div class="row" id="catalog-grid">
-            @foreach (var item in Model.Items)
-            {
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <partial name="_PropertyCard" model="item"/>
+                        <div class="wd-search-form uc-advanced-filter">
+                            <div class="grid-2 group-box">
+                                <div class="form-style">
+                                    <label for="minPrice" class="title-select fw-6">Цена от</label>
+                                    <input id="minPrice" type="number" name="minPrice" value="@Model.MinPrice" class="form-control" placeholder="5 000 000"/>
+                                </div>
+                                <div class="form-style">
+                                    <label for="maxPrice" class="title-select fw-6">Цена до</label>
+                                    <input id="maxPrice" type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control" placeholder="30 000 000"/>
+                                </div>
+                            </div>
+                            <div class="grid-2 group-box">
+                                <div class="form-style">
+                                    <label for="rooms" class="title-select fw-6">Комнаты</label>
+                                    <input id="rooms" type="number" name="rooms" value="@Model.Rooms" class="form-control" min="1" placeholder="Любое количество"/>
+                                </div>
+                                <div class="form-style uc-filter-actions">
+                                    <a asp-controller="Catalog" asp-action="Index" class="tf-btn btn-line">Сбросить</a>
+                                    <button type="submit" class="tf-btn primary">Применить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="flat-section uc-catalog-listing">
+    <div class="container">
+        <div class="box-title-listing">
+            <div>
+                <div class="text-subtitle text-primary">@transactionText</div>
+                <h1 class="fw-8">Каталог объектов</h1>
+                <p class="text-variant-1 mb-0">Найдено: <strong>@Model.TotalCount</strong></p>
+            </div>
+            <div class="box-filter-tab" aria-hidden="true">
+                <ul class="nav-tab-filter" role="tablist">
+                    <li class="nav-tab-item" role="presentation">
+                        <span class="nav-link-item active"><i class="icon icon-listing" aria-hidden="true"></i></span>
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        @{
-            var pageSize = 9;
-            var totalPages = (int)Math.Ceiling((double)Model.TotalCount / pageSize);
-            var hasMore = Model.Page < totalPages;
-        }
-
-        @if (hasMore)
+        @if (!items.Any())
         {
-            <div class="text-center mt-4">
-                <button type="button" id="load-more-btn" class="tf-btn primary"
-                        data-next-page="@(Model.Page + 1)"
-                        data-total-pages="@totalPages">
-                    Показать ещё
-                </button>
+            <div class="uc-empty-state">
+                <span class="icon icon-house-line" aria-hidden="true"></span>
+                <h2>По этим фильтрам ничего не найдено</h2>
+                <p class="text-variant-1">Попробуйте расширить цену, изменить город или сбросить фильтры.</p>
+                <a asp-controller="Catalog" asp-action="Index" class="tf-btn primary">Сбросить фильтры</a>
             </div>
+        }
+        else
+        {
+            <div class="flat-animate-tab">
+                <div class="tab-content">
+                    <div class="tab-pane active show" role="tabpanel">
+                        <div class="row" id="catalog-grid">
+                            @foreach (var item in items)
+                            {
+                                <div class="col-xl-4 col-lg-6 col-md-6">
+                                    <partial name="_PropertyCard" model="item"/>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (hasMore)
+            {
+                <div class="text-center mt-4">
+                    <button type="button" id="load-more-btn" class="tf-btn primary"
+                            data-next-page="@(Model.Page + 1)"
+                            data-total-pages="@totalPages">
+                        Показать ещё
+                    </button>
+                </div>
+            }
         }
     </div>
 </section>
@@ -91,8 +173,18 @@
                 const params = new URLSearchParams(window.location.search);
                 params.set('page', nextPage);
 
+                btn.disabled = true;
+                btn.setAttribute('aria-busy', 'true');
+                const originalText = btn.textContent;
+                btn.textContent = 'Загружаем...';
+
                 const res = await fetch('@Url.Action("LoadMore", "Catalog")?' + params.toString());
-                if (!res.ok) return;
+                if (!res.ok) {
+                    btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
+                    btn.textContent = originalText;
+                    return;
+                }
 
                 const html = await res.text();
                 const grid = document.getElementById('catalog-grid');
@@ -102,6 +194,9 @@
                     btn.remove();
                 } else {
                     btn.dataset.nextPage = (nextPage + 1).toString();
+                    btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
+                    btn.textContent = originalText;
                 }
             });
         })();
