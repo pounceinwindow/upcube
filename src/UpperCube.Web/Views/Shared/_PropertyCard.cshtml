@@ -3,8 +3,9 @@
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
     var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
-        ? "/images/banner/banner-property-1.jpg"
+        ? "/homelengo/images/banner/banner-property-13.jpg"
         : Model.PrimaryImagePath;
+    var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";
 }
 
 <div class="homelengo-box">
@@ -12,12 +13,12 @@
         <a class="images-group" asp-controller="Property" asp-action="Details" asp-route-id="@Model.Id">
             <div class="images-style">
                 <img alt="@Model.Title" class="lazyload uc-property-card-image" data-src="@cardImagePath"
-                     src="@cardImagePath">
+                     src="@cardImagePath" loading="lazy" width="410" height="260">
             </div>
             <div class="top">
                 <ul class="d-flex gap-6">
                     <li class="flag-tag primary">@Model.PropertyType</li>
-                    <li class="flag-tag style-1">@(Model.TransactionType == 0 ? "Продажа" : "Аренда")</li>
+                    <li class="flag-tag style-1">@transactionText</li>
                 </ul>
 
             </div>
@@ -52,21 +53,31 @@
                 </li>
                 <li class="item">
                     <i class="icon icon-sqft"></i>
-                    <span class="text-variant-1">Площадь: @Model.Area.ToString("F0")</span>
+                    <span class="text-variant-1">Площадь:</span>
+                    <span class="fw-6">@Model.Area.ToString("F0") м²</span>
+                </li>
+                <li class="item">
+                    <i class="icon icon-house-line"></i>
+                    <span class="text-variant-1">Этаж:</span>
+                    <span class="fw-6">@Model.Floor / @Model.TotalFloors</span>
                 </li>
             </ul>
 
-            <button type="button" class="btn-favorite @(isFavorite ? "active" : "")" data-property-id="@Model.Id">
-                <i class="icon icon-heart"></i>
+            <button type="button"
+                    class="btn-favorite @(isFavorite ? "active" : "")"
+                    data-property-id="@Model.Id"
+                    aria-pressed="@(isFavorite ? "true" : "false")"
+                    aria-label="Добавить объект в избранное">
+                <i class="icon icon-heart" aria-hidden="true"></i>
             </button>
         </div>
 
         <div class="content-bottom">
             <div class="d-flex gap-8 align-items-center">
                 <div class="avatar avt-40 round">
-                    <img alt="Агент" src="~/homelengo/images/avatar/avt-png1.png">
+                    <img alt="Агент UpperCube" src="~/homelengo/images/avatar/avt-png1.png" width="40" height="40">
                 </div>
-                <span>Arlene McCoy</span>
+                <span>UpperCube Agent</span>
             </div>
             <h6 class="price">@Model.Price.ToString("N0") @Model.Currency</h6>
         </div>

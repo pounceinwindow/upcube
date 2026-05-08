@@ -13,10 +13,12 @@ namespace UpperCube.Infrastructure.Seeding;
 public static class DataSeeder
 {
     private static readonly DateTime SeedTimestamp = new(2026, 4, 25, 0, 0, 0, DateTimeKind.Utc);
-    private const string BannerImagePrefix = "/images/banner/";
+    private const string BannerImagePrefix = "/homelengo/images/banner/";
+    private const string LegacyBannerImagePrefix = "/images/banner/";
     private const string OldDemoImagePrefix = "/images/demo/properties/";
-    private const int BannerPropertyImageCount = 13;
-    private const int SecondaryImageOffset = 12;
+    private const int BannerPropertyImageCount = 18;
+    private const int SecondaryImageOffset = 6;
+    private const int TertiaryImageOffset = 12;
 
     public static async Task SeedAsync(IServiceProvider services)
     {
@@ -242,7 +244,8 @@ public static class DataSeeder
     {
         var primaryPath = BannerPropertyImagePath(number);
         var secondaryPath = BannerPropertyImagePath(number + SecondaryImageOffset);
-        var desiredPaths = new[] { primaryPath, secondaryPath };
+        var tertiaryPath = BannerPropertyImagePath(number + TertiaryImageOffset);
+        var desiredPaths = new[] { primaryPath, secondaryPath, tertiaryPath };
         var keptSeedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         var managedSeedImages = property.Images.Where(IsManagedSeedImage).ToList();
@@ -286,6 +289,7 @@ public static class DataSeeder
     private static bool IsManagedSeedImage(PropertyImage image)
     {
         return image.Path.StartsWith(BannerImagePrefix, StringComparison.OrdinalIgnoreCase) ||
+               image.Path.StartsWith(LegacyBannerImagePrefix, StringComparison.OrdinalIgnoreCase) ||
                image.Path.StartsWith(OldDemoImagePrefix, StringComparison.OrdinalIgnoreCase) ||
                (image.Path.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase) &&
                 image.Path.Contains("/seed/", StringComparison.OrdinalIgnoreCase));

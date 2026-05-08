@@ -1,73 +1,306 @@
 @model UpperCube.Application.DTOs.PropertyDetailsDto
 @{
     ViewData["Title"] = Model.Title;
+    var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
+    var isFavorite = favoriteIds.Contains(Model.Id);
     var detailImages = Model.Images
         .Where(x => !string.IsNullOrWhiteSpace(x))
         .ToList();
 
     if (!detailImages.Any())
     {
-        detailImages.Add("/images/banner/banner-property-1.jpg");
+        detailImages.AddRange(new[]
+        {
+            "/homelengo/images/banner/banner-property-13.jpg",
+            "/homelengo/images/banner/banner-property-10.jpg",
+            "/homelengo/images/banner/banner-property-14.jpg"
+        });
     }
+
+    var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";
+    var statusText = Model.Status switch
+    {
+        1 => "Черновик",
+        2 => "На модерации",
+        3 => "Опубликовано",
+        4 => "Отклонено",
+        5 => "В архиве",
+        _ => "Опубликовано"
+    };
+    var amenities = Model.Amenities
+        .Where(x => !string.IsNullOrWhiteSpace(x))
+        .ToList();
 }
 
-<section class="flat-section">
-    <div class="tf-container">
-        <h1>@Model.Title</h1>
-        <p class="text-variant-1">
-            @Model.City, @Model.District, @Model.Address
-        </p>
-
-        <h2>@Model.Price.ToString("N0") @Model.Currency</h2>
-
-        <div class="flat-slider-detail-v1 uc-property-detail-gallery mt-4">
-            <div class="swiper tf-sw-location" data-mobile="1" data-mobile-sm="2" data-pagination="1"
-                 data-pagination-lg="3" data-pagination-md="2" data-pagination-sm="2" data-preview="3"
-                 data-space="10" data-space-lg="10" data-space-md="10" data-tablet="2" dir="ltr">
-                <div class="swiper-wrapper">
-                    @foreach (var imagePath in detailImages)
-                    {
-                        <div class="swiper-slide">
-                            <a class="box-img-detail d-block" data-fancybox="gallery" href="@imagePath">
-                                <img alt="@Model.Title" src="@imagePath">
-                            </a>
-                        </div>
-                    }
+<div class="flat-section-v4 uc-detail-header">
+    <div class="container">
+        <div class="header-property-detail">
+            <div class="content-top d-flex justify-content-between align-items-center">
+                <h1 class="title link fw-8">@Model.Title</h1>
+                <div class="box-price d-flex align-items-end">
+                    <h2 class="fw-8">@Model.Price.ToString("N0") @Model.Currency</h2>
+                    <span class="body-1 text-variant-1">@(Model.TransactionType == 2 ? "/мес." : "")</span>
+                </div>
+            </div>
+            <div class="content-bottom">
+                <div class="box-left">
+                    <div class="info-box">
+                        <div class="label">Характеристики</div>
+                        <ul class="meta">
+                            <li class="meta-item">
+                                <i class="icon icon-bed" aria-hidden="true"></i>
+                                <span class="text-variant-1">Комнат:</span>
+                                <span class="fw-6">@Model.Rooms</span>
+                            </li>
+                            <li class="meta-item">
+                                <i class="icon icon-sqft" aria-hidden="true"></i>
+                                <span class="text-variant-1">Площадь:</span>
+                                <span class="fw-6">@Model.Area.ToString("F0") м²</span>
+                            </li>
+                            <li class="meta-item">
+                                <i class="icon icon-house-line" aria-hidden="true"></i>
+                                <span class="text-variant-1">Этаж:</span>
+                                <span class="fw-6">@Model.Floor / @Model.TotalFloors</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Локация</div>
+                        <p class="meta-item">
+                            <span class="icon icon-mapPin" aria-hidden="true"></span>
+                            <span class="text-variant-1">@Model.City, @Model.District, @Model.Address</span>
+                        </p>
+                    </div>
                 </div>
 
-                @if (detailImages.Count > 1)
-                {
-                    <div class="sw-pagination sw-pagination-location text-center"></div>
-                }
+                <ul class="icon-box uc-detail-actions">
+                    <li>
+                        <button type="button"
+                                class="item btn-favorite @(isFavorite ? "active" : "")"
+                                data-property-id="@Model.Id"
+                                aria-pressed="@(isFavorite ? "true" : "false")"
+                                aria-label="Добавить объект в избранное">
+                            <span class="icon icon-heart" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                    <li>
+                        <a class="item" asp-controller="Compare" asp-action="Index" aria-label="Открыть сравнение">
+                            <span class="icon icon-sliders-horizontal" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <button type="button" class="item" onclick="window.print()" aria-label="Печать страницы">
+                            <span class="icon icon-listing" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row mt-4">
-            <div class="col-md-3"><strong>Тип:</strong> @Model.PropertyType</div>
-            <div class="col-md-3"><strong>Категория:</strong> @Model.Category</div>
-            <div class="col-md-3"><strong>Сделка:</strong> @(Model.TransactionType == 0 ? "Продажа" : "Аренда")</div>
-            <div class="col-md-3"><strong>Площадь:</strong> @Model.Area.ToString("F0") м²</div>
+<section class="flat-slider-detail-v1 px-10 uc-property-detail-gallery">
+    <div class="swiper tf-sw-location" data-mobile="1" data-mobile-sm="2" data-pagination="1"
+         data-pagination-lg="3" data-pagination-md="2" data-pagination-sm="2" data-preview="3"
+         data-space="10" data-space-lg="10" data-space-md="10" data-tablet="2" dir="ltr">
+        <div class="swiper-wrapper">
+            @foreach (var imagePath in detailImages)
+            {
+                <div class="swiper-slide">
+                    <a class="box-img-detail d-block" data-fancybox="gallery" href="@imagePath">
+                        <img alt="@Model.Title" src="@imagePath" loading="lazy">
+                    </a>
+                </div>
+            }
         </div>
 
-        <div class="row mt-3">
-            <div class="col-md-3"><strong>Комнат:</strong> @Model.Rooms</div>
-            <div class="col-md-3"><strong>Этаж:</strong> @Model.Floor / @Model.TotalFloors</div>
-            <div class="col-md-3"><strong>Просмотров:</strong> @Model.ViewsCount</div>
-            <div class="col-md-3"><strong>Агент:</strong> @Model.AgentName</div>
-        </div>
-
-        <h3 class="mt-4">Описание</h3>
-        <p>@Model.Description</p>
-
-        @if (Model.Amenities.Any())
+        @if (detailImages.Count > 1)
         {
-            <h3 class="mt-4">Удобства</h3>
-            <ul>
-                @foreach (var a in Model.Amenities)
-                {
-                    <li>@a</li>
-                }
-            </ul>
+            <div class="sw-pagination sw-pagination-location text-center"></div>
         }
+    </div>
+</section>
+
+<section class="flat-section-v3 flat-property-detail uc-property-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7">
+                <div class="single-property-element single-property-desc">
+                    <h2 class="fw-6 title">Описание</h2>
+                    <p class="text-variant-1">@Model.Description</p>
+                </div>
+
+                <div class="single-property-element single-property-overview">
+                    <h2 class="title fw-6">Обзор</h2>
+                    <ul class="info-box">
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-house-line" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">ID:</span>
+                                <span>#@Model.Id</span>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-sliders-horizontal" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">Тип:</span>
+                                <span>@Model.PropertyType</span>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-bed1" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">Комнаты:</span>
+                                <span>@Model.Rooms</span>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-ruler" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">Площадь:</span>
+                                <span>@Model.Area.ToString("F0") м²</span>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-crop" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">Этаж:</span>
+                                <span>@Model.Floor / @Model.TotalFloors</span>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="box-icon w-52"><i class="icon icon-listing" aria-hidden="true"></i></span>
+                            <div class="content">
+                                <span class="label">Статус:</span>
+                                <span>@statusText</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="single-property-element single-property-info">
+                    <h2 class="title fw-6">Детали объекта</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Сделка:</span>
+                                <div class="content text-black-3">@transactionText</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Цена:</span>
+                                <div class="content text-black-3">@Model.Price.ToString("N0") @Model.Currency</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Город:</span>
+                                <div class="content text-black-3">@Model.City</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Район:</span>
+                                <div class="content text-black-3">@Model.District</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Категория:</span>
+                                <div class="content text-black-3">@Model.Category</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box">
+                                <span class="label text-black-3">Просмотры:</span>
+                                <div class="content text-black-3">@Model.ViewsCount</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (amenities.Any())
+                {
+                    <div class="single-property-element single-property-feature">
+                        <h2 class="title fw-6">Удобства и особенности</h2>
+                        <div class="wrap-feature">
+                            @for (var column = 0; column < 3; column++)
+                            {
+                                <div class="box-feature">
+                                    <ul>
+                                        @for (var index = column; index < amenities.Count; index += 3)
+                                        {
+                                            <li class="feature-item">@amenities[index]</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="single-property-element single-property-map">
+                    <h2 class="title fw-6">Расположение</h2>
+                    <div class="uc-map-placeholder">
+                        <span class="icon icon-mapPin" aria-hidden="true"></span>
+                        <div>
+                            <strong>@Model.City, @Model.District</strong>
+                            <p class="text-variant-1 mb-0">@Model.Address</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-5">
+                <div class="single-sidebar fixed-sidebar">
+                    <div class="widget-box single-property-contact">
+                        <h2 class="title fw-6">Связаться с агентом</h2>
+                        <div class="box-avatar">
+                            <div class="avatar avt-100 round">
+                                <img alt="Агент UpperCube" src="~/homelengo/images/avatar/avt-lg-single.jpg" width="100" height="100">
+                            </div>
+                            <div class="info">
+                                <h3 class="name">@Model.AgentName</h3>
+                                <ul class="list">
+                                    <li class="d-flex align-items-center gap-4 text-variant-1">
+                                        <i class="icon icon-phone" aria-hidden="true"></i>+7 900 000-00-00
+                                    </li>
+                                    <li class="d-flex align-items-center gap-4 text-variant-1">
+                                        <i class="icon icon-mail" aria-hidden="true"></i>agent@uppercube.local
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form action="mailto:agent@uppercube.local" class="contact-form">
+                            <div class="ip-group">
+                                <input class="form-control" name="name" placeholder="Ваше имя" type="text">
+                            </div>
+                            <div class="ip-group">
+                                <input class="form-control" name="phone" placeholder="Телефон" type="tel">
+                            </div>
+                            <div class="ip-group">
+                                <input class="form-control" name="email" placeholder="Email" type="email">
+                            </div>
+                            <div class="ip-group">
+                                <textarea name="message" placeholder="Здравствуйте, интересует этот объект" rows="4"></textarea>
+                            </div>
+                            <button class="tf-btn btn-view primary hover-btn-view w-100" type="submit">
+                                Отправить запрос <span class="icon icon-arrow-right2" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="widget-box single-property-whychoose">
+                        <h2 class="title fw-6">Почему UpperCube</h2>
+                        <ul class="uc-sidebar-benefits">
+                            <li><i class="icon icon-check-circle" aria-hidden="true"></i>Проверенные агенты</li>
+                            <li><i class="icon icon-check-circle" aria-hidden="true"></i>Избранное и сравнение</li>
+                            <li><i class="icon icon-check-circle" aria-hidden="true"></i>Оценка рыночной стоимости</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

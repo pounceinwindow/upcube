@@ -1,44 +1,55 @@
 @model IEnumerable<UpperCube.Application.DTOs.PropertyListItemDto>
 @{
     ViewData["Title"] = "Главная";
+    var listings = Model.ToList();
 }
 
-<section class="flat-slider home-2 bg-primary-new">
+<section class="flat-slider home-2 bg-primary-new uc-home-hero">
     <div class="container relative">
         <div class="row">
             <div class="col-xl-10">
                 <div class="slider-content">
                     <div class="heading">
-                        <h1 class="fw-8 title">Недвижимость, которую удобно выбирать</h1>
+                        <h1 class="fw-8 title">Найдите недвижимость без лишнего шума</h1>
                         <p class="subtitle body-2">
-                            UpperCube помогает искать, сравнивать и оценивать объекты в едином интерфейсе.
+                            Каталог, избранное, сравнение и оценка стоимости собраны в одном аккуратном интерфейсе.
                         </p>
                     </div>
+
                     <div class="flat-tab flat-tab-form">
+                        <ul class="nav-tab-form style-1" role="tablist">
+                            <li class="nav-tab-item" role="presentation">
+                                <a class="nav-link-item active" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="1">Продажа</a>
+                            </li>
+                            <li class="nav-tab-item" role="presentation">
+                                <a class="nav-link-item" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="2">Аренда</a>
+                            </li>
+                        </ul>
+
                         <div class="tab-content">
                             <div class="tab-pane fade active show" role="tabpanel">
                                 <div class="form-sl">
                                     <form asp-controller="Catalog" asp-action="Index" method="get">
-                                        <div class="wd-find-select style-2">
+                                        <input type="hidden" name="transactionType" value="1"/>
+                                        <div class="wd-find-select style-2 uc-home-search">
                                             <div class="inner-group">
                                                 <div class="form-group-2 form-style">
-                                                    <label>Город или район</label>
-                                                    <div class="group-ip">
-                                                        <input type="text" class="form-control"
-                                                               placeholder="Москва, Санкт-Петербург, Краснодар"
-                                                               name="query"/>
-                                                        <a href="#" class="icon icon-location"></a>
-                                                    </div>
+                                                    <label for="homeMinPrice">Цена от</label>
+                                                    <input id="homeMinPrice" type="number" class="form-control" name="minPrice" placeholder="5 000 000"/>
                                                 </div>
                                                 <div class="form-group-3 form-style">
-                                                    <label>Ключевые слова</label>
-                                                    <input type="text" class="form-control"
-                                                           placeholder="Квартира, дом, офис" name="q"/>
+                                                    <label for="homeMaxPrice">Цена до</label>
+                                                    <input id="homeMaxPrice" type="number" class="form-control" name="maxPrice" placeholder="30 000 000"/>
+                                                </div>
+                                                <div class="form-group-3 form-style">
+                                                    <label for="homeRooms">Комнаты</label>
+                                                    <input id="homeRooms" type="number" class="form-control" name="rooms" min="1" placeholder="Любые"/>
                                                 </div>
                                             </div>
                                             <div class="box-btn-advanced">
-                                                <button type="submit" class="tf-btn btn-search primary">Искать <i
-                                                        class="icon icon-search"></i></button>
+                                                <button type="submit" class="tf-btn btn-search primary">
+                                                    Искать <i class="icon icon-search" aria-hidden="true"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -46,40 +57,139 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="wrap-search-link">
-                        <p class="body-2">Популярные разделы:</p>
+                        <p class="body-2">Быстрый доступ:</p>
                         <div class="categories-list">
-                            <a asp-controller="Catalog" asp-action="Index"><i class="icon icon-apartment"></i> Квартиры</a>
-                            <a asp-controller="Catalog" asp-action="Index"><i class="icon icon-house-fill"></i> Дома</a>
-                            <a asp-controller="Estimator" asp-action="Index"><i class="icon icon-office-fill"></i>
-                                Оценка</a>
-                            <a asp-controller="Compare" asp-action="Index"><i class="icon icon-villa-fill"></i>
-                                Сравнение</a>
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="1"><i class="icon icon-apartment" aria-hidden="true"></i> Квартиры</a>
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="2"><i class="icon icon-house-fill" aria-hidden="true"></i> Дома</a>
+                            <a asp-controller="Estimator" asp-action="Index"><i class="icon icon-office-fill" aria-hidden="true"></i> Оценка</a>
+                            <a asp-controller="Compare" asp-action="Index"><i class="icon icon-villa-fill" aria-hidden="true"></i> Сравнение</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="img-banner-left">
-        <img src="~/homelengo/images/slider/graplic-slider-2.png" alt=""/>
+    <div class="img-banner-left" aria-hidden="true">
+        <img src="~/homelengo/images/slider/graplic-slider-2.png" alt="" width="316" height="441"/>
     </div>
     <div class="img-banner-right">
-        <div class="slider-home2 img-animation">
-            <img src="~/homelengo/images/slider/slider-2.jpg" alt="Недвижимость"/>
+        <div class="swiper slider-sw-home2" dir="ltr">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="slider-home2 img-animation wow">
+                        <img src="~/homelengo/images/slider/slider-2.jpg" alt="Современный дом с панорамными окнами" width="738" height="720" fetchpriority="high" asp-append-version="true"/>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slider-home2">
+                        <img src="~/homelengo/images/slider/slider-2-1.jpg" alt="Светлый интерьер с панорамным остеклением" width="738" height="720" asp-append-version="true"/>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slider-home2">
+                        <img src="~/homelengo/images/slider/slider-2-2.jpg" alt="Дом с панорамными окнами в вечернем свете" width="738" height="720" asp-append-version="true"/>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slider-home2">
+                        <img src="~/homelengo/images/slider/slider-2-3.jpg" alt="Загородный дом с террасой" width="738" height="720" asp-append-version="true"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-<section class="flat-section">
-    <div class="tf-container">
-        <h3>Свежие предложения</h3>
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <partial name="_PropertyCard" model="item"/>
+
+<section class="flat-section flat-categories uc-home-categories">
+    <div class="container">
+        <div class="box-title style-1 wow fadeInUp">
+            <div class="text-subtitle text-primary">Тип недвижимости</div>
+            <h2 class="title mt-4">Популярные разделы</h2>
+        </div>
+        <div class="wrap-categories-sw wow fadeInUp" data-wow-delay=".2s">
+            <div class="swiper tf-sw-categories sw-over" data-mobile="2" data-mobile-sm="3" data-preview="4"
+                 data-space="15" data-space-lg="30" data-space-md="30" data-tablet="4" dir="ltr">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="1">
+                            <div class="icon-box"><span class="icon icon-apartment1" aria-hidden="true"></span></div>
+                            <div class="content text-center">
+                                <h3>Квартиры</h3>
+                                <p class="mt-4 text-variant-1">Городские объекты</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="2">
+                            <div class="icon-box"><span class="icon icon-villa-line" aria-hidden="true"></span></div>
+                            <div class="content text-center">
+                                <h3>Дома</h3>
+                                <p class="mt-4 text-variant-1">Семейные варианты</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="3">
+                            <div class="icon-box"><span class="icon icon-office1" aria-hidden="true"></span></div>
+                            <div class="content text-center">
+                                <h3>Коммерция</h3>
+                                <p class="mt-4 text-variant-1">Офисы и помещения</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="4">
+                            <div class="icon-box"><span class="icon icon-commercial" aria-hidden="true"></span></div>
+                            <div class="content text-center">
+                                <h3>Участки</h3>
+                                <p class="mt-4 text-variant-1">Земля под проект</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            }
+                <div class="sw-pagination sw-pagination-category text-center"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="flat-section flat-recommended pt-0 uc-recommended">
+    <div class="container">
+        <div class="box-title text-center wow fadeInUp">
+            <div class="text-subtitle text-primary">Свежие предложения</div>
+            <h2 class="title mt-4">Объекты, которые стоит посмотреть первыми</h2>
+        </div>
+        <div class="flat-tab-recommended flat-animate-tab wow fadeInUp" data-wow-delay=".2s">
+            <ul class="nav-tab-recommended justify-content-md-center" role="tablist">
+                <li class="nav-tab-item" role="presentation">
+                    <a class="nav-link-item active" asp-controller="Catalog" asp-action="Index">Все объекты</a>
+                </li>
+                <li class="nav-tab-item" role="presentation">
+                    <a class="nav-link-item" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="1">Продажа</a>
+                </li>
+                <li class="nav-tab-item" role="presentation">
+                    <a class="nav-link-item" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="2">Аренда</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" role="tabpanel">
+                    <div class="row">
+                        @foreach (var item in listings)
+                        {
+                            <div class="col-xl-4 col-lg-6 col-md-6">
+                                <partial name="_PropertyCard" model="item"/>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a class="tf-btn btn-view primary size-1 hover-btn-view" asp-controller="Catalog" asp-action="Index">
+                    Перейти в каталог <span class="icon icon-arrow-right2" aria-hidden="true"></span>
+                </a>
+            </div>
         </div>
     </div>
 </section>

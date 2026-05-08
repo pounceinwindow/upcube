@@ -5,6 +5,7 @@ out/
 publish/
 artifacts/
 AGENTS.md
+.agents/
 # User and IDE files
 .vs/
 .idea/

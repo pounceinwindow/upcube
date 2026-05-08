@@ -18,11 +18,16 @@
                 <div class="text-center mt-4">
                     <div class="mb-3">
                         <a asp-area="" asp-controller="Home" asp-action="Index" class="auth-logo">
-                            <span class="logo-light mx-auto fw-bold fs-4">UpperCube</span>
+                            <img alt="UpperCube" class="logo-dark mx-auto" height="30" width="104"
+                                 src="~/homelengo/images/logo/logo.png">
+                            <img alt="UpperCube" class="logo-light mx-auto" height="30" width="137"
+                                 src="~/upcube/assets/images/logo-light.png">
                         </a>
                     </div>
                 </div>
-                @RenderBody()
+                <main>
+                    @RenderBody()
+                </main>
             </div>
         </div>
     </div>

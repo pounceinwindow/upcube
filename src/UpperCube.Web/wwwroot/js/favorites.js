@@ -30,5 +30,6 @@
 
         const data = await res.json();
         btn.classList.toggle('active', data.isFavorite);
+        btn.setAttribute('aria-pressed', data.isFavorite ? 'true' : 'false');
     });
 })();

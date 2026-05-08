@@ -1,13 +1,12 @@
 ﻿@using System.Globalization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResource> Localizer
-@Html.AntiForgeryToken()
 
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>@ViewData["Title"] - UpperCube</title>
     <link rel="shortcut icon" href="~/homelengo/images/logo/favicon.png"/>
     <link rel="apple-touch-icon-precomposed" href="~/homelengo/images/logo/favicon.png"/>
@@ -22,6 +21,10 @@
     <link rel="stylesheet" href="~/css/uppercube-home.css"/>
 </head>
 <body class="body">
+<a class="uc-skip-link" href="#main-content">Перейти к контенту</a>
+<form class="uc-antiforgery-token" aria-hidden="true">
+    @Html.AntiForgeryToken()
+</form>
 <div class="preload preload-container">
     <div class="preload-logo">
         <div class="spinner"></div>
@@ -147,7 +150,7 @@
             </div>
         </header>
 
-        <main role="main">
+        <main id="main-content" role="main">
             @RenderBody()
         </main>
 

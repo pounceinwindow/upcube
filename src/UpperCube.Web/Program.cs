@@ -1,8 +1,10 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using UpperCube.Application;
 using UpperCube.Infrastructure;
+using UpperCube.Infrastructure.Persistence;
 using UpperCube.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +34,12 @@ var supportedCultures = new[]
 };
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 await DataSeeder.SeedAsync(app.Services);
 

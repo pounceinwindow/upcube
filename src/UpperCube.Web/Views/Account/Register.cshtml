@@ -9,14 +9,28 @@
 <div class="p-3">
     <form asp-action="Register" method="post" class="form-horizontal mt-3">
         @Html.AntiForgeryToken()
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" aria-live="polite"></div>
 
         <div class="form-group mb-3 row">
-            <div class="col-6">
+            <div class="col-12">
+                <label asp-for="Email" class="sr-only">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="email"
+                       inputmode="email" spellcheck="false"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <label asp-for="FirstName" class="sr-only">Имя</label>
                 <input asp-for="FirstName" class="form-control" placeholder="Имя"/>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="col-6">
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <label asp-for="LastName" class="sr-only">Фамилия</label>
                 <input asp-for="LastName" class="form-control" placeholder="Фамилия"/>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
@@ -24,13 +38,7 @@
 
         <div class="form-group mb-3 row">
             <div class="col-12">
-                <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="email"/>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div class="form-group mb-3 row">
-            <div class="col-12">
+                <label asp-for="Password" class="sr-only">Пароль</label>
                 <input asp-for="Password" class="form-control" placeholder="Пароль" autocomplete="new-password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -38,9 +46,21 @@
 
         <div class="form-group mb-3 row">
             <div class="col-12">
+                <label asp-for="ConfirmPassword" class="sr-only">Повторите пароль</label>
                 <input asp-for="ConfirmPassword" class="form-control" placeholder="Повторите пароль"
                        autocomplete="new-password"/>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group mb-3 row">
+            <div class="col-12">
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" id="acceptTerms" name="acceptTerms" type="checkbox" required>
+                    <label class="form-label ms-1 fw-normal" for="acceptTerms">
+                        Я принимаю <a class="text-muted" asp-controller="Home" asp-action="Index">условия сервиса</a>
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -52,7 +72,7 @@
 
         <div class="form-group mb-0 row mt-2">
             <div class="col-12 mt-3 text-center">
-                <a asp-action="Login" class="text-muted"><i class="mdi mdi-account-circle"></i> Уже есть аккаунт?</a>
+                <a asp-action="Login" class="text-muted"><i class="mdi mdi-account-circle" aria-hidden="true"></i> Уже есть аккаунт?</a>
             </div>
         </div>
     </form>
