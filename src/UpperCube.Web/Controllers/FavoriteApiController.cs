@@ -18,6 +18,7 @@ public sealed class FavoritesApiController(
     [HttpPost("toggle")]
     public async Task<IActionResult> Toggle([FromBody] ToggleRequest request, CancellationToken ct)
     {
+        
         var isFavorite = false;
         var id = userManager.GetUserId(User);
         var favorite = await favoriteRepository.GetAsync(id, request.PropertyId, ct);
