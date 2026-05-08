@@ -9,7 +9,12 @@
 
     if (!detailImages.Any())
     {
-        detailImages.Add("/homelengo/images/banner/banner-property-1.jpg");
+        detailImages.AddRange(new[]
+        {
+            "/homelengo/images/banner/banner-property-13.jpg",
+            "/homelengo/images/banner/banner-property-10.jpg",
+            "/homelengo/images/banner/banner-property-14.jpg"
+        });
     }
 
     var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";

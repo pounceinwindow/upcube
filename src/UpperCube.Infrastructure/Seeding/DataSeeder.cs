@@ -16,8 +16,9 @@ public static class DataSeeder
     private const string BannerImagePrefix = "/homelengo/images/banner/";
     private const string LegacyBannerImagePrefix = "/images/banner/";
     private const string OldDemoImagePrefix = "/images/demo/properties/";
-    private const int BannerPropertyImageCount = 12;
-    private const int SecondaryImageOffset = BannerPropertyImageCount - 1;
+    private const int BannerPropertyImageCount = 18;
+    private const int SecondaryImageOffset = 6;
+    private const int TertiaryImageOffset = 12;
 
     public static async Task SeedAsync(IServiceProvider services)
     {
@@ -243,7 +244,8 @@ public static class DataSeeder
     {
         var primaryPath = BannerPropertyImagePath(number);
         var secondaryPath = BannerPropertyImagePath(number + SecondaryImageOffset);
-        var desiredPaths = new[] { primaryPath, secondaryPath };
+        var tertiaryPath = BannerPropertyImagePath(number + TertiaryImageOffset);
+        var desiredPaths = new[] { primaryPath, secondaryPath, tertiaryPath };
         var keptSeedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         var managedSeedImages = property.Images.Where(IsManagedSeedImage).ToList();
