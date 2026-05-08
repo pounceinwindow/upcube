@@ -227,6 +227,17 @@ textarea:focus-visible {
     width: 100%;
 }
 
+.uc-home-hero.flat-slider.home-2 .img-banner-right {
+    display: block;
+}
+
+.uc-home-hero .slider-sw-home2,
+.uc-home-hero .slider-home2,
+.uc-home-hero .swiper-wrapper,
+.uc-home-hero .swiper-slide {
+    min-height: 100%;
+}
+
 .flat-slider.home-2 .slider-content {
     padding: clamp(86px, 9vw, 132px) 0 !important;
     max-width: 880px;
@@ -646,7 +657,7 @@ textarea:focus-visible {
 
     .flat-slider.home-2 .img-banner-right {
         left: 0;
-        opacity: 0.18;
+        opacity: 0.28;
     }
 
     .flat-slider.home-2 .slider-content {
