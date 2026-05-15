@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UpperCube.Application.Abstractions.Repositories;
@@ -7,22 +6,27 @@ using UpperCube.Infrastructure.Identity;
 
 namespace UpperCube.Web.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/favorites")]
 public sealed class FavoritesApiController(
     IFavoriteRepository favoriteRepository,
+    IPropertyRepository propertyRepository,
     IUnitOfWork unitOfWork,
     UserManager<ApplicationUser> userManager) : ControllerBase
 {
     [HttpPost("toggle")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Toggle([FromBody] ToggleRequest request, CancellationToken ct)
     {
         var userId = userManager.GetUserId(User);
         if (string.IsNullOrWhiteSpace(userId)) return Unauthorized();
 
+        var property = await propertyRepository.GetByIdAsync(request.PropertyId, ct);
+        if (property is null) return NotFound(new { success = false, message = "Property not found." });
+
         var favorite = await favoriteRepository.GetAsync(userId, request.PropertyId, ct);
         var isFavorite = false;
+
         if (favorite == null)
         {
             await favoriteRepository.AddAsync(new Favorite { PropertyId = request.PropertyId, UserId = userId }, ct);
@@ -36,7 +40,9 @@ public sealed class FavoritesApiController(
 
         await unitOfWork.SaveChangesAsync(ct);
 
-        return Ok(new { IsFavorite = isFavorite });
+        var favoriteIds = await favoriteRepository.GetUserFavoritePropertyIdsAsync(userId, ct);
+
+        return Ok(new { success = true, isFavorite, count = favoriteIds.Count });
     }
 
     public sealed record ToggleRequest(int PropertyId);

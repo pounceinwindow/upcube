@@ -1,0 +1,203 @@
+@model UpperCube.Web.Models.Agent.PropertyFormModelView
+
+@{
+    var formAction = ViewData["AgentFormAction"] as string ?? "Create";
+    var submitText = ViewData["AgentFormSubmit"] as string ?? "Сохранить";
+    var routeId = Model.Id == 0 ? null : Model.Id.ToString();
+}
+
+<form asp-controller="Agent"
+      asp-action="@formAction"
+      asp-route-id="@routeId"
+      method="post"
+      enctype="multipart/form-data"
+      class="homelengo-box p-4">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" aria-live="polite"></div>
+
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label asp-for="Title" class="form-label">Название</label>
+            <input asp-for="Title"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="Например, Светлая квартира у парка…" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="TransactionType" class="form-label">Тип сделки</label>
+            <select asp-for="TransactionType" class="form-select" autocomplete="off">
+                <option value="1">Продажа</option>
+                <option value="2">Аренда</option>
+            </select>
+            <span asp-validation-for="TransactionType" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Description" class="form-label">Описание</label>
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="5"
+                      autocomplete="off"
+                      placeholder="Опишите планировку, ремонт, инфраструктуру и преимущества объекта…"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Price" class="form-label">Цена</label>
+            <input asp-for="Price"
+                   type="number"
+                   min="1"
+                   step="0.01"
+                   inputmode="decimal"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="12500000…" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-2">
+            <label asp-for="Currency" class="form-label">Валюта</label>
+            <input asp-for="Currency"
+                   class="form-control"
+                   maxlength="3"
+                   autocomplete="off"
+                   spellcheck="false"
+                   placeholder="RUB…" />
+            <span asp-validation-for="Currency" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="Area" class="form-label">Площадь</label>
+            <input asp-for="Area"
+                   type="number"
+                   min="1"
+                   step="0.01"
+                   inputmode="decimal"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="72.5…" />
+            <span asp-validation-for="Area" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="Rooms" class="form-label">Комнаты</label>
+            <input asp-for="Rooms"
+                   type="number"
+                   min="1"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="3…" />
+            <span asp-validation-for="Rooms" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="Floor" class="form-label">Этаж</label>
+            <input asp-for="Floor"
+                   type="number"
+                   min="0"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="5…" />
+            <span asp-validation-for="Floor" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="TotalFloors" class="form-label">Всего этажей</label>
+            <input asp-for="TotalFloors"
+                   type="number"
+                   min="1"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="16…" />
+            <span asp-validation-for="TotalFloors" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="CityId" class="form-label">Город</label>
+            <select asp-for="CityId" asp-items="Model.Cities" class="form-select" autocomplete="off">
+                <option value="">Выберите город</option>
+            </select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="DistrictId" class="form-label">Район</label>
+            <select asp-for="DistrictId" asp-items="Model.Districts" class="form-select" autocomplete="off">
+                <option value="">Выберите район</option>
+            </select>
+            <span asp-validation-for="DistrictId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="PropertyTypeId" class="form-label">Тип недвижимости</label>
+            <select asp-for="PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select" autocomplete="off">
+                <option value="">Выберите тип</option>
+            </select>
+            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="CategoryId" class="form-label">Категория</label>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select" autocomplete="off">
+                <option value="">Выберите категорию</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Address" class="form-label">Адрес</label>
+            <input asp-for="Address"
+                   class="form-control"
+                   autocomplete="street-address"
+                   placeholder="Москва, Тверская улица, 7…" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        @if (Model.ExistingImages.Any())
+        {
+            <div class="col-12">
+                <div class="text-btn mb-2">Текущие фотографии</div>
+                <div class="row g-3">
+                    @foreach (var imagePath in Model.ExistingImages)
+                    {
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <img src="@imagePath"
+                                 alt="Фотография объявления"
+                                 class="img-fluid rounded"
+                                 loading="lazy"
+                                 width="260"
+                                 height="170" />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="col-12">
+            <label asp-for="ImageFiles" class="form-label">Добавить фотографии</label>
+            <input asp-for="ImageFiles"
+                   type="file"
+                   class="form-control"
+                   accept="image/jpeg,image/png,image/webp"
+                   multiple />
+            <span asp-validation-for="ImageFiles" class="text-danger"></span>
+            <div class="form-text">JPG, PNG или WebP, до 5 МБ на файл.</div>
+        </div>
+
+        <div class="col-12 d-flex flex-wrap gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">
+                @submitText
+            </button>
+
+            <a asp-controller="Agent"
+               asp-action="MyProperties"
+               class="btn btn-outline-secondary">
+                Отмена
+            </a>
+        </div>
+    </div>
+</form>

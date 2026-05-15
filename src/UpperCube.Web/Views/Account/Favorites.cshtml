@@ -5,18 +5,19 @@
 
 <section class="flat-section">
     <div class="tf-container">
-        <h3 class="mb-4">Избранное (@Model.Count)</h3>
+        <h3 class="mb-4">Избранное (<span id="favorites-count">@Model.Count</span>)</h3>
 
         @if (Model.Count == 0)
         {
-            <p class="text-center text-variant-1">У вас пока нет избранных объектов.</p>
+            <p id="favorites-empty-state" class="text-center text-variant-1">У вас пока нет избранных объектов.</p>
         }
         else
         {
-            <div class="row">
+            <p id="favorites-empty-state" class="text-center text-variant-1" hidden>У вас пока нет избранных объектов.</p>
+            <div class="row" id="favorites-grid">
                 @foreach (var item in Model)
                 {
-                    <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="col-xl-4 col-lg-6 col-md-6" data-favorite-card-id="@item.Id">
                         <partial name="_PropertyCard" model="item"/>
                     </div>
                 }

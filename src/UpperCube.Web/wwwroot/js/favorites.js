@@ -14,6 +14,7 @@
 
         const res = await fetch('/api/favorites/toggle', {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'RequestVerificationToken': tokenInput.value
@@ -31,5 +32,23 @@
         const data = await res.json();
         btn.classList.toggle('active', data.isFavorite);
         btn.setAttribute('aria-pressed', data.isFavorite ? 'true' : 'false');
+
+        const count = document.getElementById('favorites-count');
+        if (count && typeof data.count === 'number') {
+            count.textContent = data.count.toString();
+        }
+
+        if (!data.isFavorite) {
+            const favoriteCard = btn.closest('[data-favorite-card-id]');
+            if (favoriteCard) {
+                favoriteCard.remove();
+
+                const grid = document.getElementById('favorites-grid');
+                const emptyState = document.getElementById('favorites-empty-state');
+                if (grid && emptyState && !grid.querySelector('[data-favorite-card-id]')) {
+                    emptyState.hidden = false;
+                }
+            }
+        }
     });
 })();

@@ -19,14 +19,14 @@
 
         @if (TempData["AgentMessage"] is string message)
         {
-            <div class="alert alert-success">@message</div>
+            <div class="alert alert-success" role="status" aria-live="polite">@message</div>
         }
 
         @if (!Model.Any())
         {
             <div class="homelengo-box p-4 text-center">
                 <h5>Объявлений пока нет</h5>
-                <p class="text-variant-1">Создай первый объект недвижимости.</p>
+                <p class="text-variant-1">Создайте первый объект недвижимости.</p>
                 <a asp-controller="Agent" asp-action="Create" class="tf-btn primary">
                     Создать объявление
                 </a>
@@ -52,8 +52,8 @@
                                   asp-action="Delete"
                                   asp-route-id="@item.Id"
                                   method="post"
-                                  class="w-50"
-                                  onsubmit="return confirm('Удалить объявление?');">
+                                  class="w-50 js-agent-delete-form"
+                                  data-confirm-message="Удалить объявление?">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-outline-danger w-100">
                                     Удалить
@@ -66,3 +66,18 @@
         }
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        (function () {
+            document.querySelectorAll('.js-agent-delete-form').forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    const message = form.dataset.confirmMessage || 'Удалить объявление?';
+                    if (!window.confirm(message)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        })();
+    </script>
+}

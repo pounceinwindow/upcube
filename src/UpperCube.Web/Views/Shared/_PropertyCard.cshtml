@@ -3,7 +3,7 @@
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
     var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
-        ? "/homelengo/images/banner/banner-property-13.jpg"
+        ? "/homelengo/images/banner/banner-property-1.jpg"
         : Model.PrimaryImagePath;
     var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";
 }

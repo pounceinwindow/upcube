@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using UpperCube.Application.Abstractions.Media;
 
 namespace UpperCube.Infrastructure.Services.ImageStorage;
 
-public sealed class LocalDiskImageStorage(IConfiguration configuration) : IImageStorage
+public sealed class LocalDiskImageStorage(IConfiguration configuration, IHostEnvironment environment) : IImageStorage
 {
     private static readonly IReadOnlyDictionary<string, string> AllowedExtensions = new Dictionary<string, string>
     {
@@ -18,7 +19,7 @@ public sealed class LocalDiskImageStorage(IConfiguration configuration) : IImage
         if (!AllowedExtensions.TryGetValue(contentType, out var extension))
             throw new InvalidOperationException("Unsupported image content type.");
 
-        var rootPath = configuration["ImageStorage:RootPath"] ?? "wwwroot/uploads";
+        var rootPath = ResolveRootPath();
         Directory.CreateDirectory(rootPath);
 
         var sourceExtension = Path.GetExtension(fileName);
@@ -39,12 +40,20 @@ public sealed class LocalDiskImageStorage(IConfiguration configuration) : IImage
     {
         if (string.IsNullOrWhiteSpace(path)) return Task.CompletedTask;
 
-        var rootPath = configuration["ImageStorage:RootPath"] ?? "wwwroot/uploads";
+        var rootPath = ResolveRootPath();
         var fileName = Path.GetFileName(path);
         var fullPath = Path.Combine(rootPath, fileName);
 
         if (File.Exists(fullPath)) File.Delete(fullPath);
 
         return Task.CompletedTask;
+    }
+
+    private string ResolveRootPath()
+    {
+        var configuredRoot = configuration["ImageStorage:RootPath"] ?? "wwwroot/uploads";
+        return Path.IsPathRooted(configuredRoot)
+            ? configuredRoot
+            : Path.Combine(environment.ContentRootPath, configuredRoot);
     }
 }

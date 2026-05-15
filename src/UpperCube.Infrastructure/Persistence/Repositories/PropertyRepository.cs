@@ -77,7 +77,7 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
 
     public Task UpdateAsync(Property property, CancellationToken ct = default)
     {
-        dbContext.Properties.Update(property);
+        if (dbContext.Entry(property).State == EntityState.Detached) dbContext.Properties.Update(property);
         return Task.CompletedTask;
     }
 
