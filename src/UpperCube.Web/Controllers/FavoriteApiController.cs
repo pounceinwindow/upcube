@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UpperCube.Application.Abstractions.Repositories;
@@ -6,6 +7,7 @@ using UpperCube.Infrastructure.Identity;
 
 namespace UpperCube.Web.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/favorites")]
 public sealed class FavoritesApiController(
