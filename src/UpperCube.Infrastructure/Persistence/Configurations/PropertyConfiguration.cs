@@ -56,7 +56,6 @@ public sealed class PropertyImageConfiguration : IEntityTypeConfiguration<Proper
     {
         builder.ToTable("PropertyImages");
         builder.Property(x => x.Path).HasMaxLength(512).IsRequired();
-        builder.Property(x => x.MediaType).HasConversion<int>();
         builder.HasOne(x => x.Property).WithMany(x => x.Images).HasForeignKey(x => x.PropertyId)
             .OnDelete(DeleteBehavior.Cascade);
         builder.HasIndex(x => new { x.PropertyId, x.Order });

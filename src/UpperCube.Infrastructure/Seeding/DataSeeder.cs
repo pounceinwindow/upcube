@@ -256,7 +256,6 @@ public static class DataSeeder
 
             if (desiredOrder >= 0 && keptSeedPaths.Add(image.Path))
             {
-                image.MediaType = MediaType.Photo;
                 image.Order = desiredOrder;
                 image.UploadedAt = SeedTimestamp;
                 continue;
@@ -273,7 +272,6 @@ public static class DataSeeder
             property.Images.Add(new PropertyImage
             {
                 Path = path,
-                MediaType = MediaType.Photo,
                 IsPrimary = false,
                 Order = order,
                 UploadedAt = SeedTimestamp
@@ -320,13 +318,6 @@ public static class DataSeeder
                 Code = "property.valuation",
                 DisplayName = "Оценка стоимости",
                 Description = "AI-оценщик рыночной стоимости недвижимости",
-                IsEnabled = true
-            },
-            new FeatureCatalogEntry
-            {
-                Code = "property.tour360.upload",
-                DisplayName = "Загрузка 360° панорам",
-                Description = "Загрузка и отображение виртуальных 360° туров",
                 IsEnabled = true
             },
             new FeatureCatalogEntry
