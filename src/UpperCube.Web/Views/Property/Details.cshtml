@@ -30,6 +30,8 @@
     var amenities = Model.Amenities
         .Where(x => !string.IsNullOrWhiteSpace(x))
         .ToList();
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
 }
 
 <div class="flat-section-v4 uc-detail-header">
@@ -272,23 +274,48 @@
                                 </ul>
                             </div>
                         </div>
-                        <form action="mailto:agent@uppercube.local" class="contact-form">
-                            <div class="ip-group">
-                                <input class="form-control" name="name" placeholder="Ваше имя" type="text">
+                        @if (TempData["Success"] is string success)
+                        {
+                            <div class="alert alert-success mt-3" role="status" aria-live="polite">@success</div>
+                        }
+
+                        @if (TempData["Error"] is string error)
+                        {
+                            <div class="alert alert-danger mt-3" role="alert" aria-live="assertive">@error</div>
+                        }
+
+                        @if (isAuthenticated)
+                        {
+                            <form asp-controller="Property" asp-action="SendInquiry" method="post" class="contact-form">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="propertyId" value="@Model.Id" />
+
+                                <div class="ip-group">
+                                    <textarea name="message"
+                                              placeholder="Здравствуйте, интересует этот объект"
+                                              rows="4"
+                                              maxlength="2000"
+                                              required></textarea>
+                                </div>
+                                <button class="tf-btn btn-view primary hover-btn-view w-100" type="submit">
+                                    Отправить запрос <span class="icon icon-arrow-right2" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="contact-form">
+                                <div class="alert alert-info mb-3" role="status">
+                                    Войдите, чтобы отправить заявку агенту.
+                                </div>
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   asp-route-returnUrl="@returnUrl"
+                                   class="tf-btn btn-view primary hover-btn-view w-100">
+                                    Войти <span class="icon icon-arrow-right2" aria-hidden="true"></span>
+                                </a>
                             </div>
-                            <div class="ip-group">
-                                <input class="form-control" name="phone" placeholder="Телефон" type="tel">
-                            </div>
-                            <div class="ip-group">
-                                <input class="form-control" name="email" placeholder="Email" type="email">
-                            </div>
-                            <div class="ip-group">
-                                <textarea name="message" placeholder="Здравствуйте, интересует этот объект" rows="4"></textarea>
-                            </div>
-                            <button class="tf-btn btn-view primary hover-btn-view w-100" type="submit">
-                                Отправить запрос <span class="icon icon-arrow-right2" aria-hidden="true"></span>
-                            </button>
-                        </form>
+                        }
                     </div>
 
                     <div class="widget-box single-property-whychoose">

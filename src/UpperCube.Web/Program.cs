@@ -6,6 +6,8 @@ using UpperCube.Application;
 using UpperCube.Infrastructure;
 using UpperCube.Infrastructure.Persistence;
 using UpperCube.Infrastructure.Seeding;
+using UpperCube.Web.Hubs;
+using UpperCube.Web.Services.Inquiries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddSignalR();
+builder.Services.AddScoped<IInquiryChatService, InquiryChatService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services
     .AddControllersWithViews()
@@ -74,5 +77,6 @@ app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
+app.MapHub<InquiryHub>("/hubs/inquiries");
 
 app.Run();

@@ -1,7 +1,9 @@
 @{
     ViewData["Title"] = "Дашборд";
     var favCount = (int)(ViewData["FavoritesCount"] ?? 0);
+    var inquiriesCount = (int)(ViewData["InquiriesCount"] ?? 0);
     var myPropsCount = (int)(ViewData["MyPropertiesCount"] ?? 0);
+    var agentInquiriesCount = (int)(ViewData["AgentInquiriesCount"] ?? 0);
     var isAgent = (bool)(ViewData["IsAgent"] ?? false);
 }
 
@@ -18,6 +20,14 @@
                 </div>
             </div>
 
+            <div class="col-md-4">
+                <div class="homelengo-box p-4 text-center">
+                    <h2 class="fw-7">@inquiriesCount</h2>
+                    <p class="text-variant-1">Моих заявок</p>
+                    <a asp-controller="Account" asp-action="Inquiries" class="tf-btn primary">Открыть</a>
+                </div>
+            </div>
+
             @if (isAgent)
             {
                 <div class="col-md-4">
@@ -25,6 +35,14 @@
                         <h2 class="fw-7">@myPropsCount</h2>
                         <p class="text-variant-1">Моих объявлений</p>
                         <a asp-controller="Agent" asp-action="MyProperties" class="tf-btn primary">Перейти</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="homelengo-box p-4 text-center">
+                        <h2 class="fw-7">@agentInquiriesCount</h2>
+                        <p class="text-variant-1">Заявок по объектам</p>
+                        <a asp-controller="Agent" asp-action="Inquiries" class="tf-btn primary">Открыть</a>
                     </div>
                 </div>
             }

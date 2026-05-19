@@ -1,0 +1,95 @@
+@model UpperCube.Web.Models.Inquiry.InquiryDetailsModelView
+@{
+    ViewData["Title"] = "Заявка";
+}
+
+<section class="flat-section">
+    <div class="tf-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="mb-1">@Model.PropertyTitle</h3>
+                <p class="text-variant-1 mb-0">@Model.PropertyAddress</p>
+            </div>
+
+            <a asp-controller="Property"
+               asp-action="Details"
+               asp-route-id="@Model.PropertyId"
+               class="tf-btn primary">
+                К объекту
+            </a>
+        </div>
+
+        @if (TempData["Success"] is string success)
+        {
+            <div class="alert alert-success" role="status" aria-live="polite">@success</div>
+        }
+
+        @if (TempData["Error"] is string error)
+        {
+            <div class="alert alert-danger" role="alert" aria-live="assertive">@error</div>
+        }
+
+        <div class="homelengo-box p-4 mb-4">
+            <div class="d-flex justify-content-between gap-3 flex-wrap mb-3">
+                <div>
+                    <h5 class="mb-1">Заявка #@Model.Id</h5>
+                    <p class="text-variant-1 mb-0">Создана @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                </div>
+                <span class="badge bg-light text-dark align-self-start">@Model.StatusText</span>
+            </div>
+            <p class="mb-0">@Model.InitialMessage</p>
+        </div>
+
+        <div class="homelengo-box p-4"
+             data-inquiry-chat
+             data-inquiry-id="@Model.Id"
+             data-current-user-id="@Model.CurrentUserId">
+            <h5 class="mb-4">Переписка</h5>
+
+            <div data-chat-error class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
+            <div data-chat-status class="text-variant-1 small mb-3" aria-live="polite"></div>
+
+            <div class="uc-chat-messages" data-messages>
+                @foreach (var message in Model.Messages)
+                {
+                    <div class="uc-chat-message-row @(message.IsOwnMessage ? "is-own" : "is-other")"
+                         data-message-id="@message.Id">
+                        <div class="uc-chat-message">
+                            <div class="small text-variant-1 mb-1">
+                                @(message.IsOwnMessage ? "Вы" : "Собеседник") · @message.SentAt.ToString("dd.MM.yyyy HH:mm")
+                            </div>
+                            <div>@message.Text</div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <form asp-controller="Inquiry"
+                  asp-action="Reply"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="mt-4"
+                  data-message-form>
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label for="reply-message" class="form-label">Ответ</label>
+                    <textarea id="reply-message"
+                              name="message"
+                              class="form-control"
+                              rows="4"
+                              maxlength="4000"
+                              data-message-input
+                              required></textarea>
+                </div>
+                <button type="submit" class="tf-btn primary" data-message-submit>
+                    Отправить
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+    <script src="~/js/inquiry-chat.js" asp-append-version="true"></script>
+}

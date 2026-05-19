@@ -1,0 +1,72 @@
+@model IReadOnlyList<UpperCube.Web.Models.Inquiry.InquiryListItemModelView>
+@{
+    ViewData["Title"] = "Заявки по объектам";
+}
+
+<section class="flat-section">
+    <div class="tf-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="mb-1">Заявки по моим объектам</h3>
+                <p class="text-variant-1 mb-0">Сообщения пользователей по объявлениям агента</p>
+            </div>
+
+            <a asp-controller="Agent" asp-action="MyProperties" class="tf-btn primary">
+                Мои объявления
+            </a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="homelengo-box p-4 text-center">
+                <h5>Заявок пока нет</h5>
+                <p class="text-variant-1">Новые обращения появятся здесь после отправки формы на странице объекта.</p>
+            </div>
+        }
+        else
+        {
+            <div class="homelengo-box p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Объект</th>
+                            <th>Первое сообщение</th>
+                            <th>Статус</th>
+                            <th>Обновлена</th>
+                            <th>Сообщений</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@item.PropertyId"
+                                       class="fw-6 link">
+                                        @item.PropertyTitle
+                                    </a>
+                                    <div class="text-variant-1">@item.PropertyAddress</div>
+                                </td>
+                                <td>@item.InitialMessage</td>
+                                <td><span class="badge bg-light text-dark">@item.StatusText</span></td>
+                                <td>@item.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@item.MessagesCount</td>
+                                <td class="text-end">
+                                    <a asp-controller="Inquiry"
+                                       asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="tf-btn btn-line">
+                                        Открыть
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</section>

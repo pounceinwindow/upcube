@@ -12,9 +12,14 @@
                 <p class="text-variant-1 mb-0">Управление объектами недвижимости агента</p>
             </div>
 
-            <a asp-controller="Agent" asp-action="Create" class="tf-btn primary">
-                Добавить объект
-            </a>
+            <div class="d-flex gap-2">
+                <a asp-controller="Agent" asp-action="Inquiries" class="tf-btn btn-line">
+                    Заявки
+                </a>
+                <a asp-controller="Agent" asp-action="Create" class="tf-btn primary">
+                    Добавить объект
+                </a>
+            </div>
         </div>
 
         @if (TempData["AgentMessage"] is string message)

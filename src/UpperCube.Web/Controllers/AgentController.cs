@@ -46,6 +46,20 @@ public sealed class AgentController(
         return View(propertyListItem);
     }
 
+    [HttpGet("inquiries")]
+    public async Task<IActionResult> Inquiries(
+        [FromServices] IInquiryRepository inquiryRepository,
+        CancellationToken ct)
+    {
+        var agentId = userManager.GetUserId(User);
+        if (string.IsNullOrWhiteSpace(agentId)) return Challenge();
+
+        var inquiries = await inquiryRepository.GetByAgentIdAsync(agentId, ct);
+        var model = inquiries.Select(x => x.ToListItemModelView()).ToList();
+
+        return View(model);
+    }
+
     [HttpGet("create")]
     public async Task<IActionResult> Create(CancellationToken ct)
     {

@@ -158,25 +158,48 @@ public sealed class AccountController(
     public async Task<IActionResult> Dashboard(
         [FromServices] IFavoriteRepository favoriteRepository,
         [FromServices] IPropertyRepository propertyRepository,
+        [FromServices] IInquiryRepository inquiryRepository,
         CancellationToken ct)
     {
         var userId = userManager.GetUserId(User);
         if (userId is null) return Challenge();
 
         var favoriteIds = await favoriteRepository.GetUserFavoritePropertyIdsAsync(userId, ct);
+        var inquiries = await inquiryRepository.GetByUserIdAsync(userId, ct);
 
         var myPropertiesCount = 0;
+        var agentInquiriesCount = 0;
         if (User.IsInRole("Agent"))
         {
             var myProps = await propertyRepository.GetByAgentIdAsync(userId, ct);
             myPropertiesCount = myProps.Count;
+
+            var agentInquiries = await inquiryRepository.GetByAgentIdAsync(userId, ct);
+            agentInquiriesCount = agentInquiries.Count;
         }
 
         ViewData["FavoritesCount"] = favoriteIds.Count;
+        ViewData["InquiriesCount"] = inquiries.Count;
         ViewData["MyPropertiesCount"] = myPropertiesCount;
+        ViewData["AgentInquiriesCount"] = agentInquiriesCount;
         ViewData["IsAgent"] = User.IsInRole("Agent");
 
         return View();
+    }
+
+    [Authorize]
+    [HttpGet("inquiries")]
+    public async Task<IActionResult> Inquiries(
+        [FromServices] IInquiryRepository inquiryRepository,
+        CancellationToken ct)
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null) return Challenge();
+
+        var inquiries = await inquiryRepository.GetByUserIdAsync(userId, ct);
+        var model = inquiries.Select(x => x.ToListItemModelView()).ToList();
+
+        return View(model);
     }
 
     [Authorize]

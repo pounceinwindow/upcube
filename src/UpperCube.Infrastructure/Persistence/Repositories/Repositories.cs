@@ -53,7 +53,30 @@ public sealed class InquiryRepository(AppDbContext dbContext) : IInquiryReposito
 {
     public Task<Inquiry?> GetByIdAsync(int id, CancellationToken ct = default)
     {
-        return dbContext.Inquiries.Include(x => x.Messages).FirstOrDefaultAsync(x => x.Id == id, ct);
+        return dbContext.Inquiries
+            .Include(x => x.Property)
+            .Include(x => x.Messages)
+            .FirstOrDefaultAsync(x => x.Id == id, ct);
+    }
+
+    public async Task<IReadOnlyList<Inquiry>> GetByUserIdAsync(string userId, CancellationToken ct = default)
+    {
+        return await dbContext.Inquiries
+            .Where(x => x.FromUserId == userId)
+            .Include(x => x.Property)
+            .Include(x => x.Messages)
+            .OrderByDescending(x => x.UpdatedAt)
+            .ToListAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<Inquiry>> GetByAgentIdAsync(string agentId, CancellationToken ct = default)
+    {
+        return await dbContext.Inquiries
+            .Include(x => x.Property)
+            .Include(x => x.Messages)
+            .Where(x => x.Property != null && x.Property.AgentId == agentId)
+            .OrderByDescending(x => x.UpdatedAt)
+            .ToListAsync(ct);
     }
 
     public Task AddAsync(Inquiry inquiry, CancellationToken ct = default)

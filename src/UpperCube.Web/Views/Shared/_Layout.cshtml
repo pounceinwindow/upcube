@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="~/homelengo/css/jquery.fancybox.min.css"/>
     <link rel="stylesheet" href="~/homelengo/css/styles.css"/>
     <link rel="stylesheet" href="~/css/favorites.css">
+    <link rel="stylesheet" href="~/css/inquiry-chat.css"/>
     <link rel="stylesheet" href="~/css/uppercube-home.css"/>
 </head>
 <body class="body">
@@ -66,6 +67,8 @@
                                                            asp-action="Dashboard">Дашборд</a></li>
                                                     <li><a asp-area="" asp-controller="Account"
                                                            asp-action="Favorites">Избранное</a></li>
+                                                    <li><a asp-area="" asp-controller="Account"
+                                                           asp-action="Inquiries">Заявки</a></li>
                                                     <li><a asp-area="" asp-controller="Account"
                                                            asp-action="Profile">Профиль</a></li>
                                                 }
@@ -153,20 +156,6 @@
         <main id="main-content" role="main">
             @RenderBody()
         </main>
-
-        <footer class="footer">
-            <div class="footer-inner">
-                <div class="tf-container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="footer-cl-1">
-                                <p class="text-variant-2 mb-0">© 2026 UpperCube. @Localizer["RealEstatePlatform"]</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
     </div>
 </div>
 

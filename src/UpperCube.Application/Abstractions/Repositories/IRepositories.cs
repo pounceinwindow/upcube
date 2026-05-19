@@ -19,6 +19,10 @@ public interface IInquiryRepository
 {
     Task<Inquiry?> GetByIdAsync(int id, CancellationToken ct = default);
 
+    Task<IReadOnlyList<Inquiry>> GetByUserIdAsync(string userId, CancellationToken ct = default);
+
+    Task<IReadOnlyList<Inquiry>> GetByAgentIdAsync(string agentId, CancellationToken ct = default);
+
     Task AddAsync(Inquiry inquiry, CancellationToken ct = default);
 }
 
