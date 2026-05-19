@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UpperCube.Application.Abstractions.AI;
 using UpperCube.Application.Abstractions.Authentication;
 using UpperCube.Application.Abstractions.Media;
 using UpperCube.Application.Abstractions.Notifications;
@@ -14,6 +15,7 @@ using UpperCube.Infrastructure.Persistence.Interceptors;
 using UpperCube.Infrastructure.Persistence.Repositories;
 using UpperCube.Infrastructure.Services.Authentication;
 using UpperCube.Infrastructure.Services.Email;
+using UpperCube.Infrastructure.Services.AI;
 using UpperCube.Infrastructure.Services.ImageStorage;
 
 namespace UpperCube.Infrastructure;
@@ -27,6 +29,7 @@ public static class DependencyInjection
                                    "Connection string 'Postgres' is not configured.");
 
         services.AddSingleton<AuditableEntityInterceptor>();
+        services.Configure<AiOptions>(configuration.GetSection(AiOptions.SectionName));
 
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
@@ -65,6 +68,12 @@ public static class DependencyInjection
         services.AddScoped<IAccountService, IdentityAccountService>();
         services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<IImageStorage, LocalDiskImageStorage>();
+        services.AddHttpClient<ILocalLlmClient, OllamaLocalLlmClient>((serviceProvider, client) =>
+        {
+            var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<AiOptions>>().Value;
+            client.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
+            client.Timeout = TimeSpan.FromSeconds(Math.Max(options.TimeoutSeconds, 1));
+        });
 
         return services;
     }

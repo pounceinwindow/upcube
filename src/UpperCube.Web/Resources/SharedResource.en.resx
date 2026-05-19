@@ -43,4 +43,121 @@
     <data name="RealEstatePlatform" xml:space="preserve">
     <value>Real estate platform</value>
   </data>
+    <data name="SkipToContent" xml:space="preserve">
+    <value>Skip to content</value>
+  </data>
+    <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+    <data name="Favorites" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+    <data name="Inquiries" xml:space="preserve">
+    <value>Inquiries</value>
+  </data>
+    <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+    <data name="EstimatorTitle" xml:space="preserve">
+    <value>AI value estimator</value>
+  </data>
+    <data name="EstimatorSubtitle" xml:space="preserve">
+    <value>Enter property parameters to get a calculated range and a short explanation from the local AI model.</value>
+  </data>
+    <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+    <data name="District" xml:space="preserve">
+    <value>District</value>
+  </data>
+    <data name="PropertyType" xml:space="preserve">
+    <value>Property type</value>
+  </data>
+    <data name="Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+    <data name="Rooms" xml:space="preserve">
+    <value>Rooms</value>
+  </data>
+    <data name="Floor" xml:space="preserve">
+    <value>Floor</value>
+  </data>
+    <data name="TotalFloors" xml:space="preserve">
+    <value>Total floors</value>
+  </data>
+    <data name="EstimateButton" xml:space="preserve">
+    <value>Estimate</value>
+  </data>
+    <data name="EstimatedValue" xml:space="preserve">
+    <value>Estimated value</value>
+  </data>
+    <data name="EstimatedRange" xml:space="preserve">
+    <value>Estimated range</value>
+  </data>
+    <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+    <data name="Strategy" xml:space="preserve">
+    <value>Strategy</value>
+  </data>
+    <data name="StrategyUsed" xml:space="preserve">
+    <value>Strategy used</value>
+  </data>
+    <data name="AiExplanation" xml:space="preserve">
+    <value>AI explanation</value>
+  </data>
+    <data name="AiExplanationUnavailable" xml:space="preserve">
+    <value>AI explanation is unavailable.</value>
+  </data>
+    <data name="AiExplanationUnavailableText" xml:space="preserve">
+    <value>The valuation was calculated, but the local LLM is not responding. Check Ollama and try again later.</value>
+  </data>
+    <data name="ValuationFactors" xml:space="preserve">
+    <value>The estimate considers city, district, property type, area, rooms, floor data, and similar published listings.</value>
+  </data>
+    <data name="ComparableProperties" xml:space="preserve">
+    <value>Comparable properties</value>
+  </data>
+    <data name="NoComparableProperties" xml:space="preserve">
+    <value>No comparable properties were found, so the calculation used the available average data.</value>
+  </data>
+    <data name="ValidationRequired" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+    <data name="ValidationAreaPositive" xml:space="preserve">
+    <value>Area must be greater than 0.</value>
+  </data>
+    <data name="ValidationRoomsPositive" xml:space="preserve">
+    <value>Rooms must be greater than 0.</value>
+  </data>
+    <data name="ValidationInvalidFloor" xml:space="preserve">
+    <value>Check floors: values must be at least 0, and total floors cannot be lower than the property floor.</value>
+  </data>
+    <data name="ValidationDistrictCity" xml:space="preserve">
+    <value>Select a district from the selected city.</value>
+  </data>
+    <data name="SignInOptional" xml:space="preserve">
+    <value>Sign-in is optional: anonymous valuations are saved without a user.</value>
+  </data>
+    <data name="TryAgain" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+    <data name="Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+    <data name="From" xml:space="preserve">
+    <value>from</value>
+  </data>
+    <data name="To" xml:space="preserve">
+    <value>to</value>
+  </data>
+    <data name="SelectCity" xml:space="preserve">
+    <value>Select city</value>
+  </data>
+    <data name="SelectDistrict" xml:space="preserve">
+    <value>Select district</value>
+  </data>
+    <data name="SelectPropertyType" xml:space="preserve">
+    <value>Select type</value>
+  </data>
 </root>

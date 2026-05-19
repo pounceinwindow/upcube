@@ -6,6 +6,7 @@ using UpperCube.Application;
 using UpperCube.Infrastructure;
 using UpperCube.Infrastructure.Persistence;
 using UpperCube.Infrastructure.Seeding;
+using UpperCube.Web;
 using UpperCube.Web.Hubs;
 using UpperCube.Web.Services.Inquiries;
 
@@ -26,7 +27,10 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services
     .AddControllersWithViews()
     .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(SharedResource));
+    });
 
 builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 

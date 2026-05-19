@@ -1,3 +1,3 @@
-namespace UpperCube;
+namespace UpperCube.Web;
 
 public sealed class SharedResource;

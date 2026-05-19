@@ -43,4 +43,121 @@
     <data name="RealEstatePlatform" xml:space="preserve">
     <value>Платформа недвижимости</value>
   </data>
+    <data name="SkipToContent" xml:space="preserve">
+    <value>Перейти к контенту</value>
+  </data>
+    <data name="Dashboard" xml:space="preserve">
+    <value>Дашборд</value>
+  </data>
+    <data name="Favorites" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+    <data name="Inquiries" xml:space="preserve">
+    <value>Заявки</value>
+  </data>
+    <data name="Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+    <data name="EstimatorTitle" xml:space="preserve">
+    <value>AI-оценщик стоимости</value>
+  </data>
+    <data name="EstimatorSubtitle" xml:space="preserve">
+    <value>Введите параметры объекта, чтобы получить расчётный диапазон и краткое объяснение локальной AI-модели.</value>
+  </data>
+    <data name="City" xml:space="preserve">
+    <value>Город</value>
+  </data>
+    <data name="District" xml:space="preserve">
+    <value>Район</value>
+  </data>
+    <data name="PropertyType" xml:space="preserve">
+    <value>Тип недвижимости</value>
+  </data>
+    <data name="Area" xml:space="preserve">
+    <value>Площадь</value>
+  </data>
+    <data name="Rooms" xml:space="preserve">
+    <value>Комнаты</value>
+  </data>
+    <data name="Floor" xml:space="preserve">
+    <value>Этаж</value>
+  </data>
+    <data name="TotalFloors" xml:space="preserve">
+    <value>Всего этажей</value>
+  </data>
+    <data name="EstimateButton" xml:space="preserve">
+    <value>Оценить</value>
+  </data>
+    <data name="EstimatedValue" xml:space="preserve">
+    <value>Расчётная стоимость</value>
+  </data>
+    <data name="EstimatedRange" xml:space="preserve">
+    <value>Диапазон оценки</value>
+  </data>
+    <data name="Currency" xml:space="preserve">
+    <value>Валюта</value>
+  </data>
+    <data name="Strategy" xml:space="preserve">
+    <value>Стратегия</value>
+  </data>
+    <data name="StrategyUsed" xml:space="preserve">
+    <value>Стратегия</value>
+  </data>
+    <data name="AiExplanation" xml:space="preserve">
+    <value>AI-объяснение</value>
+  </data>
+    <data name="AiExplanationUnavailable" xml:space="preserve">
+    <value>AI-объяснение недоступно.</value>
+  </data>
+    <data name="AiExplanationUnavailableText" xml:space="preserve">
+    <value>Расчёт выполнен, но локальная LLM сейчас не отвечает. Проверьте Ollama и повторите попытку позже.</value>
+  </data>
+    <data name="ValuationFactors" xml:space="preserve">
+    <value>Оценка учитывает город, район, тип объекта, площадь, комнаты, этажность и похожие опубликованные объявления.</value>
+  </data>
+    <data name="ComparableProperties" xml:space="preserve">
+    <value>Похожие объекты</value>
+  </data>
+    <data name="NoComparableProperties" xml:space="preserve">
+    <value>Похожие объекты не найдены, расчёт выполнен по доступным средним данным.</value>
+  </data>
+    <data name="ValidationRequired" xml:space="preserve">
+    <value>Заполните поле.</value>
+  </data>
+    <data name="ValidationAreaPositive" xml:space="preserve">
+    <value>Площадь должна быть больше 0.</value>
+  </data>
+    <data name="ValidationRoomsPositive" xml:space="preserve">
+    <value>Количество комнат должно быть больше 0.</value>
+  </data>
+    <data name="ValidationInvalidFloor" xml:space="preserve">
+    <value>Проверьте этажность: значения должны быть не ниже 0, а всего этажей не меньше этажа объекта.</value>
+  </data>
+    <data name="ValidationDistrictCity" xml:space="preserve">
+    <value>Выберите район выбранного города.</value>
+  </data>
+    <data name="SignInOptional" xml:space="preserve">
+    <value>Вход не обязателен: оценка сохранится без пользователя.</value>
+  </data>
+    <data name="TryAgain" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+    <data name="Result" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+    <data name="From" xml:space="preserve">
+    <value>от</value>
+  </data>
+    <data name="To" xml:space="preserve">
+    <value>до</value>
+  </data>
+    <data name="SelectCity" xml:space="preserve">
+    <value>Выберите город</value>
+  </data>
+    <data name="SelectDistrict" xml:space="preserve">
+    <value>Выберите район</value>
+  </data>
+    <data name="SelectPropertyType" xml:space="preserve">
+    <value>Выберите тип</value>
+  </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SharedResource> Localizer
+@inject IStringLocalizer<UpperCube.Web.SharedResource> Localizer
 
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="~/css/uppercube-home.css"/>
 </head>
 <body class="body">
-<a class="uc-skip-link" href="#main-content">Перейти к контенту</a>
+<a class="uc-skip-link" href="#main-content">@Localizer["SkipToContent"]</a>
 <form class="uc-antiforgery-token" aria-hidden="true">
     @Html.AntiForgeryToken()
 </form>
@@ -64,13 +64,13 @@
                                                 @if (User.Identity?.IsAuthenticated == true)
                                                 {
                                                     <li><a asp-area="" asp-controller="Account"
-                                                           asp-action="Dashboard">Дашборд</a></li>
+                                                           asp-action="Dashboard">@Localizer["Dashboard"]</a></li>
                                                     <li><a asp-area="" asp-controller="Account"
-                                                           asp-action="Favorites">Избранное</a></li>
+                                                           asp-action="Favorites">@Localizer["Favorites"]</a></li>
                                                     <li><a asp-area="" asp-controller="Account"
-                                                           asp-action="Inquiries">Заявки</a></li>
+                                                           asp-action="Inquiries">@Localizer["Inquiries"]</a></li>
                                                     <li><a asp-area="" asp-controller="Account"
-                                                           asp-action="Profile">Профиль</a></li>
+                                                           asp-action="Profile">@Localizer["Profile"]</a></li>
                                                 }
                                                 @if (User.IsInRole("Admin"))
                                                 {

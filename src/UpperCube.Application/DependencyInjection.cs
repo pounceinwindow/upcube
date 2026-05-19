@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<RegionalAverageValuator>();
         services.AddScoped<ComparableSalesValuator>();
         services.AddScoped<CompositeValuator>();
+        services.AddSingleton<ValuationExplanationPromptBuilder>();
         services.AddScoped<IValuator>(serviceProvider => serviceProvider.GetRequiredService<RegionalAverageValuator>());
         services.AddScoped<IValuator>(serviceProvider => serviceProvider.GetRequiredService<ComparableSalesValuator>());
         services.AddScoped<IValuator>(serviceProvider => serviceProvider.GetRequiredService<CompositeValuator>());

@@ -1,10 +1,204 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@model UpperCube.Web.Models.Estimator.EstimatorModelView
+@inject IStringLocalizer<UpperCube.Web.SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Оценка стоимости";
+    ViewData["Title"] = Localizer["EstimatorTitle"];
+    var culture = CultureInfo.CurrentCulture;
+    var uiCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var hasResult = Model.EstimatedMin.HasValue && Model.EstimatedMax.HasValue;
 }
 
-<section class="flat-section">
+@functions {
+    private static string FormatMoney(decimal value, string? currency, CultureInfo culture, string uiCulture)
+    {
+        var code = string.IsNullOrWhiteSpace(currency) ? "RUB" : currency;
+        var suffix = uiCulture == "ru" && string.Equals(code, "RUB", StringComparison.OrdinalIgnoreCase)
+            ? "₽"
+            : code;
+
+        return $"{value.ToString("N0", culture)} {suffix}";
+    }
+
+    private static string FormatArea(decimal value, CultureInfo culture)
+    {
+        return $"{value.ToString("N1", culture)} m²";
+    }
+}
+
+<section class="flat-section uc-estimator-page">
     <div class="tf-container">
-        <h2>Оценка стоимости</h2>
-        <p class="text-variant-1">Эта страница будет реализована в Phase 7.</p>
+        <div class="box-title-listing uc-estimator-title">
+            <div>
+                <div class="text-subtitle text-primary">@Localizer["RealEstatePlatform"]</div>
+                <h1 class="fw-8">@Localizer["EstimatorTitle"]</h1>
+                <p class="text-variant-1 mb-0">@Localizer["EstimatorSubtitle"]</p>
+            </div>
+        </div>
+
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-7">
+                <form asp-controller="Estimator"
+                      asp-action="Index"
+                      method="post"
+                      class="uc-estimator-panel">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" aria-live="polite"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="CityId" class="form-label">@Localizer["City"]</label>
+                            <select asp-for="CityId" asp-items="Model.Cities" class="form-select" autocomplete="off">
+                                <option value="">@Localizer["SelectCity"]</option>
+                            </select>
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="DistrictId" class="form-label">@Localizer["District"]</label>
+                            <select asp-for="DistrictId" asp-items="Model.Districts" class="form-select" autocomplete="off">
+                                <option value="">@Localizer["SelectDistrict"]</option>
+                            </select>
+                            <span asp-validation-for="DistrictId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="PropertyTypeId" class="form-label">@Localizer["PropertyType"]</label>
+                            <select asp-for="PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select" autocomplete="off">
+                                <option value="">@Localizer["SelectPropertyType"]</option>
+                            </select>
+                            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Area" class="form-label">@Localizer["Area"]</label>
+                            <input asp-for="Area"
+                                   type="number"
+                                   min="1"
+                                   step="0.1"
+                                   inputmode="decimal"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="72.5" />
+                            <span asp-validation-for="Area" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="Rooms" class="form-label">@Localizer["Rooms"]</label>
+                            <input asp-for="Rooms"
+                                   type="number"
+                                   min="1"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="3" />
+                            <span asp-validation-for="Rooms" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="Floor" class="form-label">@Localizer["Floor"]</label>
+                            <input asp-for="Floor"
+                                   type="number"
+                                   min="0"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="5" />
+                            <span asp-validation-for="Floor" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="TotalFloors" class="form-label">@Localizer["TotalFloors"]</label>
+                            <input asp-for="TotalFloors"
+                                   type="number"
+                                   min="0"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="16" />
+                            <span asp-validation-for="TotalFloors" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 d-flex flex-wrap align-items-center gap-3 mt-4">
+                            <button type="submit" class="tf-btn primary">@Localizer["EstimateButton"]</button>
+                            <span class="text-variant-1">@Localizer["SignInOptional"]</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-5">
+                @if (hasResult)
+                {
+                    <div class="uc-estimator-result">
+                        <div class="text-subtitle text-primary">@Localizer["Result"]</div>
+                        <h2>@Localizer["EstimatedValue"]</h2>
+                        <div class="uc-estimator-range">
+                            <span>@Localizer["From"] @FormatMoney(Model.EstimatedMin!.Value, Model.Currency, culture, uiCulture)</span>
+                            <span>@Localizer["To"] @FormatMoney(Model.EstimatedMax!.Value, Model.Currency, culture, uiCulture)</span>
+                        </div>
+                        <dl class="uc-estimator-meta">
+                            <div>
+                                <dt>@Localizer["Currency"]</dt>
+                                <dd>@Model.Currency</dd>
+                            </div>
+                            <div>
+                                <dt>@Localizer["StrategyUsed"]</dt>
+                                <dd>@Model.StrategyUsed</dd>
+                            </div>
+                        </dl>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.AiExplanation))
+                        {
+                            <div class="uc-ai-explanation">
+                                <h3>@Localizer["AiExplanation"]</h3>
+                                <p>@Model.AiExplanation</p>
+                            </div>
+                        }
+                        else if (Model.AiExplanationUnavailable)
+                        {
+                            <div class="alert alert-warning mb-0">
+                                <strong>@Localizer["AiExplanationUnavailable"]</strong>
+                                <span>@Localizer["AiExplanationUnavailableText"]</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="uc-estimator-result mt-3">
+                        <h3>@Localizer["ComparableProperties"]</h3>
+                        @if (Model.Comparables.Count == 0)
+                        {
+                            <p class="text-variant-1 mb-0">@Localizer["NoComparableProperties"]</p>
+                        }
+                        else
+                        {
+                            <ul class="uc-comparable-list">
+                                @foreach (var comparable in Model.Comparables)
+                                {
+                                    <li>
+                                        <span>@comparable.Title</span>
+                                        <small>
+                                            @FormatArea(comparable.Area, culture),
+                                            @FormatMoney(comparable.Price, Model.Currency, culture, uiCulture)
+                                        </small>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="uc-estimator-result uc-estimator-placeholder">
+                        <span class="icon icon-house-line" aria-hidden="true"></span>
+                        <h2>@Localizer["EstimatedRange"]</h2>
+                        <p class="text-variant-1 mb-0">@Localizer["ValuationFactors"]</p>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

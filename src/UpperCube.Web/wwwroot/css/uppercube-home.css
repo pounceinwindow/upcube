@@ -518,6 +518,138 @@ textarea:focus-visible {
     background: rgba(255, 71, 87, 0.08);
 }
 
+.uc-estimator-page {
+    padding-top: calc(var(--uc-header-height) + 42px);
+    background: #ffffff;
+}
+
+.uc-estimator-title {
+    margin-bottom: 30px;
+}
+
+.uc-estimator-panel,
+.uc-estimator-result {
+    border: 1px solid rgba(21, 99, 223, 0.12);
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 16px 34px rgba(22, 30, 45, 0.06);
+}
+
+.uc-estimator-panel {
+    padding: clamp(22px, 3vw, 34px);
+}
+
+.uc-estimator-result {
+    padding: clamp(20px, 2.4vw, 28px);
+}
+
+.uc-estimator-result h2,
+.uc-estimator-result h3 {
+    margin: 0 0 14px;
+    color: var(--uc-text);
+}
+
+.uc-estimator-range {
+    display: grid;
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.uc-estimator-range span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--uc-soft);
+    color: var(--uc-text);
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 800;
+}
+
+.uc-estimator-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 20px;
+}
+
+.uc-estimator-meta div {
+    min-width: 0;
+}
+
+.uc-estimator-meta dt {
+    color: #5c6873;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.uc-estimator-meta dd {
+    margin: 2px 0 0;
+    color: var(--uc-text);
+    font-weight: 700;
+}
+
+.uc-ai-explanation {
+    margin-top: 20px;
+    padding-left: 18px;
+    border-left: 3px solid var(--uc-primary);
+}
+
+.uc-ai-explanation p {
+    margin: 0;
+    color: #4a5560;
+    line-height: 1.7;
+}
+
+.uc-comparable-list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.uc-comparable-list li {
+    display: grid;
+    gap: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(21, 99, 223, 0.1);
+}
+
+.uc-comparable-list li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.uc-comparable-list span {
+    color: var(--uc-text);
+    font-weight: 700;
+}
+
+.uc-comparable-list small {
+    color: #5c6873;
+    font-size: 14px;
+}
+
+.uc-estimator-placeholder {
+    min-height: 280px;
+}
+
+.uc-estimator-placeholder .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 999px;
+    background: var(--uc-soft);
+    color: var(--uc-primary);
+    font-size: 26px;
+}
+
 .uc-detail-actions .btn-favorite.active .icon {
     color: #ff4757;
 }
