@@ -35,7 +35,13 @@ public interface IComparisonRepository
 {
     Task<Comparison?> GetByUserIdAsync(string userId, CancellationToken ct = default);
 
+    Task<IReadOnlyList<int>> GetUserComparisonPropertyIdsAsync(string userId, CancellationToken ct = default);
+
     Task AddAsync(Comparison comparison, CancellationToken ct = default);
+
+    void RemoveItem(ComparisonItem item);
+
+    void RemoveItems(IEnumerable<ComparisonItem> items);
 }
 
 public interface IValuationRepository

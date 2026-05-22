@@ -97,12 +97,43 @@ public sealed class ComparisonRepository(AppDbContext dbContext) : IComparisonRe
 {
     public Task<Comparison?> GetByUserIdAsync(string userId, CancellationToken ct = default)
     {
-        return dbContext.Comparisons.Include(x => x.Items).FirstOrDefaultAsync(x => x.UserId == userId, ct);
+        return dbContext.Comparisons
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Property)
+            .ThenInclude(x => x!.Images)
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Property)
+            .ThenInclude(x => x!.City)
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Property)
+            .ThenInclude(x => x!.District)
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Property)
+            .ThenInclude(x => x!.PropertyType)
+            .FirstOrDefaultAsync(x => x.UserId == userId, ct);
+    }
+
+    public async Task<IReadOnlyList<int>> GetUserComparisonPropertyIdsAsync(string userId, CancellationToken ct = default)
+    {
+        return await dbContext.ComparisonItems
+            .Where(x => x.Comparison != null && x.Comparison.UserId == userId)
+            .Select(x => x.PropertyId)
+            .ToListAsync(ct);
     }
 
     public Task AddAsync(Comparison comparison, CancellationToken ct = default)
     {
         return dbContext.Comparisons.AddAsync(comparison, ct).AsTask();
+    }
+
+    public void RemoveItem(ComparisonItem item)
+    {
+        dbContext.ComparisonItems.Remove(item);
+    }
+
+    public void RemoveItems(IEnumerable<ComparisonItem> items)
+    {
+        dbContext.ComparisonItems.RemoveRange(items);
     }
 }
 

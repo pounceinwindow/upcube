@@ -160,4 +160,121 @@
     <data name="SelectPropertyType" xml:space="preserve">
     <value>Выберите тип</value>
   </data>
+    <data name="AreaPlaceholder" xml:space="preserve">
+    <value>72,5…</value>
+  </data>
+    <data name="RoomsPlaceholder" xml:space="preserve">
+    <value>3…</value>
+  </data>
+    <data name="FloorPlaceholder" xml:space="preserve">
+    <value>5…</value>
+  </data>
+    <data name="TotalFloorsPlaceholder" xml:space="preserve">
+    <value>16…</value>
+  </data>
+    <data name="CompareTitle" xml:space="preserve">
+    <value>Сравнение объектов</value>
+  </data>
+    <data name="CompareSubtitle" xml:space="preserve">
+    <value>Соберите до 4 объявлений и быстро сравните цену, площадь, комнаты и район в одной таблице.</value>
+  </data>
+    <data name="CompareBrowseCatalog" xml:space="preserve">
+    <value>Открыть каталог</value>
+  </data>
+    <data name="CompareOpenEstimator" xml:space="preserve">
+    <value>Перейти к оценщику</value>
+  </data>
+    <data name="CompareSnapshotLabel" xml:space="preserve">
+    <value>Сводка сравнения</value>
+  </data>
+    <data name="CompareLimitLabel" xml:space="preserve">
+    <value>Лимит объектов</value>
+  </data>
+    <data name="CompareSavedLabel" xml:space="preserve">
+    <value>Добавлено сейчас</value>
+  </data>
+    <data name="CompareStatusLabel" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+    <data name="CompareStatusDraft" xml:space="preserve">
+    <value>Черновик</value>
+  </data>
+    <data name="CompareStatusActive" xml:space="preserve">
+    <value>Активно</value>
+  </data>
+    <data name="CompareStatusLoginRequired" xml:space="preserve">
+    <value>Нужен вход</value>
+  </data>
+    <data name="CompareBoardTitle" xml:space="preserve">
+    <value>Доска сравнения</value>
+  </data>
+    <data name="CompareSlot" xml:space="preserve">
+    <value>Объект</value>
+  </data>
+    <data name="CompareSlotEmpty" xml:space="preserve">
+    <value>Выберите объявление из каталога.</value>
+  </data>
+    <data name="CompareTableLabel" xml:space="preserve">
+    <value>Таблица сравнения объектов</value>
+  </data>
+    <data name="CompareMetric" xml:space="preserve">
+    <value>Параметр</value>
+  </data>
+    <data name="CompareMetricPrice" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+    <data name="CompareMetricArea" xml:space="preserve">
+    <value>Площадь</value>
+  </data>
+    <data name="CompareMetricRooms" xml:space="preserve">
+    <value>Комнаты</value>
+  </data>
+    <data name="CompareMetricDistrict" xml:space="preserve">
+    <value>Район</value>
+  </data>
+    <data name="CompareMetricFloor" xml:space="preserve">
+    <value>Этаж</value>
+  </data>
+    <data name="CompareMetricAddress" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+    <data name="CompareNotSelected" xml:space="preserve">
+    <value>Не выбрано</value>
+  </data>
+    <data name="CompareEmptyTitle" xml:space="preserve">
+    <value>Пока нечего сравнивать</value>
+  </data>
+    <data name="CompareEmptyText" xml:space="preserve">
+    <value>Откройте каталог и добавьте интересные объекты. Здесь появится компактное сравнение без лишних переходов.</value>
+  </data>
+    <data name="CompareHowToTitle" xml:space="preserve">
+    <value>Как пополнить сравнение</value>
+  </data>
+    <data name="CompareLoginPrompt" xml:space="preserve">
+    <value>Войдите, чтобы сохранять объекты в сравнение и возвращаться к ним позже.</value>
+  </data>
+    <data name="CompareAdd" xml:space="preserve">
+    <value>Добавить в сравнение</value>
+  </data>
+    <data name="CompareRemove" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+    <data name="CompareClear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+    <data name="CompareAdded" xml:space="preserve">
+    <value>Объект добавлен в сравнение.</value>
+  </data>
+    <data name="CompareRemoved" xml:space="preserve">
+    <value>Объект убран из сравнения.</value>
+  </data>
+    <data name="CompareCleared" xml:space="preserve">
+    <value>Сравнение очищено.</value>
+  </data>
+    <data name="CompareAlreadyAdded" xml:space="preserve">
+    <value>Этот объект уже есть в сравнении.</value>
+  </data>
+    <data name="CompareLimitReached" xml:space="preserve">
+    <value>В сравнение можно добавить не больше 4 объектов.</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@ public class CatalogController(
     IDictionaryRepository<City> cityRepo,
     IDictionaryRepository<PropertyType> propertyTypeRepo,
     IFavoriteRepository favoriteRepository,
+    IComparisonRepository comparisonRepository,
     UserManager<ApplicationUser> userManager) : Controller
 {
     public async Task<IActionResult> Index(int? cityId,
@@ -61,6 +62,7 @@ public class CatalogController(
         };
 
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
+        await CompareViewDataHelper.PopulateCompareIdsAsync(this, comparisonRepository, userManager, ct);
         return View(model);
     }
 
@@ -88,6 +90,7 @@ public class CatalogController(
         var dtos = items.Select(p => p.ToListItemDto()).ToList();
 
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
+        await CompareViewDataHelper.PopulateCompareIdsAsync(this, comparisonRepository, userManager, ct);
 
         return PartialView("_PropertyCardList", dtos);
     }

@@ -21,15 +21,30 @@
         return $"{value.ToString("N0", culture)} {suffix}";
     }
 
-    private static string FormatArea(decimal value, CultureInfo culture)
+    private static string FormatArea(decimal value, CultureInfo culture, string uiCulture)
     {
-        return $"{value.ToString("N1", culture)} m²";
+        var unit = uiCulture == "ru" ? "м²" : "m²";
+        return $"{value.ToString("N1", culture)} {unit}";
+    }
+
+    private static IReadOnlyList<string> SplitExplanation(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return [];
+        }
+
+        var parts = text.Split('*', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToList();
+
+        return parts.Count > 1 ? parts : [text.Trim()];
     }
 }
 
-<section class="flat-section uc-estimator-page">
+<section class="flat-section uc-tool-page uc-estimator-page">
     <div class="tf-container">
-        <div class="box-title-listing uc-estimator-title">
+        <div class="box-title-listing uc-tool-title">
             <div>
                 <div class="text-subtitle text-primary">@Localizer["RealEstatePlatform"]</div>
                 <h1 class="fw-8">@Localizer["EstimatorTitle"]</h1>
@@ -42,7 +57,7 @@
                 <form asp-controller="Estimator"
                       asp-action="Index"
                       method="post"
-                      class="uc-estimator-panel">
+                      class="uc-tool-panel">
                     @Html.AntiForgeryToken()
 
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3" aria-live="polite"></div>
@@ -81,7 +96,7 @@
                                    inputmode="decimal"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="72.5" />
+                                   placeholder="@Localizer["AreaPlaceholder"]" />
                             <span asp-validation-for="Area" class="text-danger"></span>
                         </div>
 
@@ -92,7 +107,7 @@
                                    min="1"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="3" />
+                                   placeholder="@Localizer["RoomsPlaceholder"]" />
                             <span asp-validation-for="Rooms" class="text-danger"></span>
                         </div>
 
@@ -103,7 +118,7 @@
                                    min="0"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="5" />
+                                   placeholder="@Localizer["FloorPlaceholder"]" />
                             <span asp-validation-for="Floor" class="text-danger"></span>
                         </div>
 
@@ -114,7 +129,7 @@
                                    min="0"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="16" />
+                                   placeholder="@Localizer["TotalFloorsPlaceholder"]" />
                             <span asp-validation-for="TotalFloors" class="text-danger"></span>
                         </div>
 
@@ -129,7 +144,7 @@
             <div class="col-lg-5">
                 @if (hasResult)
                 {
-                    <div class="uc-estimator-result">
+                    <div class="uc-tool-card">
                         <div class="text-subtitle text-primary">@Localizer["Result"]</div>
                         <h2>@Localizer["EstimatedValue"]</h2>
                         <div class="uc-estimator-range">
@@ -149,9 +164,22 @@
 
                         @if (!string.IsNullOrWhiteSpace(Model.AiExplanation))
                         {
+                            var explanationParts = SplitExplanation(Model.AiExplanation);
                             <div class="uc-ai-explanation">
                                 <h3>@Localizer["AiExplanation"]</h3>
-                                <p>@Model.AiExplanation</p>
+                                @if (explanationParts.Count > 1)
+                                {
+                                    <ul class="uc-ai-list">
+                                        @foreach (var part in explanationParts)
+                                        {
+                                            <li>@part</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p>@Model.AiExplanation</p>
+                                }
                             </div>
                         }
                         else if (Model.AiExplanationUnavailable)
@@ -163,7 +191,7 @@
                         }
                     </div>
 
-                    <div class="uc-estimator-result mt-3">
+                    <div class="uc-tool-card mt-3">
                         <h3>@Localizer["ComparableProperties"]</h3>
                         @if (Model.Comparables.Count == 0)
                         {
@@ -175,9 +203,11 @@
                                 @foreach (var comparable in Model.Comparables)
                                 {
                                     <li>
-                                        <span>@comparable.Title</span>
+                                        <a asp-controller="Property"
+                                           asp-action="Details"
+                                           asp-route-id="@comparable.PropertyId">@comparable.Title</a>
                                         <small>
-                                            @FormatArea(comparable.Area, culture),
+                                            @FormatArea(comparable.Area, culture, uiCulture),
                                             @FormatMoney(comparable.Price, Model.Currency, culture, uiCulture)
                                         </small>
                                     </li>
@@ -188,8 +218,8 @@
                 }
                 else
                 {
-                    <div class="uc-estimator-result uc-estimator-placeholder">
-                        <span class="icon icon-house-line" aria-hidden="true"></span>
+                    <div class="uc-tool-card uc-tool-placeholder">
+                        <span class="uc-tool-icon icon icon-house-line" aria-hidden="true"></span>
                         <h2>@Localizer["EstimatedRange"]</h2>
                         <p class="text-variant-1 mb-0">@Localizer["ValuationFactors"]</p>
                     </div>

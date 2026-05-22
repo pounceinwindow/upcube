@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = Model.Title;
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
+    var compareIds = ViewData["CompareIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
+    var isCompared = compareIds.Contains(Model.Id);
     var detailImages = Model.Images
         .Where(x => !string.IsNullOrWhiteSpace(x))
         .ToList();
@@ -86,9 +88,27 @@
                         </button>
                     </li>
                     <li>
-                        <a class="item" asp-controller="Compare" asp-action="Index" aria-label="Открыть сравнение">
-                            <span class="icon icon-sliders-horizontal" aria-hidden="true"></span>
-                        </a>
+                        @if (isAuthenticated)
+                        {
+                            <form asp-controller="Compare" asp-action="Add" method="post" class="uc-detail-compare-form">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="propertyId" value="@Model.Id">
+                                <input type="hidden" name="returnUrl" value="@returnUrl">
+                                <button type="submit"
+                                        class="item btn-compare @(isCompared ? "active" : "")"
+                                        aria-pressed="@(isCompared ? "true" : "false")"
+                                        aria-label="Добавить объект в сравнение">
+                                    <span class="icon icon-sliders-horizontal" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl"
+                               class="item btn-compare" aria-label="Войдите, чтобы добавить объект в сравнение">
+                                <span class="icon icon-sliders-horizontal" aria-hidden="true"></span>
+                            </a>
+                        }
                     </li>
                     <li>
                         <button type="button" class="item" onclick="window.print()" aria-label="Печать страницы">

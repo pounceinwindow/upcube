@@ -1,10 +1,226 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using UpperCube.Web.Models.Compare
+@model CompareModelView
+@inject IStringLocalizer<UpperCube.Web.SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Сравнение";
+    ViewData["Title"] = Localizer["CompareTitle"];
+    var culture = CultureInfo.CurrentCulture;
+    var uiCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+    var itemsByPosition = Model.Items.ToDictionary(x => x.Position);
+    var columns = Enumerable.Range(1, CompareModelView.MaxItems)
+        .Select(position => itemsByPosition.GetValueOrDefault(position))
+        .ToList();
+    var status = !Model.IsAuthenticated
+        ? Localizer["CompareStatusLoginRequired"]
+        : Model.HasItems
+            ? Localizer["CompareStatusActive"]
+            : Localizer["CompareStatusDraft"];
 }
 
-<section class="flat-section">
+@functions {
+    private static string FormatMoney(decimal value, string currency, CultureInfo culture, string uiCulture)
+    {
+        var suffix = uiCulture == "ru" && string.Equals(currency, "RUB", StringComparison.OrdinalIgnoreCase)
+            ? "₽"
+            : currency;
+
+        return $"{value.ToString("N0", culture)} {suffix}";
+    }
+
+    private static string FormatArea(decimal value, CultureInfo culture, string uiCulture)
+    {
+        var unit = uiCulture == "ru" ? "м²" : "m²";
+        return $"{value.ToString("N1", culture)} {unit}";
+    }
+}
+
+<section class="flat-section uc-tool-page uc-compare-page">
     <div class="tf-container">
-        <h2>Сравнение объектов</h2>
-        <p class="text-variant-1">Эта страница будет реализована в Phase 7.</p>
+        <div class="uc-tool-hero">
+            <div class="uc-tool-hero-content">
+                <div class="text-subtitle text-primary">@Localizer["RealEstatePlatform"]</div>
+                <h1 class="fw-8">@Localizer["CompareTitle"]</h1>
+                <p class="text-variant-1 mb-0">@Localizer["CompareSubtitle"]</p>
+                <div class="uc-tool-actions">
+                    <a asp-controller="Catalog" asp-action="Index" class="tf-btn primary">@Localizer["CompareBrowseCatalog"]</a>
+                    @if (Model.IsAuthenticated)
+                    {
+                        <a asp-controller="Estimator" asp-action="Index" class="tf-btn btn-line">@Localizer["CompareOpenEstimator"]</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="tf-btn btn-line">@Localizer["Login"]</a>
+                    }
+                </div>
+            </div>
+
+            <div class="uc-compare-snapshot" aria-label="@Localizer["CompareSnapshotLabel"]">
+                <div class="uc-compare-snapshot-row">
+                    <span>@Localizer["CompareLimitLabel"]</span>
+                    <strong>@CompareModelView.MaxItems</strong>
+                </div>
+                <div class="uc-compare-snapshot-row">
+                    <span>@Localizer["CompareSavedLabel"]</span>
+                    <strong id="compare-count">@Model.Count</strong>
+                </div>
+                <div class="uc-compare-snapshot-row">
+                    <span>@Localizer["CompareStatusLabel"]</span>
+                    <strong>@status</strong>
+                </div>
+            </div>
+        </div>
+
+        @if (TempData["CompareSuccess"] is string success)
+        {
+            <div class="alert alert-success uc-compare-alert">@success</div>
+        }
+        @if (TempData["CompareInfo"] is string info)
+        {
+            <div class="alert alert-info uc-compare-alert">@info</div>
+        }
+        @if (TempData["CompareError"] is string error)
+        {
+            <div class="alert alert-warning uc-compare-alert">@error</div>
+        }
+
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-8">
+                <section class="uc-tool-card" aria-labelledby="compare-board-title">
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-4">
+                        <div>
+                            <div class="text-subtitle text-primary">@Localizer["Result"]</div>
+                            <h2 id="compare-board-title">@Localizer["CompareBoardTitle"]</h2>
+                        </div>
+                        @if (Model.HasItems)
+                        {
+                            <form asp-controller="Compare" asp-action="Clear" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="tf-btn btn-line uc-compare-clear">@Localizer["CompareClear"]</button>
+                            </form>
+                        }
+                    </div>
+
+                    <div class="uc-compare-slots">
+                        @for (var i = 1; i <= CompareModelView.MaxItems; i++)
+                        {
+                            var item = itemsByPosition.GetValueOrDefault(i);
+                            if (item is null)
+                            {
+                                <a class="uc-compare-slot" asp-controller="Catalog" asp-action="Index">
+                                    <span class="uc-tool-icon icon icon-house-line" aria-hidden="true"></span>
+                                    <strong>@Localizer["CompareSlot"] @i</strong>
+                                    <small>@(Model.IsAuthenticated ? Localizer["CompareSlotEmpty"] : Localizer["CompareLoginPrompt"])</small>
+                                </a>
+                            }
+                            else
+                            {
+                                var imagePath = string.IsNullOrWhiteSpace(item.PrimaryImagePath)
+                                    ? "/homelengo/images/banner/banner-property-1.jpg"
+                                    : item.PrimaryImagePath;
+
+                                <article class="uc-compare-slot uc-compare-slot-filled">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@item.Id" class="uc-compare-slot-image">
+                                        <img src="@imagePath" alt="@item.Title" loading="lazy">
+                                    </a>
+                                    <div class="uc-compare-slot-body">
+                                        <strong>@item.Title</strong>
+                                        <small>@item.City, @item.District</small>
+                                        <span>@FormatMoney(item.Price, item.Currency, culture, uiCulture)</span>
+                                    </div>
+                                    <form asp-controller="Compare" asp-action="Remove" method="post" class="uc-compare-remove-form">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="propertyId" value="@item.Id">
+                                        <input type="hidden" name="returnUrl" value="@returnUrl">
+                                        <button type="submit" class="tf-btn btn-line">@Localizer["CompareRemove"]</button>
+                                    </form>
+                                </article>
+                            }
+                        }
+                    </div>
+
+                    <div class="uc-compare-table-wrap">
+                        <div class="uc-compare-table" role="table" aria-label="@Localizer["CompareTableLabel"]">
+                            <div class="uc-compare-row uc-compare-head" role="row">
+                                <div class="uc-compare-cell" role="columnheader">@Localizer["CompareMetric"]</div>
+                                @for (var i = 1; i <= CompareModelView.MaxItems; i++)
+                                {
+                                    <div class="uc-compare-cell" role="columnheader">@Localizer["CompareSlot"] @i</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricPrice"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : FormatMoney(item.Price, item.Currency, culture, uiCulture))</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricArea"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : FormatArea(item.Area, culture, uiCulture))</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricRooms"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : item.Rooms)</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricFloor"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : $"{item.Floor} / {item.TotalFloors}")</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricDistrict"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : item.District)</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["PropertyType"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : item.PropertyType)</div>
+                                }
+                            </div>
+                            <div class="uc-compare-row" role="row">
+                                <div class="uc-compare-cell" role="rowheader">@Localizer["CompareMetricAddress"]</div>
+                                @foreach (var item in columns)
+                                {
+                                    <div class="uc-compare-cell" role="cell">@(item is null ? Localizer["CompareNotSelected"] : item.Address)</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-lg-4">
+                <aside class="uc-tool-card uc-tool-placeholder">
+                    <span class="uc-tool-icon icon icon-listing" aria-hidden="true"></span>
+                    <h2>@(Model.HasItems ? Localizer["CompareHowToTitle"] : Localizer["CompareEmptyTitle"])</h2>
+                    <p class="text-variant-1">
+                        @(Model.IsAuthenticated ? Localizer["CompareEmptyText"] : Localizer["CompareLoginPrompt"])
+                    </p>
+                    @if (Model.IsAuthenticated)
+                    {
+                        <a asp-controller="Catalog" asp-action="Index" class="tf-btn primary">@Localizer["CompareBrowseCatalog"]</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="tf-btn primary">@Localizer["Login"]</a>
+                    }
+                </aside>
+            </div>
+        </div>
     </div>
 </section>

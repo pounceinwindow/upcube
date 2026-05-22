@@ -1,11 +1,15 @@
 @model UpperCube.Application.DTOs.PropertyListItemDto
 @{
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
+    var compareIds = ViewData["CompareIds"] as HashSet<int> ?? new HashSet<int>();
     var isFavorite = favoriteIds.Contains(Model.Id);
+    var isCompared = compareIds.Contains(Model.Id);
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
     var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
         ? "/homelengo/images/banner/banner-property-1.jpg"
         : Model.PrimaryImagePath;
     var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
 }
 
 <div class="homelengo-box">
@@ -63,13 +67,36 @@
                 </li>
             </ul>
 
-            <button type="button"
-                    class="btn-favorite @(isFavorite ? "active" : "")"
-                    data-property-id="@Model.Id"
-                    aria-pressed="@(isFavorite ? "true" : "false")"
-                    aria-label="Добавить объект в избранное">
-                <i class="icon icon-heart" aria-hidden="true"></i>
-            </button>
+            <div class="uc-card-actions">
+                <button type="button"
+                        class="btn-favorite @(isFavorite ? "active" : "")"
+                        data-property-id="@Model.Id"
+                        aria-pressed="@(isFavorite ? "true" : "false")"
+                        aria-label="Добавить объект в избранное">
+                    <i class="icon icon-heart" aria-hidden="true"></i>
+                </button>
+                @if (isAuthenticated)
+                {
+                    <form asp-controller="Compare" asp-action="Add" method="post" class="uc-card-compare-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="propertyId" value="@Model.Id">
+                        <input type="hidden" name="returnUrl" value="@returnUrl">
+                        <button type="submit"
+                                class="btn-compare @(isCompared ? "active" : "")"
+                                aria-pressed="@(isCompared ? "true" : "false")"
+                                aria-label="Добавить объект в сравнение">
+                            <i class="icon icon-sliders-horizontal" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl"
+                       class="btn-compare" aria-label="Войдите, чтобы добавить объект в сравнение">
+                        <i class="icon icon-sliders-horizontal" aria-hidden="true"></i>
+                    </a>
+                }
+            </div>
         </div>
 
         <div class="content-bottom">

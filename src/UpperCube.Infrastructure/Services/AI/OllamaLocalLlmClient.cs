@@ -39,6 +39,11 @@ public sealed class OllamaLocalLlmClient(
             var body = new OllamaChatRequest(
                 settings.Model,
                 false,
+                "5m",
+                new OllamaChatOptions(
+                    Math.Clamp(settings.MaxTokens, 8, 512),
+                    Math.Clamp(settings.ContextLength, 512, 8192),
+                    settings.Temperature),
                 [
                     new OllamaChatMessage("system", request.SystemPrompt),
                     new OllamaChatMessage("user", request.UserPrompt)
@@ -63,7 +68,7 @@ public sealed class OllamaLocalLlmClient(
                 return new LocalLlmResult(string.Empty, false, "Local AI is unavailable.");
             }
 
-            return new LocalLlmResult(content.Trim(), true);
+            return new LocalLlmResult(NormalizeContent(content), true);
         }
         catch (OperationCanceledException) when (!ct.IsCancellationRequested)
         {
@@ -86,7 +91,14 @@ public sealed class OllamaLocalLlmClient(
     private sealed record OllamaChatRequest(
         [property: JsonPropertyName("model")] string Model,
         [property: JsonPropertyName("stream")] bool Stream,
+        [property: JsonPropertyName("keep_alive")] string KeepAlive,
+        [property: JsonPropertyName("options")] OllamaChatOptions Options,
         [property: JsonPropertyName("messages")] IReadOnlyList<OllamaChatMessage> Messages);
+
+    private sealed record OllamaChatOptions(
+        [property: JsonPropertyName("num_predict")] int NumPredict,
+        [property: JsonPropertyName("num_ctx")] int NumContext,
+        [property: JsonPropertyName("temperature")] double Temperature);
 
     private sealed record OllamaChatMessage(
         [property: JsonPropertyName("role")] string Role,
@@ -94,4 +106,33 @@ public sealed class OllamaLocalLlmClient(
 
     private sealed record OllamaChatResponse(
         [property: JsonPropertyName("message")] OllamaChatMessage? Message);
+
+    private static string NormalizeContent(string content)
+    {
+        var text = content.Trim();
+        if (text.Length == 0 || EndsWithSentence(text))
+        {
+            return text;
+        }
+
+        var lastSentenceEnd = text.LastIndexOfAny(['.', '!', '?', '…']);
+        if (lastSentenceEnd >= 24)
+        {
+            return text[..(lastSentenceEnd + 1)].Trim();
+        }
+
+        var lastSoftBreak = text.LastIndexOfAny([',', ';', ':', '(']);
+        if (lastSoftBreak >= 24)
+        {
+            text = text[..lastSoftBreak].Trim();
+        }
+
+        return $"{text.TrimEnd(',', ';', ':', '(')}.";
+    }
+
+    private static bool EndsWithSentence(string text)
+    {
+        var last = text[^1];
+        return last is '.' or '!' or '?' or '…';
+    }
 }

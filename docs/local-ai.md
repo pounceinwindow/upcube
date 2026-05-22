@@ -33,7 +33,10 @@ LLM only explains the calculated range and receives a small structured context.
        "Provider": "Ollama",
        "BaseUrl": "http://localhost:11434",
        "Model": "llama3.1",
-       "TimeoutSeconds": 60
+       "TimeoutSeconds": 60,
+       "MaxTokens": 48,
+       "ContextLength": 1024,
+       "Temperature": 0.2
      }
    }
    ```
@@ -49,6 +52,40 @@ LLM only explains the calculated range and receives a small structured context.
 If Ollama is disabled or unavailable, `/Estimator` still returns the numeric
 valuation and shows an AI explanation fallback message.
 
-If the Web app is later run in Docker, change `AI:BaseUrl` to
-`http://host.docker.internal:11434`. For local `dotnet run`, keep
-`http://localhost:11434`.
+## Docker Compose
+
+`compose.yaml` includes an `ollama` service and a one-shot
+`ollama-pull-llama31` service. The Web container uses:
+
+```json
+"AI": {
+  "BaseUrl": "http://ollama:11434",
+  "Model": "llama3.1",
+  "TimeoutSeconds": 240,
+  "MaxTokens": 48,
+  "ContextLength": 512,
+  "Temperature": 0.2
+}
+```
+
+Run the full stack:
+
+```bash
+docker compose up -d --build
+```
+
+The first run downloads `llama3.1` into the `ollama_data` Docker volume. That
+can take time, and the Web container waits until the model pull finishes before
+starting. To watch the download:
+
+```bash
+docker compose logs -f ollama-pull-llama31
+```
+
+After the pull completes, check the model list:
+
+```bash
+docker compose exec ollama ollama list
+```
+
+For local `dotnet run`, keep `AI:BaseUrl` as `http://localhost:11434`.

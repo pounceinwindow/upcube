@@ -13,6 +13,7 @@ namespace UpperCube.Web.Controllers;
 public sealed class PropertyController(
     IPropertyRepository repository,
     IFavoriteRepository favoriteRepository,
+    IComparisonRepository comparisonRepository,
     IUnitOfWork unitOfWork,
     UserManager<ApplicationUser> userManager,
     IInquiryRepository inquiryRepository) : Controller
@@ -85,6 +86,7 @@ public sealed class PropertyController(
         var details = model.ToDetailsDto();
 
         await FavoritesViewDataHelper.PopulateFavoriteIdsAsync(this, favoriteRepository, userManager, ct);
+        await CompareViewDataHelper.PopulateCompareIdsAsync(this, comparisonRepository, userManager, ct);
         return View(details);
     }
 }
