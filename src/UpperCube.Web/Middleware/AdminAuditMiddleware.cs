@@ -58,7 +58,7 @@ public sealed class AdminAuditMiddleware(
                 EntityId = null,
                 PayloadJson = JsonSerializer.Serialize(new
                 {
-                    Method = context.Request.Method,
+                    context.Request.Method,
                     Path = context.Request.Path.Value,
                     QueryString = BuildSafeQueryString(context.Request),
                     StatusCode = statusCode
