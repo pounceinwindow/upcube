@@ -11,8 +11,6 @@ public sealed class CompareModelView
     public int Count => Items.Count;
 
     public bool HasItems => Items.Count > 0;
-
-    public bool HasCapacity => Items.Count < MaxItems;
 }
 
 public sealed class CompareItemModelView
@@ -44,6 +42,4 @@ public sealed class CompareItemModelView
     public string Address { get; init; } = string.Empty;
 
     public string? PrimaryImagePath { get; init; }
-
-    public int TransactionType { get; init; }
 }

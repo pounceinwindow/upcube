@@ -12,7 +12,6 @@ using UpperCube.Application.UseCases.Valuation;
 using UpperCube.Domain.Entities;
 using UpperCube.Domain.Enums;
 using UpperCube.Infrastructure.Identity;
-using UpperCube.Web;
 using UpperCube.Web.Models.Estimator;
 
 namespace UpperCube.Web.Controllers;
@@ -43,14 +42,10 @@ public sealed class EstimatorController(
     public async Task<IActionResult> Index(EstimatorModelView model, CancellationToken ct)
     {
         if (model.Floor.HasValue && model.TotalFloors.HasValue && model.TotalFloors.Value < model.Floor.Value)
-        {
             ModelState.AddModelError(nameof(model.TotalFloors), localizer["ValidationInvalidFloor"]);
-        }
 
         if (model.Area.HasValue && model.Area.Value <= 0)
-        {
             ModelState.AddModelError(nameof(model.Area), localizer["ValidationAreaPositive"]);
-        }
 
         if (!ModelState.IsValid)
         {
@@ -64,11 +59,10 @@ public sealed class EstimatorController(
 
         if (city is null) ModelState.AddModelError(nameof(model.CityId), localizer["ValidationRequired"]);
         if (district is null) ModelState.AddModelError(nameof(model.DistrictId), localizer["ValidationRequired"]);
-        if (propertyType is null) ModelState.AddModelError(nameof(model.PropertyTypeId), localizer["ValidationRequired"]);
+        if (propertyType is null)
+            ModelState.AddModelError(nameof(model.PropertyTypeId), localizer["ValidationRequired"]);
         if (district is not null && district.CityId != model.CityId)
-        {
             ModelState.AddModelError(nameof(model.DistrictId), localizer["ValidationDistrictCity"]);
-        }
 
         if (!ModelState.IsValid)
         {
@@ -124,7 +118,6 @@ public sealed class EstimatorController(
         else
         {
             model.AiExplanationUnavailable = true;
-            model.AiErrorMessage = aiResult.ErrorMessage;
         }
 
         var userId = userManager.GetUserId(User);
@@ -208,7 +201,7 @@ public sealed class EstimatorController(
     {
         return JsonSerializer.Serialize(new
         {
-            Culture = context.Culture,
+            context.Culture,
             model.CityId,
             context.CityName,
             model.DistrictId,

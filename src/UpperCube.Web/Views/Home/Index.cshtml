@@ -19,10 +19,12 @@
                     <div class="flat-tab flat-tab-form">
                         <ul class="nav-tab-form style-1" role="tablist">
                             <li class="nav-tab-item" role="presentation">
-                                <a class="nav-link-item active" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="1">Продажа</a>
+                                <a class="nav-link-item active" asp-controller="Catalog" asp-action="Index"
+                                   asp-route-transactionType="1">Продажа</a>
                             </li>
                             <li class="nav-tab-item" role="presentation">
-                                <a class="nav-link-item" asp-controller="Catalog" asp-action="Index" asp-route-transactionType="2">Аренда</a>
+                                <a class="nav-link-item" asp-controller="Catalog" asp-action="Index"
+                                   asp-route-transactionType="2">Аренда</a>
                             </li>
                         </ul>
 
@@ -35,15 +37,18 @@
                                             <div class="inner-group">
                                                 <div class="form-group-2 form-style">
                                                     <label for="homeMinPrice">Цена от</label>
-                                                    <input id="homeMinPrice" type="number" class="form-control" name="minPrice" placeholder="5 000 000"/>
+                                                    <input id="homeMinPrice" type="number" class="form-control"
+                                                           name="minPrice" placeholder="5 000 000"/>
                                                 </div>
                                                 <div class="form-group-3 form-style">
                                                     <label for="homeMaxPrice">Цена до</label>
-                                                    <input id="homeMaxPrice" type="number" class="form-control" name="maxPrice" placeholder="30 000 000"/>
+                                                    <input id="homeMaxPrice" type="number" class="form-control"
+                                                           name="maxPrice" placeholder="30 000 000"/>
                                                 </div>
                                                 <div class="form-group-3 form-style">
                                                     <label for="homeRooms">Комнаты</label>
-                                                    <input id="homeRooms" type="number" class="form-control" name="rooms" min="1" placeholder="Любые"/>
+                                                    <input id="homeRooms" type="number" class="form-control"
+                                                           name="rooms" min="1" placeholder="Любые"/>
                                                 </div>
                                             </div>
                                             <div class="box-btn-advanced">
@@ -61,10 +66,14 @@
                     <div class="wrap-search-link">
                         <p class="body-2">Быстрый доступ:</p>
                         <div class="categories-list">
-                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="1"><i class="icon icon-apartment" aria-hidden="true"></i> Квартиры</a>
-                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="2"><i class="icon icon-house-fill" aria-hidden="true"></i> Дома</a>
-                            <a asp-controller="Estimator" asp-action="Index"><i class="icon icon-office-fill" aria-hidden="true"></i> Оценка</a>
-                            <a asp-controller="Compare" asp-action="Index"><i class="icon icon-villa-fill" aria-hidden="true"></i> Сравнение</a>
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="1"><i
+                                    class="icon icon-apartment" aria-hidden="true"></i> Квартиры</a>
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="2"><i
+                                    class="icon icon-house-fill" aria-hidden="true"></i> Дома</a>
+                            <a asp-controller="Estimator" asp-action="Index"><i class="icon icon-office-fill"
+                                                                                aria-hidden="true"></i> Оценка</a>
+                            <a asp-controller="Compare" asp-action="Index"><i class="icon icon-villa-fill"
+                                                                              aria-hidden="true"></i> Сравнение</a>
                         </div>
                     </div>
                 </div>
@@ -79,22 +88,28 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="slider-home2 img-animation wow">
-                        <img src="~/homelengo/images/slider/slider-2.jpg" alt="Современный дом с панорамными окнами" width="738" height="720" fetchpriority="high" asp-append-version="true"/>
+                        <img src="~/homelengo/images/slider/slider-2.jpg" alt="Современный дом с панорамными окнами"
+                             width="738" height="720" fetchpriority="high" asp-append-version="true"/>
                     </div>
                 </div>
                 <div class="swiper-slide">
                     <div class="slider-home2">
-                        <img src="~/homelengo/images/slider/slider-2-1.jpg" alt="Светлый интерьер с панорамным остеклением" width="738" height="720" asp-append-version="true"/>
+                        <img src="~/homelengo/images/slider/slider-2-1.jpg"
+                             alt="Светлый интерьер с панорамным остеклением" width="738" height="720"
+                             asp-append-version="true"/>
                     </div>
                 </div>
                 <div class="swiper-slide">
                     <div class="slider-home2">
-                        <img src="~/homelengo/images/slider/slider-2-2.jpg" alt="Дом с панорамными окнами в вечернем свете" width="738" height="720" asp-append-version="true"/>
+                        <img src="~/homelengo/images/slider/slider-2-2.jpg"
+                             alt="Дом с панорамными окнами в вечернем свете" width="738" height="720"
+                             asp-append-version="true"/>
                     </div>
                 </div>
                 <div class="swiper-slide">
                     <div class="slider-home2">
-                        <img src="~/homelengo/images/slider/slider-2-3.jpg" alt="Загородный дом с террасой" width="738" height="720" asp-append-version="true"/>
+                        <img src="~/homelengo/images/slider/slider-2-3.jpg" alt="Загородный дом с террасой" width="738"
+                             height="720" asp-append-version="true"/>
                     </div>
                 </div>
             </div>
@@ -113,7 +128,8 @@
                  data-space="15" data-space-lg="30" data-space-md="30" data-tablet="4" dir="ltr">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="1">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index"
+                           asp-route-propertyTypeId="1">
                             <div class="icon-box"><span class="icon icon-apartment1" aria-hidden="true"></span></div>
                             <div class="content text-center">
                                 <h3>Квартиры</h3>
@@ -122,7 +138,8 @@
                         </a>
                     </div>
                     <div class="swiper-slide">
-                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="2">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index"
+                           asp-route-propertyTypeId="2">
                             <div class="icon-box"><span class="icon icon-villa-line" aria-hidden="true"></span></div>
                             <div class="content text-center">
                                 <h3>Дома</h3>
@@ -131,7 +148,8 @@
                         </a>
                     </div>
                     <div class="swiper-slide">
-                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="3">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index"
+                           asp-route-propertyTypeId="3">
                             <div class="icon-box"><span class="icon icon-office1" aria-hidden="true"></span></div>
                             <div class="content text-center">
                                 <h3>Коммерция</h3>
@@ -140,7 +158,8 @@
                         </a>
                     </div>
                     <div class="swiper-slide">
-                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index" asp-route-propertyTypeId="4">
+                        <a class="homelengo-categories" asp-controller="Catalog" asp-action="Index"
+                           asp-route-propertyTypeId="4">
                             <div class="icon-box"><span class="icon icon-commercial" aria-hidden="true"></span></div>
                             <div class="content text-center">
                                 <h3>Участки</h3>

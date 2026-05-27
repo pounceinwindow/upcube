@@ -12,13 +12,13 @@ public sealed class ValuationExplanationPromptBuilder
         var isRussian = context.Culture.StartsWith("ru", StringComparison.OrdinalIgnoreCase);
         var systemPrompt = isRussian
             ? """
-              Ты — внимательный помощник по оценке недвижимости. Отвечай по-русски живо и понятно.
-              Используй только предоставленные данные и осторожные формулировки.
-              Не придумывай новые цены, районы, характеристики, состояние ремонта, инфраструктуру или внешние факты.
-              Можно повторять только те числа, которые есть в контексте.
-              Не меняй оценочный диапазон и не утверждай абсолютную точность оценки.
-              Если важного фактора нет в данных, прямо скажи, что он не учтён в расчёте.
-            """
+                Ты — внимательный помощник по оценке недвижимости. Отвечай по-русски живо и понятно.
+                Используй только предоставленные данные и осторожные формулировки.
+                Не придумывай новые цены, районы, характеристики, состояние ремонта, инфраструктуру или внешние факты.
+                Можно повторять только те числа, которые есть в контексте.
+                Не меняй оценочный диапазон и не утверждай абсолютную точность оценки.
+                Если важного фактора нет в данных, прямо скажи, что он не учтён в расчёте.
+              """
             : """
               You are a careful real estate valuation assistant. Answer in natural, user-friendly English.
               Use only the provided data and cautious wording.
@@ -45,7 +45,8 @@ public sealed class ValuationExplanationPromptBuilder
         prompt.AppendLine($"- Rooms: {context.Rooms}");
         prompt.AppendLine($"- Floor: {context.Floor?.ToString(culture) ?? "not provided"}");
         prompt.AppendLine($"- Total floors: {context.TotalFloors?.ToString(culture) ?? "not provided"}");
-        prompt.AppendLine($"- Estimated range: {context.EstimatedMin.ToString("0.##", culture)} - {context.EstimatedMax.ToString("0.##", culture)} {context.Currency}");
+        prompt.AppendLine(
+            $"- Estimated range: {context.EstimatedMin.ToString("0.##", culture)} - {context.EstimatedMax.ToString("0.##", culture)} {context.Currency}");
         prompt.AppendLine($"- Strategy: {context.StrategyUsed}");
         prompt.AppendLine("- Comparable properties:");
 

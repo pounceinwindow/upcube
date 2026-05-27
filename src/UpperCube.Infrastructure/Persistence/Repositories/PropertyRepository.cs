@@ -8,6 +8,16 @@ namespace UpperCube.Infrastructure.Persistence.Repositories;
 
 public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyRepository
 {
+    public Task<int> CountAsync(CancellationToken ct = default)
+    {
+        return dbContext.Properties.CountAsync(ct);
+    }
+
+    public Task<int> CountByStatusAsync(PropertyStatus status, CancellationToken ct = default)
+    {
+        return dbContext.Properties.CountAsync(x => x.Status == status, ct);
+    }
+
     public Task<Property?> GetByIdAsync(int id, CancellationToken ct = default)
     {
         return dbContext.Properties
@@ -108,6 +118,18 @@ public sealed class PropertyRepository(AppDbContext dbContext) : IPropertyReposi
             .Include(x => x.District)
             .Include(x => x.PropertyType)
             .Where(x => x.AgentId == agentId)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<Property>> GetByStatusAsync(PropertyStatus status, CancellationToken ct = default)
+    {
+        return await dbContext.Properties
+            .Include(x => x.Images)
+            .Include(x => x.City)
+            .Include(x => x.District)
+            .Include(x => x.PropertyType)
+            .Where(x => x.Status == status)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync(ct);
     }

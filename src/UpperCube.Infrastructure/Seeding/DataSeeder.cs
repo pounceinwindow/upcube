@@ -12,13 +12,13 @@ namespace UpperCube.Infrastructure.Seeding;
 
 public static class DataSeeder
 {
-    private static readonly DateTime SeedTimestamp = new(2026, 4, 25, 0, 0, 0, DateTimeKind.Utc);
     private const string BannerImagePrefix = "/homelengo/images/banner/";
     private const string LegacyBannerImagePrefix = "/images/banner/";
     private const string OldDemoImagePrefix = "/images/demo/properties/";
     private const int BannerPropertyImageCount = 18;
     private const int SecondaryImageOffset = 6;
     private const int TertiaryImageOffset = 12;
+    private static readonly DateTime SeedTimestamp = new(2026, 4, 25, 0, 0, 0, DateTimeKind.Utc);
 
     public static async Task SeedAsync(IServiceProvider services)
     {
@@ -279,9 +279,7 @@ public static class DataSeeder
         }
 
         foreach (var image in property.Images)
-        {
             image.IsPrimary = string.Equals(image.Path, primaryPath, StringComparison.OrdinalIgnoreCase);
-        }
     }
 
     private static bool IsManagedSeedImage(PropertyImage image)
@@ -295,7 +293,7 @@ public static class DataSeeder
 
     private static string BannerPropertyImagePath(int number)
     {
-        var normalized = ((number - 1) % BannerPropertyImageCount) + 1;
+        var normalized = (number - 1) % BannerPropertyImageCount + 1;
         return $"{BannerImagePrefix}banner-property-{normalized}.jpg";
     }
 

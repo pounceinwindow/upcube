@@ -1,7 +1,9 @@
 @using System.Globalization
 @using Microsoft.Extensions.Localization
+@using UpperCube.Web
+@using UpperCube.Web.Helpers
 @model UpperCube.Web.Models.Estimator.EstimatorModelView
-@inject IStringLocalizer<UpperCube.Web.SharedResource> Localizer
+@inject IStringLocalizer<SharedResource> Localizer
 
 @{
     ViewData["Title"] = Localizer["EstimatorTitle"];
@@ -11,22 +13,6 @@
 }
 
 @functions {
-    private static string FormatMoney(decimal value, string? currency, CultureInfo culture, string uiCulture)
-    {
-        var code = string.IsNullOrWhiteSpace(currency) ? "RUB" : currency;
-        var suffix = uiCulture == "ru" && string.Equals(code, "RUB", StringComparison.OrdinalIgnoreCase)
-            ? "₽"
-            : code;
-
-        return $"{value.ToString("N0", culture)} {suffix}";
-    }
-
-    private static string FormatArea(decimal value, CultureInfo culture, string uiCulture)
-    {
-        var unit = uiCulture == "ru" ? "м²" : "m²";
-        return $"{value.ToString("N1", culture)} {unit}";
-    }
-
     private static IReadOnlyList<string> SplitExplanation(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -40,6 +26,7 @@
 
         return parts.Count > 1 ? parts : [text.Trim()];
     }
+
 }
 
 <section class="flat-section uc-tool-page uc-estimator-page">
@@ -73,7 +60,8 @@
 
                         <div class="col-md-6">
                             <label asp-for="DistrictId" class="form-label">@Localizer["District"]</label>
-                            <select asp-for="DistrictId" asp-items="Model.Districts" class="form-select" autocomplete="off">
+                            <select asp-for="DistrictId" asp-items="Model.Districts" class="form-select"
+                                    autocomplete="off">
                                 <option value="">@Localizer["SelectDistrict"]</option>
                             </select>
                             <span asp-validation-for="DistrictId" class="text-danger"></span>
@@ -81,7 +69,8 @@
 
                         <div class="col-md-6">
                             <label asp-for="PropertyTypeId" class="form-label">@Localizer["PropertyType"]</label>
-                            <select asp-for="PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select" autocomplete="off">
+                            <select asp-for="PropertyTypeId" asp-items="Model.PropertyTypes" class="form-select"
+                                    autocomplete="off">
                                 <option value="">@Localizer["SelectPropertyType"]</option>
                             </select>
                             <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
@@ -96,7 +85,7 @@
                                    inputmode="decimal"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="@Localizer["AreaPlaceholder"]" />
+                                   placeholder="@Localizer["AreaPlaceholder"]"/>
                             <span asp-validation-for="Area" class="text-danger"></span>
                         </div>
 
@@ -107,7 +96,7 @@
                                    min="1"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="@Localizer["RoomsPlaceholder"]" />
+                                   placeholder="@Localizer["RoomsPlaceholder"]"/>
                             <span asp-validation-for="Rooms" class="text-danger"></span>
                         </div>
 
@@ -118,7 +107,7 @@
                                    min="0"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="@Localizer["FloorPlaceholder"]" />
+                                   placeholder="@Localizer["FloorPlaceholder"]"/>
                             <span asp-validation-for="Floor" class="text-danger"></span>
                         </div>
 
@@ -129,7 +118,7 @@
                                    min="0"
                                    class="form-control"
                                    autocomplete="off"
-                                   placeholder="@Localizer["TotalFloorsPlaceholder"]" />
+                                   placeholder="@Localizer["TotalFloorsPlaceholder"]"/>
                             <span asp-validation-for="TotalFloors" class="text-danger"></span>
                         </div>
 
@@ -148,8 +137,8 @@
                         <div class="text-subtitle text-primary">@Localizer["Result"]</div>
                         <h2>@Localizer["EstimatedValue"]</h2>
                         <div class="uc-estimator-range">
-                            <span>@Localizer["From"] @FormatMoney(Model.EstimatedMin!.Value, Model.Currency, culture, uiCulture)</span>
-                            <span>@Localizer["To"] @FormatMoney(Model.EstimatedMax!.Value, Model.Currency, culture, uiCulture)</span>
+                            <span>@Localizer["From"] @DisplayFormatHelper.FormatMoney(Model.EstimatedMin!.Value, Model.Currency, culture, uiCulture)</span>
+                            <span>@Localizer["To"] @DisplayFormatHelper.FormatMoney(Model.EstimatedMax!.Value, Model.Currency, culture, uiCulture)</span>
                         </div>
                         <dl class="uc-estimator-meta">
                             <div>
@@ -207,8 +196,8 @@
                                            asp-action="Details"
                                            asp-route-id="@comparable.PropertyId">@comparable.Title</a>
                                         <small>
-                                            @FormatArea(comparable.Area, culture, uiCulture),
-                                            @FormatMoney(comparable.Price, Model.Currency, culture, uiCulture)
+                                            @DisplayFormatHelper.FormatArea(comparable.Area, culture, uiCulture),
+                                            @DisplayFormatHelper.FormatMoney(comparable.Price, Model.Currency, culture, uiCulture)
                                         </small>
                                     </li>
                                 }
@@ -230,5 +219,5 @@
 </section>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

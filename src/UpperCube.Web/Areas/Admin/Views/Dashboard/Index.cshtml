@@ -1,0 +1,86 @@
+@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Дашборд";
+
+    var tiles = new[]
+    {
+        new { Title = "Пользователи", Value = Model.UsersCount, Icon = "ti-user", Color = "primary" },
+        new { Title = "Объекты", Value = Model.PropertiesCount, Icon = "ti-home", Color = "success" },
+        new { Title = "На модерации", Value = Model.PendingPropertiesCount, Icon = "ti-check-box", Color = "warning" },
+        new { Title = "Обращения", Value = Model.InquiriesCount, Icon = "ti-comments", Color = "info" },
+        new { Title = "Оценки", Value = Model.ValuationsCount, Icon = "ti-stats-up", Color = "secondary" },
+        new { Title = "Фичи", Value = Model.FeatureCatalogCount, Icon = "ti-settings", Color = "purple" },
+        new { Title = "Audit logs", Value = Model.RecentAuditLogsCount, Icon = "ti-notepad", Color = "dark" },
+        new { Title = "Errors", Value = Model.RecentErrorsCount, Icon = "ti-alert", Color = "danger" }
+    };
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h4 class="mb-1">Admin Dashboard</h4>
+        <p class="text-muted mb-0">Краткое состояние платформы и быстрые переходы к рабочим разделам.</p>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var tile in tiles)
+    {
+        <div class="col-xl-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="avatar-sm rounded-circle bg-@tile.Color align-self-center mr-3">
+                            <span class="avatar-title rounded-circle bg-@tile.Color">
+                                <i class="@tile.Icon font-size-18" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            <p class="text-muted font-weight-medium mb-1">@tile.Title</p>
+                            <h4 class="mb-0">@tile.Value</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Модерация</h5>
+                <p class="text-muted">Проверь новые объявления и опубликуй корректные объекты.</p>
+                <a asp-area="Admin" asp-controller="Moderation" asp-action="Index" class="btn btn-primary btn-sm">
+                    Открыть модерацию
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Feature Catalog</h5>
+                <p class="text-muted">Включай и выключай готовые фичи без изменения кода.</p>
+                <a asp-area="Admin" asp-controller="FeatureCatalog" asp-action="Index" class="btn btn-outline-primary btn-sm">
+                    Управлять фичами
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Логи</h5>
+                <p class="text-muted">Последние admin-действия и ошибки приложения.</p>
+                <a asp-area="Admin" asp-controller="Logs" asp-action="Audit" class="btn btn-outline-secondary btn-sm mr-2">
+                    Audit
+                </a>
+                <a asp-area="Admin" asp-controller="Logs" asp-action="Errors" class="btn btn-outline-danger btn-sm">
+                    Errors
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

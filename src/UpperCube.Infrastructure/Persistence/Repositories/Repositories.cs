@@ -51,6 +51,11 @@ public sealed class FavoriteRepository(AppDbContext dbContext) : IFavoriteReposi
 
 public sealed class InquiryRepository(AppDbContext dbContext) : IInquiryRepository
 {
+    public Task<int> CountAsync(CancellationToken ct = default)
+    {
+        return dbContext.Inquiries.CountAsync(ct);
+    }
+
     public Task<Inquiry?> GetByIdAsync(int id, CancellationToken ct = default)
     {
         return dbContext.Inquiries
@@ -113,7 +118,8 @@ public sealed class ComparisonRepository(AppDbContext dbContext) : IComparisonRe
             .FirstOrDefaultAsync(x => x.UserId == userId, ct);
     }
 
-    public async Task<IReadOnlyList<int>> GetUserComparisonPropertyIdsAsync(string userId, CancellationToken ct = default)
+    public async Task<IReadOnlyList<int>> GetUserComparisonPropertyIdsAsync(string userId,
+        CancellationToken ct = default)
     {
         return await dbContext.ComparisonItems
             .Where(x => x.Comparison != null && x.Comparison.UserId == userId)
@@ -139,6 +145,11 @@ public sealed class ComparisonRepository(AppDbContext dbContext) : IComparisonRe
 
 public sealed class ValuationRepository(AppDbContext dbContext) : IValuationRepository
 {
+    public Task<int> CountAsync(CancellationToken ct = default)
+    {
+        return dbContext.Valuations.CountAsync(ct);
+    }
+
     public Task AddAsync(Valuation valuation, CancellationToken ct = default)
     {
         return dbContext.Valuations.AddAsync(valuation, ct).AsTask();
@@ -147,6 +158,11 @@ public sealed class ValuationRepository(AppDbContext dbContext) : IValuationRepo
 
 public sealed class FeatureCatalogRepository(AppDbContext dbContext) : IFeatureCatalogRepository
 {
+    public Task<int> CountAsync(CancellationToken ct = default)
+    {
+        return dbContext.FeatureCatalog.CountAsync(ct);
+    }
+
     public Task<FeatureCatalogEntry?> GetByCodeAsync(string code, CancellationToken ct = default)
     {
         return dbContext.FeatureCatalog.FirstOrDefaultAsync(x => x.Code == code, ct);
@@ -155,6 +171,12 @@ public sealed class FeatureCatalogRepository(AppDbContext dbContext) : IFeatureC
     public async Task<IReadOnlyList<FeatureCatalogEntry>> ListAsync(CancellationToken ct = default)
     {
         return await dbContext.FeatureCatalog.OrderBy(x => x.Code).ToListAsync(ct);
+    }
+
+    public Task UpdateAsync(FeatureCatalogEntry entry, CancellationToken ct = default)
+    {
+        if (dbContext.Entry(entry).State == EntityState.Detached) dbContext.FeatureCatalog.Update(entry);
+        return Task.CompletedTask;
     }
 }
 
@@ -174,6 +196,17 @@ public sealed class DictionaryRepository<T>(AppDbContext dbContext) : IDictionar
 
 public sealed class ModerationRepository(AppDbContext dbContext) : IModerationRepository
 {
+    public async Task<IReadOnlyList<ModerationAction>> GetRecentAsync(int count, CancellationToken ct = default)
+    {
+        count = Math.Clamp(count, 1, 100);
+
+        return await dbContext.ModerationActions
+            .Include(x => x.Property)
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(count)
+            .ToListAsync(ct);
+    }
+
     public Task AddAsync(ModerationAction action, CancellationToken ct = default)
     {
         return dbContext.ModerationActions.AddAsync(action, ct).AsTask();

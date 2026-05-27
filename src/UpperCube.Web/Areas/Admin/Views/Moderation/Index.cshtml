@@ -1,0 +1,73 @@
+@model AdminModerationIndexViewModel
+
+@{
+    ViewData["Title"] = "Модерация";
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h4 class="mb-1">Модерация объявлений</h4>
+        <p class="text-muted mb-0">Публикуй корректные объявления или отклоняй объекты, которые нужно доработать.</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="thead-light">
+                <tr>
+                    <th>Объект</th>
+                    <th>Локация</th>
+                    <th>Агент</th>
+                    <th>Цена</th>
+                    <th>Статус</th>
+                    <th>Создан</th>
+                    <th class="text-right">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Нет объектов, ожидающих модерации.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-area="" asp-controller="Property" asp-action="Details" asp-route-id="@item.Id"
+                                   class="font-weight-medium text-dark">
+                                    @item.Title
+                                </a>
+                            </td>
+                            <td>@(string.IsNullOrWhiteSpace(item.Location) ? "—" : item.Location)</td>
+                            <td class="text-break">@item.AgentId</td>
+                            <td>@item.Price.ToString("N0") @item.Currency</td>
+                            <td><span class="badge badge-soft-warning">@item.Status</span></td>
+                            <td>@item.CreatedAt.ToLocalTime().ToString("g")</td>
+                            <td class="text-right">
+                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Approve" asp-route-id="@item.Id"
+                                      method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-success mr-1">Approve</button>
+                                </form>
+                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Reject" asp-route-id="@item.Id"
+                                      method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="reason" value="Rejected by admin"/>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Отклонить это объявление?');">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

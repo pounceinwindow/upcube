@@ -1,4 +1,3 @@
-@using Microsoft.AspNetCore.Mvc.Rendering
 @model UpperCube.Web.Models.Catalog.CatalogModelView
 @{
     ViewData["Title"] = "Каталог";
@@ -44,7 +43,8 @@
                                         <option value="">Любой город</option>
                                         @foreach (var c in cities)
                                         {
-                                            <option value="@c.Value" selected="@(c.Value == Model.CityId?.ToString())">@c.Text</option>
+                                            <option value="@c.Value"
+                                                    selected="@(c.Value == Model.CityId?.ToString())">@c.Text</option>
                                         }
                                     </select>
                                 </div>
@@ -54,7 +54,8 @@
                                         <option value="">Любой тип</option>
                                         @foreach (var type in propertyTypes)
                                         {
-                                            <option value="@type.Value" selected="@(type.Value == Model.PropertyTypeId?.ToString())">@type.Text</option>
+                                            <option value="@type.Value"
+                                                    selected="@(type.Value == Model.PropertyTypeId?.ToString())">@type.Text</option>
                                         }
                                     </select>
                                 </div>
@@ -78,17 +79,20 @@
                             <div class="grid-2 group-box">
                                 <div class="form-style">
                                     <label for="minPrice" class="title-select fw-6">Цена от</label>
-                                    <input id="minPrice" type="number" name="minPrice" value="@Model.MinPrice" class="form-control" placeholder="5 000 000"/>
+                                    <input id="minPrice" type="number" name="minPrice" value="@Model.MinPrice"
+                                           class="form-control" placeholder="5 000 000"/>
                                 </div>
                                 <div class="form-style">
                                     <label for="maxPrice" class="title-select fw-6">Цена до</label>
-                                    <input id="maxPrice" type="number" name="maxPrice" value="@Model.MaxPrice" class="form-control" placeholder="30 000 000"/>
+                                    <input id="maxPrice" type="number" name="maxPrice" value="@Model.MaxPrice"
+                                           class="form-control" placeholder="30 000 000"/>
                                 </div>
                             </div>
                             <div class="grid-2 group-box">
                                 <div class="form-style">
                                     <label for="rooms" class="title-select fw-6">Комнаты</label>
-                                    <input id="rooms" type="number" name="rooms" value="@Model.Rooms" class="form-control" min="1" placeholder="Любое количество"/>
+                                    <input id="rooms" type="number" name="rooms" value="@Model.Rooms"
+                                           class="form-control" min="1" placeholder="Любое количество"/>
                                 </div>
                                 <div class="form-style uc-filter-actions">
                                     <a asp-controller="Catalog" asp-action="Index" class="tf-btn btn-line">Сбросить</a>

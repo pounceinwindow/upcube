@@ -158,10 +158,9 @@ public sealed class AgentController(
         if (string.IsNullOrWhiteSpace(agentId)) return Challenge();
         if (!IsOwner(property, agentId)) return Forbid();
 
-        foreach (var image in property.Images.Where(x => x.Path.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase)))
-        {
+        foreach (var image in property.Images.Where(x =>
+                     x.Path.StartsWith("/uploads/", StringComparison.OrdinalIgnoreCase)))
             await imageStorage.DeleteAsync(image.Path, ct);
-        }
 
         await repository.DeleteAsync(id, ct);
         await unitOfWork.SaveChangesAsync(ct);
@@ -215,7 +214,7 @@ public sealed class AgentController(
         property.Title = model.Title.Trim();
         property.Description = model.Description.Trim();
         property.Price = new Money(model.Price, model.Currency.Trim().ToUpperInvariant());
-        property.Area = new Area(model.Area, AreaUnit.SquareMeter);
+        property.Area = new Area(model.Area);
         property.Rooms = model.Rooms;
         property.Floor = model.Floor;
         property.TotalFloors = model.TotalFloors;
@@ -232,20 +231,17 @@ public sealed class AgentController(
         foreach (var file in (imageFiles ?? []).Where(x => x.Length > 0))
         {
             if (file.Length > MaxImageSizeBytes)
-            {
                 ModelState.AddModelError(nameof(PropertyFormModelView.ImageFiles),
                     $"Файл {file.FileName} больше 5 МБ.");
-            }
 
             if (!AllowedImageContentTypes.Contains(file.ContentType))
-            {
                 ModelState.AddModelError(nameof(PropertyFormModelView.ImageFiles),
                     $"Файл {file.FileName} должен быть JPG, PNG или WebP.");
-            }
         }
     }
 
-    private async Task AppendUploadedImagesAsync(Property property, IEnumerable<IFormFile>? imageFiles, CancellationToken ct)
+    private async Task AppendUploadedImagesAsync(Property property, IEnumerable<IFormFile>? imageFiles,
+        CancellationToken ct)
     {
         var order = property.Images.Count == 0 ? 0 : property.Images.Max(x => x.Order) + 1;
 

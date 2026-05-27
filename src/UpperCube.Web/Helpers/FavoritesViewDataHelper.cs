@@ -13,20 +13,11 @@ public static class FavoritesViewDataHelper
         UserManager<ApplicationUser> userManager,
         CancellationToken ct = default)
     {
-        if (controller.User.Identity?.IsAuthenticated != true)
-        {
-            controller.ViewData["FavoriteIds"] = new HashSet<int>();
-            return;
-        }
-
-        var userId = userManager.GetUserId(controller.User);
-        if (userId is null)
-        {
-            controller.ViewData["FavoriteIds"] = new HashSet<int>();
-            return;
-        }
-
-        var ids = await favoriteRepository.GetUserFavoritePropertyIdsAsync(userId, ct);
-        controller.ViewData["FavoriteIds"] = ids.ToHashSet();
+        await PropertySelectionViewDataHelper.PopulateAsync(
+            controller,
+            userManager,
+            "FavoriteIds",
+            favoriteRepository.GetUserFavoritePropertyIdsAsync,
+            ct);
     }
 }

@@ -1,0 +1,67 @@
+@model AdminFeatureCatalogViewModel
+
+@{
+    ViewData["Title"] = "Feature Catalog";
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h4 class="mb-1">Feature Catalog</h4>
+        <p class="text-muted mb-0">Каталог готовых фич и их текущая доступность.</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="thead-light">
+                <tr>
+                    <th>Code</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Обновлено</th>
+                    <th class="text-right">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Фичи не найдены.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var feature in Model.Items)
+                    {
+                        <tr>
+                            <td><code>@feature.Code</code></td>
+                            <td class="font-weight-medium">@feature.DisplayName</td>
+                            <td>@feature.Description</td>
+                            <td>
+                                <span class="badge @(feature.IsEnabled ? "badge-soft-success" : "badge-soft-secondary")">
+                                    @(feature.IsEnabled ? "Enabled" : "Disabled")
+                                </span>
+                            </td>
+                            <td>@feature.UpdatedAt.ToLocalTime().ToString("g")</td>
+                            <td class="text-right">
+                                <form asp-area="Admin" asp-controller="FeatureCatalog" asp-action="Toggle"
+                                      method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="code" value="@feature.Code"/>
+                                    <button type="submit" class="btn btn-sm @(feature.IsEnabled ? "btn-outline-danger" : "btn-outline-success")"
+                                            onclick="return confirm('Изменить состояние фичи @feature.Code?');">
+                                        @(feature.IsEnabled ? "Disable" : "Enable")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

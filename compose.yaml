@@ -20,12 +20,6 @@ services:
     volumes:
       - mongo_data:/data/db
 
-  mailhog:
-    image: mailhog/mailhog:latest
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
   ollama:
     image: ollama/ollama:latest
     ports:
@@ -35,7 +29,7 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     healthcheck:
-      test: ["CMD-SHELL", "OLLAMA_HOST=http://127.0.0.1:11434 ollama list >/dev/null 2>&1 || exit 1"]
+      test: [ "CMD-SHELL", "OLLAMA_HOST=http://127.0.0.1:11434 ollama list >/dev/null 2>&1 || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -47,7 +41,7 @@ services:
         condition: service_healthy
     environment:
       OLLAMA_HOST: http://ollama:11434
-    entrypoint: ["/bin/sh", "-lc"]
+    entrypoint: [ "/bin/sh", "-lc" ]
     command:
       - "until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull llama3.1"
 
@@ -63,8 +57,6 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=realestate;Username=realestate;Password=devpassword
       ConnectionStrings__Mongo: mongodb://realestate:devpassword@mongo:27017/?authSource=admin
-      Email__Host: mailhog
-      Email__Port: 1025
       AI__Enabled: true
       AI__Provider: Ollama
       AI__BaseUrl: http://ollama:11434
@@ -77,8 +69,6 @@ services:
       postgres:
         condition: service_started
       mongo:
-        condition: service_started
-      mailhog:
         condition: service_started
       ollama:
         condition: service_healthy

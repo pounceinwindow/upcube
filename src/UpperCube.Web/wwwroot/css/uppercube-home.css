@@ -1026,9 +1026,8 @@ textarea:focus-visible {
     min-height: 190px;
     padding: 28px;
     border-radius: 16px;
-    background:
-        linear-gradient(rgba(247, 249, 253, 0.86), rgba(247, 249, 253, 0.86)),
-        url("/homelengo/images/location/map-lo.png") center / cover no-repeat;
+    background: linear-gradient(rgba(247, 249, 253, 0.86), rgba(247, 249, 253, 0.86)),
+    url("/homelengo/images/location/map-lo.png") center / cover no-repeat;
 }
 
 .uc-map-placeholder > .icon {

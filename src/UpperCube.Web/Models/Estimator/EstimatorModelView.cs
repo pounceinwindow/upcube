@@ -44,17 +44,11 @@ public class EstimatorModelView
 
     public bool AiExplanationUnavailable { get; set; }
 
-    public string? AiErrorMessage { get; set; }
-
     public IReadOnlyList<ComparablePropertyContext> Comparables { get; set; } = [];
 
-    [ValidateNever]
-    public IEnumerable<SelectListItem> Cities { get; set; } = [];
+    [ValidateNever] public IEnumerable<SelectListItem> Cities { get; set; } = [];
 
-    [ValidateNever]
-    public IEnumerable<SelectListItem> Districts { get; set; } = [];
+    [ValidateNever] public IEnumerable<SelectListItem> Districts { get; set; } = [];
 
-    [ValidateNever]
-    public IEnumerable<SelectListItem> PropertyTypes { get; set; } = [];
-
+    [ValidateNever] public IEnumerable<SelectListItem> PropertyTypes { get; set; } = [];
 }

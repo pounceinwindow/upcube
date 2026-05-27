@@ -1,5 +1,6 @@
 using UpperCube.Application.DTOs;
 using UpperCube.Domain.Entities;
+using UpperCube.Web.Helpers;
 
 namespace UpperCube.Web.Mapping;
 
@@ -7,10 +8,7 @@ public static class PropertyMapping
 {
     public static PropertyListItemDto ToListItemDto(this Property property)
     {
-        var primaryImagePath = property.Images
-            .OrderBy(x => x.Order)
-            .FirstOrDefault(x => x.IsPrimary)?.Path
-            ?? property.Images.OrderBy(x => x.Order).FirstOrDefault()?.Path;
+        var primaryImagePath = PropertyImagePathHelper.GetPrimaryOrFirstPath(property.Images);
 
         return new PropertyListItemDto(property.Id, property.Title, property.Price.Amount,
             property.Price.Currency, property.Area.Value, property.Rooms, property.City?.Name ?? string.Empty,

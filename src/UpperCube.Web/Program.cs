@@ -8,6 +8,7 @@ using UpperCube.Infrastructure.Persistence;
 using UpperCube.Infrastructure.Seeding;
 using UpperCube.Web;
 using UpperCube.Web.Hubs;
+using UpperCube.Web.Middleware;
 using UpperCube.Web.Services.Inquiries;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,6 +72,8 @@ app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
+app.UseMiddleware<AdminAccessMiddleware>();
+app.UseMiddleware<AdminAuditMiddleware>();
 app.UseAuthorization();
 
 app.MapControllerRoute(

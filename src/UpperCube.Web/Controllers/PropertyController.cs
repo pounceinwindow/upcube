@@ -48,7 +48,7 @@ public sealed class PropertyController(
         }
 
         var now = DateTime.UtcNow;
-        var inquiry = new Inquiry()
+        var inquiry = new Inquiry
         {
             PropertyId = propertyId,
             FromUserId = userId,

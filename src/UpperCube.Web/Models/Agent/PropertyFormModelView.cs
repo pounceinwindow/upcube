@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -55,8 +54,7 @@ public class PropertyFormModelView : IValidatableObject
     [StringLength(256, MinimumLength = 5, ErrorMessage = "Адрес должен быть от 5 до 256 символов.")]
     public string Address { get; set; } = string.Empty;
 
-    [ValidateNever]
-    public List<IFormFile>? ImageFiles { get; set; }
+    [ValidateNever] public List<IFormFile>? ImageFiles { get; set; }
 
     public IReadOnlyList<string> ExistingImages { get; set; } = [];
 
@@ -68,10 +66,8 @@ public class PropertyFormModelView : IValidatableObject
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (TotalFloors < Floor)
-        {
             yield return new ValidationResult(
                 "Количество этажей не может быть меньше этажа объекта.",
                 [nameof(TotalFloors)]);
-        }
     }
 }

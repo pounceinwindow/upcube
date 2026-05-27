@@ -13,7 +13,7 @@ public sealed class SmtpEmailSender(
     public async Task SendAsync(string to, string subject, string htmlBody, CancellationToken ct = default)
     {
         var host = configuration["Email:Host"] ?? "localhost";
-        var port = configuration.GetValue("Email:Port", 1025);
+        var port = configuration.GetValue("Email:Port", 25);
         var useSsl = configuration.GetValue("Email:UseSsl", false);
         var fromAddress = configuration["Email:FromAddress"] ?? "noreply@uppercube.local";
         var fromName = configuration["Email:FromName"] ?? "UpperCube";

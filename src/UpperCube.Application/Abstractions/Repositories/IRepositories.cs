@@ -17,6 +17,8 @@ public interface IFavoriteRepository
 
 public interface IInquiryRepository
 {
+    Task<int> CountAsync(CancellationToken ct = default);
+
     Task<Inquiry?> GetByIdAsync(int id, CancellationToken ct = default);
 
     Task<IReadOnlyList<Inquiry>> GetByUserIdAsync(string userId, CancellationToken ct = default);
@@ -46,14 +48,20 @@ public interface IComparisonRepository
 
 public interface IValuationRepository
 {
+    Task<int> CountAsync(CancellationToken ct = default);
+
     Task AddAsync(Domain.Entities.Valuation valuation, CancellationToken ct = default);
 }
 
 public interface IFeatureCatalogRepository
 {
+    Task<int> CountAsync(CancellationToken ct = default);
+
     Task<FeatureCatalogEntry?> GetByCodeAsync(string code, CancellationToken ct = default);
 
     Task<IReadOnlyList<FeatureCatalogEntry>> ListAsync(CancellationToken ct = default);
+
+    Task UpdateAsync(FeatureCatalogEntry entry, CancellationToken ct = default);
 }
 
 public interface IDictionaryRepository<T>
@@ -65,6 +73,8 @@ public interface IDictionaryRepository<T>
 
 public interface IModerationRepository
 {
+    Task<IReadOnlyList<ModerationAction>> GetRecentAsync(int count, CancellationToken ct = default);
+
     Task AddAsync(ModerationAction action, CancellationToken ct = default);
 }
 

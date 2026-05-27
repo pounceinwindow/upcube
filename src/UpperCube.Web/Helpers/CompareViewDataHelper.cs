@@ -13,20 +13,11 @@ public static class CompareViewDataHelper
         UserManager<ApplicationUser> userManager,
         CancellationToken ct = default)
     {
-        if (controller.User.Identity?.IsAuthenticated != true)
-        {
-            controller.ViewData["CompareIds"] = new HashSet<int>();
-            return;
-        }
-
-        var userId = userManager.GetUserId(controller.User);
-        if (userId is null)
-        {
-            controller.ViewData["CompareIds"] = new HashSet<int>();
-            return;
-        }
-
-        var ids = await comparisonRepository.GetUserComparisonPropertyIdsAsync(userId, ct);
-        controller.ViewData["CompareIds"] = ids.ToHashSet();
+        await PropertySelectionViewDataHelper.PopulateAsync(
+            controller,
+            userManager,
+            "CompareIds",
+            comparisonRepository.GetUserComparisonPropertyIdsAsync,
+            ct);
     }
 }

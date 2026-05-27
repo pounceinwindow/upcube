@@ -1,3 +1,4 @@
+@using UpperCube.Web.Helpers
 @model UpperCube.Application.DTOs.PropertyListItemDto
 @{
     var favoriteIds = ViewData["FavoriteIds"] as HashSet<int> ?? new HashSet<int>();
@@ -5,9 +6,7 @@
     var isFavorite = favoriteIds.Contains(Model.Id);
     var isCompared = compareIds.Contains(Model.Id);
     var isAuthenticated = User.Identity?.IsAuthenticated == true;
-    var cardImagePath = string.IsNullOrWhiteSpace(Model.PrimaryImagePath)
-        ? "/homelengo/images/banner/banner-property-1.jpg"
-        : Model.PrimaryImagePath;
+    var cardImagePath = PropertyImagePathHelper.WithDefault(Model.PrimaryImagePath);
     var transactionText = Model.TransactionType == 2 ? "Аренда" : "Продажа";
     var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
 }

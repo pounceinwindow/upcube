@@ -90,7 +90,8 @@
                     <li>
                         @if (isAuthenticated)
                         {
-                            <form asp-controller="Compare" asp-action="Add" method="post" class="uc-detail-compare-form">
+                            <form asp-controller="Compare" asp-action="Add" method="post"
+                                  class="uc-detail-compare-form">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="propertyId" value="@Model.Id">
                                 <input type="hidden" name="returnUrl" value="@returnUrl">
@@ -280,7 +281,8 @@
                         <h2 class="title fw-6">Связаться с агентом</h2>
                         <div class="box-avatar">
                             <div class="avatar avt-100 round">
-                                <img alt="Агент UpperCube" src="~/homelengo/images/avatar/avt-lg-single.jpg" width="100" height="100">
+                                <img alt="Агент UpperCube" src="~/homelengo/images/avatar/avt-lg-single.jpg" width="100"
+                                     height="100">
                             </div>
                             <div class="info">
                                 <h3 class="name">@Model.AgentName</h3>
@@ -308,7 +310,7 @@
                         {
                             <form asp-controller="Property" asp-action="SendInquiry" method="post" class="contact-form">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="propertyId" value="@Model.Id" />
+                                <input type="hidden" name="propertyId" value="@Model.Id"/>
 
                                 <div class="ip-group">
                                     <textarea name="message"

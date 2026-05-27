@@ -1,0 +1,52 @@
+@model AdminUserListItemViewModel
+
+@{
+    ViewData["Title"] = "Пользователь";
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h4 class="mb-1">Пользователь</h4>
+        <p class="text-muted mb-0">@Model.Email</p>
+    </div>
+    <div class="col-auto">
+        <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            Назад
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9 text-break">@Model.Id</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Имя</dt>
+            <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.FullName) ? "—" : Model.FullName)</dd>
+
+            <dt class="col-sm-3">Роли</dt>
+            <dd class="col-sm-9">
+                @foreach (var role in Model.Roles)
+                {
+                    <span class="badge badge-soft-primary mr-1">@role</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Email confirmed</dt>
+            <dd class="col-sm-9">@(Model.EmailConfirmed ? "Да" : "Нет")</dd>
+
+            <dt class="col-sm-3">Verified</dt>
+            <dd class="col-sm-9">@(Model.IsVerified ? "Да" : "Нет")</dd>
+
+            <dt class="col-sm-3">Blocked</dt>
+            <dd class="col-sm-9">@(Model.IsBlocked ? "Да" : "Нет")</dd>
+
+            <dt class="col-sm-3">Создан</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToLocalTime().ToString("g")</dd>
+        </dl>
+    </div>
+</div>
