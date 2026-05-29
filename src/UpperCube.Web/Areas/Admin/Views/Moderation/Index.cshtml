@@ -50,17 +50,20 @@
                             <td><span class="badge badge-soft-warning">@item.Status</span></td>
                             <td>@item.CreatedAt.ToLocalTime().ToString("g")</td>
                             <td class="text-right">
-                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Approve" asp-route-id="@item.Id"
+                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Approve"
+                                      asp-route-id="@item.Id"
                                       method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-success mr-1">Approve</button>
                                 </form>
-                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Reject" asp-route-id="@item.Id"
+                                <form asp-area="Admin" asp-controller="Moderation" asp-action="Reject"
+                                      asp-route-id="@item.Id"
                                       method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="reason" value="Rejected by admin"/>
                                     <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('Отклонить это объявление?');">Reject</button>
+                                            onclick="return confirm('Отклонить это объявление?');">Reject
+                                    </button>
                                 </form>
                             </td>
                         </tr>

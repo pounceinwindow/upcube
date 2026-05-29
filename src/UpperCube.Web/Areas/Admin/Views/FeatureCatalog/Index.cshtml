@@ -41,7 +41,8 @@
                             <td class="font-weight-medium">@feature.DisplayName</td>
                             <td>@feature.Description</td>
                             <td>
-                                <span class="badge @(feature.IsEnabled ? "badge-soft-success" : "badge-soft-secondary")">
+                                <span
+                                    class="badge @(feature.IsEnabled ? "badge-soft-success" : "badge-soft-secondary")">
                                     @(feature.IsEnabled ? "Enabled" : "Disabled")
                                 </span>
                             </td>
@@ -51,7 +52,8 @@
                                       method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="code" value="@feature.Code"/>
-                                    <button type="submit" class="btn btn-sm @(feature.IsEnabled ? "btn-outline-danger" : "btn-outline-success")"
+                                    <button type="submit"
+                                            class="btn btn-sm @(feature.IsEnabled ? "btn-outline-danger" : "btn-outline-success")"
                                             onclick="return confirm('Изменить состояние фичи @feature.Code?');">
                                         @(feature.IsEnabled ? "Disable" : "Enable")
                                     </button>

@@ -112,13 +112,9 @@ public sealed class EstimatorController(
         model.Comparables = comparables;
 
         if (aiResult.IsSuccess)
-        {
             model.AiExplanation = aiResult.Text;
-        }
         else
-        {
             model.AiExplanationUnavailable = true;
-        }
 
         var userId = userManager.GetUserId(User);
         await valuationRepository.AddAsync(new Valuation

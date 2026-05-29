@@ -31,9 +31,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Areas\Admin\Views\_ViewStart.cshtml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <Content Update="Areas\Admin\Views\_ViewStart.cshtml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

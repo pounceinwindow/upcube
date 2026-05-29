@@ -156,7 +156,8 @@
                                     <div class="uc-compare-cell" role="rowheader">@metric.Label</div>
                                     @foreach (var item in columns)
                                     {
-                                        <div class="uc-compare-cell" role="cell">@(item is null ? notSelected : metric.Value(item))</div>
+                                        <div class="uc-compare-cell"
+                                             role="cell">@(item is null ? notSelected : metric.Value(item))</div>
                                     }
                                 </div>
                             }
