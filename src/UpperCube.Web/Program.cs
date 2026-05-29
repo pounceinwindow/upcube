@@ -70,6 +70,7 @@ app.UseRequestLocalization(new RequestLocalizationOptions
 app.UseRouting();
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseSerilogRequestLogging();
+app.UseMiddleware<ErrorLoggingMiddleware>();
 
 app.UseAuthentication();
 app.UseMiddleware<AdminAccessMiddleware>();
