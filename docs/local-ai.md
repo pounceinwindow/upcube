@@ -33,8 +33,8 @@ LLM only explains the calculated range and receives a small structured context.
        "Provider": "Ollama",
        "BaseUrl": "http://localhost:11434",
        "Model": "llama3.1",
-       "TimeoutSeconds": 60,
-       "MaxTokens": 48,
+       "TimeoutSeconds": 300,
+       "MaxTokens": 128,
        "ContextLength": 1024,
        "Temperature": 0.2
      }
@@ -61,8 +61,8 @@ valuation and shows an AI explanation fallback message.
 "AI": {
   "BaseUrl": "http://ollama:11434",
   "Model": "llama3.1",
-  "TimeoutSeconds": 240,
-  "MaxTokens": 48,
+  "TimeoutSeconds": 300,
+  "MaxTokens": 128,
   "ContextLength": 512,
   "Temperature": 0.2
 }

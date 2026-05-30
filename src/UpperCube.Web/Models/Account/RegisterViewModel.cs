@@ -23,4 +23,8 @@ public sealed class RegisterViewModel
     [DataType(DataType.Password)]
     [Compare(nameof(Password))]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Необходимо принять условия сервиса.")]
+    [Display(Name = "Условия сервиса")]
+    public bool AcceptTerms { get; set; }
 }

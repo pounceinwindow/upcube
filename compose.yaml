@@ -61,8 +61,8 @@ services:
       AI__Provider: Ollama
       AI__BaseUrl: http://ollama:11434
       AI__Model: llama3.1
-      AI__TimeoutSeconds: 240
-      AI__MaxTokens: 48
+      AI__TimeoutSeconds: 300
+      AI__MaxTokens: 128
       AI__ContextLength: 512
       AI__Temperature: 0.2
     depends_on:

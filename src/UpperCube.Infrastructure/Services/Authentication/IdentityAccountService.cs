@@ -35,6 +35,10 @@ public sealed class IdentityAccountService(
         string password,
         CancellationToken ct = default)
     {
+        var normalizedEmail = email.Trim();
+        if (await userManager.FindByEmailAsync(normalizedEmail) is not null)
+            return AccountOperationResult.Failed("Аккаунт с таким email уже зарегистрирован. Войдите в аккаунт.");
+
         if (!await roleManager.RoleExistsAsync("User"))
         {
             var createRoleResult = await roleManager.CreateAsync(new IdentityRole("User"));
@@ -44,8 +48,9 @@ public sealed class IdentityAccountService(
 
         var user = new ApplicationUser
         {
-            UserName = email,
-            Email = email,
+            UserName = normalizedEmail,
+            Email = normalizedEmail,
+            EmailConfirmed = true,
             FirstName = firstName,
             LastName = lastName,
             PreferredLanguage = "ru",
@@ -62,7 +67,7 @@ public sealed class IdentityAccountService(
                 return AccountOperationResult.Failed(roleResult.Errors.Select(x => x.Description).ToArray());
         }
 
-        return AccountOperationResult.Success("Регистрация завершена. Подтвердите email перед входом.");
+        return AccountOperationResult.Success("Регистрация завершена. Теперь вы можете войти.");
     }
 
     public async Task<AccountOperationResult> ConfirmEmailAsync(

@@ -56,10 +56,11 @@
         <div class="form-group mb-3 row">
             <div class="col-12">
                 <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" id="acceptTerms" name="acceptTerms" type="checkbox" required>
-                    <label class="form-label ms-1 fw-normal" for="acceptTerms">
+                    <input asp-for="AcceptTerms" class="custom-control-input" required/>
+                    <label asp-for="AcceptTerms" class="custom-control-label form-label ms-1 fw-normal">
                         Я принимаю <a class="text-muted" asp-controller="Home" asp-action="Index">условия сервиса</a>
                     </label>
+                    <span asp-validation-for="AcceptTerms" class="text-danger d-block"></span>
                 </div>
             </div>
         </div>

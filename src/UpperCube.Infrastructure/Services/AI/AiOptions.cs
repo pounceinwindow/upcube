@@ -12,9 +12,9 @@ public sealed class AiOptions
 
     public string Model { get; set; } = "llama3.1";
 
-    public int TimeoutSeconds { get; set; } = 60;
+    public int TimeoutSeconds { get; set; } = 300;
 
-    public int MaxTokens { get; set; } = 48;
+    public int MaxTokens { get; set; } = 128;
 
     public int ContextLength { get; set; } = 1024;
 

@@ -26,6 +26,8 @@ public sealed class AccountController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
+        NormalizeRememberMeModelState(model);
+
         if (!ModelState.IsValid) return View(model);
 
         var result = await accountService.PasswordSignInAsync(
@@ -44,6 +46,16 @@ public sealed class AccountController(
         return View(model);
     }
 
+    private void NormalizeRememberMeModelState(LoginViewModel model)
+    {
+        if (!ModelState.TryGetValue(nameof(LoginViewModel.RememberMe), out var rememberMeState) ||
+            !string.Equals(rememberMeState.AttemptedValue, "on", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        model.RememberMe = true;
+        ModelState.Remove(nameof(LoginViewModel.RememberMe));
+    }
+
     [HttpGet("register")]
     [AllowAnonymous]
     public IActionResult Register()
@@ -56,6 +68,11 @@ public sealed class AccountController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        NormalizeAcceptTermsModelState(model);
+
+        if (!model.AcceptTerms)
+            ModelState.AddModelError(nameof(RegisterViewModel.AcceptTerms), "Необходимо принять условия сервиса.");
+
         if (!ModelState.IsValid) return View(model);
 
         var result = await accountService.RegisterAsync(
@@ -74,6 +91,16 @@ public sealed class AccountController(
         foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error);
 
         return View(model);
+    }
+
+    private void NormalizeAcceptTermsModelState(RegisterViewModel model)
+    {
+        if (!ModelState.TryGetValue(nameof(RegisterViewModel.AcceptTerms), out var acceptTermsState) ||
+            !string.Equals(acceptTermsState.AttemptedValue, "on", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        model.AcceptTerms = true;
+        ModelState.Remove(nameof(RegisterViewModel.AcceptTerms));
     }
 
     [HttpGet("forgot-password")]
